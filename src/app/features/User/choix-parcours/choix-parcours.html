@@ -1,0 +1,47 @@
+<div class="parcours-shell">
+  <div class="parcours-card section-card">
+    <div class="parcours-header">
+      <div>
+        <h1 class="parcours-title">Comment souhaitez-vous choisir votre vélo ?</h1>
+        <p class="parcours-subtitle">Bonjour {{ firstName }} {{ lastName }}, sélectionnez votre méthode préférée.</p>
+      </div>
+      <div class="parcours-logo">
+        @if (organisationLogoUrl) {
+          <img [src]="organisationLogoUrl" alt="Logo" />
+        } @else {
+          <div class="logo-placeholder"><i class="pi pi-building"></i></div>
+        }
+      </div>
+    </div>
+
+    <div class="parcours-options">
+      <div class="parcours-option">
+        <div class="option-icon option-icon-question">
+          <i class="pi pi-question"></i>
+        </div>
+        <h3>Je ne sais pas ce que je veux</h3>
+        <p>Répondez à quelques questions et nous vous recommandons les vélos adaptés.</p>
+        <p-button label="Questionnaire guidé" (click)="goToQuestionnaire()"></p-button>
+      </div>
+
+      <div class="parcours-option">
+        <div class="option-icon option-icon-target">
+          <i class="pi pi-bullseye"></i>
+        </div>
+        <h3>Je sais ce que je veux</h3>
+        <p>Parcourez notre catalogue complet et choisissez directement votre vélo.</p>
+        <p-button label="Voir le catalogue" class="p-button-outlined" (click)="goToCatalogue()"></p-button>
+      </div>
+    </div>
+  </div>
+
+  <div class="parcours-footer">
+    <div class="footer-brand">Mojo</div>
+    <div class="footer-links">
+      <span>Accueil</span>
+      <span>Accessoires</span>
+      <span>Conditions générales</span>
+      <span>Contact</span>
+    </div>
+  </div>
+</div>

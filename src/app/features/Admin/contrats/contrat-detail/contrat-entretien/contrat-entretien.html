@@ -1,0 +1,70 @@
+<p-card class="section-card">
+  <ng-template pTemplate="header">
+    <div class="p-3 flex justify-content-between align-items-center">
+      <h3 class="m-0">Entretien</h3>
+      <p-button icon="pi pi-plus" label="Ajouter" size="small" severity="success" (onClick)="onAddIntervention()"></p-button>
+    </div>
+  </ng-template>
+
+  <!-- Formulaire inline ajout/édition -->
+  @if (editingIntervention) {
+    <div class="mb-3 p-3 surface-50 border-round">
+      <h4 class="mt-0">{{ interventionFormMode === 'create' ? 'Nouvelle intervention' : "Modifier l'intervention" }}</h4>
+      <div class="grid">
+        <div class="col-12 md:col-6">
+          <label class="block text-600 mb-2">Type d'intervention *</label>
+          <input type="text" pInputText [(ngModel)]="currentIntervention.typeIntervention" class="w-full" placeholder="Ex: Batterie, Look, Révision..." />
+        </div>
+        <div class="col-12 md:col-6">
+          <label class="block text-600 mb-2">Date *</label>
+          <p-datepicker [(ngModel)]="interventionDate" dateFormat="dd/mm/yy" [showIcon]="true" class="w-full" [style]="{ 'width': '100%' }"></p-datepicker>
+        </div>
+        <div class="col-12">
+          <label class="block text-600 mb-2">Description *</label>
+          <textarea pInputText [(ngModel)]="currentIntervention.description" class="w-full" rows="3" placeholder="Décrivez l'intervention..."></textarea>
+        </div>
+        <div class="col-12 md:col-6">
+          <label class="block text-600 mb-2">Coût (€) *</label>
+          <p-inputnumber [(ngModel)]="currentIntervention.cout" mode="decimal" [minFractionDigits]="2" class="w-full" [style]="{ 'width': '100%' }"></p-inputnumber>
+        </div>
+      </div>
+      <div class="flex gap-2 justify-content-end mt-3">
+        <p-button label="Annuler"      severity="secondary" (onClick)="onCancelInterventionEdit()"></p-button>
+        <p-button label="Enregistrer"  icon="pi pi-check"   (onClick)="onSaveIntervention()"></p-button>
+      </div>
+    </div>
+  }
+
+  <!-- Tableau des interventions -->
+  @if (interventions().length > 0 && !editingIntervention) {
+    <p-table [value]="interventions()" class="p-datatable-sm">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Date</th>
+          <th>Coût</th>
+          <th style="width: 120px">Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-intervention>
+        <tr>
+          <td>{{ intervention.typeIntervention }}</td>
+          <td>{{ intervention.description }}</td>
+          <td>{{ formatDate(intervention.dateIntervention) }}</td>
+          <td>{{ formatCurrency(intervention.cout) }}</td>
+          <td>
+            <div class="flex gap-1">
+              <p-button icon="pi pi-pencil" [text]="true" [rounded]="true" severity="secondary" (onClick)="onEditIntervention(intervention)" pTooltip="Modifier"></p-button>
+              <p-button icon="pi pi-trash"  [text]="true" [rounded]="true" severity="danger"    (onClick)="onDeleteIntervention(intervention)" pTooltip="Supprimer"></p-button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  } @else {
+    @if (!editingIntervention) {
+      <p class="text-600">Aucun entretien enregistré pour ce vélo.</p>
+    }
+  }
+</p-card>

@@ -14,7 +14,7 @@ export interface AdminDashboard {
   activeContrats: number;
   budgetTotal: number;
   activityFeed: ActivityFeedItem[];
-  bikeTypeCounts: Array<{ label: string; value: number }>;
+  veloTypeCounts: Array<{ label: string; value: number }>;
 }
 
 export interface ManagerDashboard {

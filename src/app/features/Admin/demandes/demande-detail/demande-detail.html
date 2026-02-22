@@ -1,0 +1,124 @@
+<div class="demande-detail-page page-shell">
+  <p-toast></p-toast>
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Détail de la demande</h1>
+      <p class="page-subtitle">Validation RH et suivi</p>
+    </div>
+    <div class="flex gap-2">
+      <p-button label="Retour"   icon="pi pi-arrow-left" class="p-button-text" (click)="goBack()"></p-button>
+      <p-button label="Modifier" icon="pi pi-pencil"     (click)="goEdit()" [disabled]="!demandeId()"></p-button>
+    </div>
+  </div>
+
+  @if (demande(); as d) {
+    <p-card class="section-card">
+      <div class="grid">
+        <div class="col-12 lg:col-8">
+
+          <div class="detail-section">
+            <h3>Informations employé</h3>
+            <div class="info-grid">
+              <div>
+                <div class="text-600 text-sm">Nom</div>
+                <div class="font-semibold">{{ d.userName }}</div>
+              </div>
+              <div>
+                <div class="text-600 text-sm">Email</div>
+                <div class="font-semibold">{{ d.userEmail }}</div>
+              </div>
+              <div>
+                <div class="text-600 text-sm">Identifiant</div>
+                <div class="font-semibold">{{ d.idUser }}</div>
+              </div>
+              <div>
+                <div class="text-600 text-sm">Statut</div>
+                <p-tag [value]="getStatusLabel(d.status)" [severity]="getStatusSeverity(d.status)" [ngClass]="getStatusClass(d.status)"></p-tag>
+              </div>
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <h3>Vélo sélectionné</h3>
+            <div class="info-grid">
+              <div>
+                <div class="text-600 text-sm">Modèle</div>
+                <div class="font-semibold">{{ velo()?.title?.rendered || d.veloModele || '-' }}</div>
+              </div>
+              <div>
+                <div class="text-600 text-sm">Marque</div>
+                <div class="font-semibold">{{ d.veloMarque || 'Non renseignée' }}</div>
+              </div>
+              <div>
+                <div class="text-600 text-sm">Type</div>
+                <div class="font-semibold">{{ d.veloType || '-' }}</div>
+              </div>
+              <div>
+                <div class="text-600 text-sm">Prix TVAC</div>
+                <div class="font-semibold">{{ formatCurrency(d.veloPrixAchat) }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <h3>Accessoires</h3>
+            <div class="text-600">Cadenas certifié (obligatoire)</div>
+            <div class="text-600">Souhaités : {{ d.accessoiresSouhaites || 'Non renseignés' }}</div>
+          </div>
+
+        </div>
+
+        <div class="col-12 lg:col-4">
+
+          <div class="summary-card">
+            <h3>Récapitulatif financier</h3>
+            <div class="summary-line">
+              <span>Vélo</span>
+              <span>{{ formatCurrency(d.veloPrixAchat) }}</span>
+            </div>
+            <div class="summary-line">
+              <span>Accessoires</span>
+              <span>Sur devis</span>
+            </div>
+            <div class="summary-line total">
+              <span>Total estimé</span>
+              <span>{{ formatCurrency(d.veloPrixAchat) }}</span>
+            </div>
+            <div class="summary-hint">Durée 36 mois · Services inclus</div>
+          </div>
+
+          <div class="validation-card">
+            <h3>{{ isUserView ? 'Validation Client' : 'Validation Admin' }}</h3>
+            <div class="flex gap-2 mt-3">
+              <p-button label="Valider" icon="pi pi-check" (click)="onValidate()" [disabled]="isValidateDisabled()"></p-button>
+              <p-button label="Refuser" icon="pi pi-times" class="p-button-danger" (click)="onDecision(DemandeStatus.Refuse)" [disabled]="d.status === DemandeStatus.Refuse"></p-button>
+            </div>
+          </div>
+
+          <div class="velo-preview-card">
+            <div class="velo-preview-image">
+              @if (getVeloImage(velo()); as imgUrl) {
+                <img [src]="imgUrl" [alt]="velo()?.title?.rendered || 'Vélo'" />
+              } @else {
+                <div class="velo-preview-placeholder">
+                  <i class="pi pi-image"></i>
+                </div>
+              }
+            </div>
+            <div class="velo-preview-title">{{ velo()?.title?.rendered || d.veloModele || 'Vélo' }}</div>
+          </div>
+
+        </div>
+
+        <div class="col-12">
+          <app-demande-discussion [demandeId]="demandeId()"></app-demande-discussion>
+        </div>
+      </div>
+    </p-card>
+  } @else {
+    <p-card>
+      <div class="text-600">Chargement...</div>
+    </p-card>
+  }
+</div>

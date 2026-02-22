@@ -1,0 +1,52 @@
+<div class="catalogue-container page-shell">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Catalogue de vélos</h1>
+      <p class="page-subtitle">Choisissez un vélo puis créez votre demande.</p>
+    </div>
+  </div>
+
+  <p-card class="section-card">
+    @if (loading()) {
+      <div class="catalogue-state">
+        <i class="pi pi-spin pi-spinner"></i> Chargement du catalogue...
+      </div>
+    } @else if (velos().length) {
+      <div class="catalogue-grid">
+        @for (velo of velos(); track velo.id) {
+          <div class="velo-card" [class.is-selected]="isSelected(velo)">
+            <div class="velo-image">
+              @if (getVeloImage(velo)) {
+                <img [src]="getVeloImage(velo)" [alt]="getVeloTitle(velo)" />
+              } @else {
+                <div class="image-placeholder"><i class="pi pi-image"></i></div>
+              }
+            </div>
+            <div class="velo-body">
+              <div class="velo-title">{{ getVeloTitle(velo) }}</div>
+              <div class="velo-price">{{ formatCurrency(getVeloPrice(velo)) }}</div>
+            </div>
+            <p-button
+              [label]="isSelected(velo) ? 'Sélectionné' : 'Choisir'"
+              class="catalogue-select"
+              [disabled]="creatingDemande()"
+              (click)="selectVelo(velo)"
+            ></p-button>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="catalogue-state">Aucun vélo disponible.</div>
+    }
+  </p-card>
+
+  <div class="catalogue-actions">
+    <p-button
+      label="Créer la demande"
+      icon="pi pi-check"
+      [loading]="creatingDemande()"
+      [disabled]="!selectedVeloId() || creatingDemande()"
+      (click)="createDemande()"
+    ></p-button>
+  </div>
+</div>

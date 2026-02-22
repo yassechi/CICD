@@ -1,0 +1,31 @@
+<div class="confirmation-shell">
+  <div class="confirmation-card">
+    <div class="confirmation-icon">
+      <i class="pi pi-check"></i>
+    </div>
+
+    <h1 class="confirmation-title">Votre demande a été envoyée !</h1>
+    <p class="confirmation-subtitle">Merci, votre demande de leasing vélo a bien été transmise.</p>
+
+    <p-card class="confirmation-summary">
+      <div class="summary-title">Récapitulatif de votre demande</div>
+      <div class="summary-row">
+        <span class="label">Vélo sélectionné</span>
+        <span class="value">{{ veloTitle || '-' }}</span>
+      </div>
+      <div class="summary-row">
+        <span class="label">Prix total estimé</span>
+        <span class="value">{{ formatCurrency(veloPrice) }}</span>
+      </div>
+      <div class="summary-row">
+        <span class="label">Référence demande</span>
+        <span class="value">{{ demandeId ?? '-' }}</span>
+      </div>
+    </p-card>
+
+    <div class="confirmation-actions">
+      <p-button label="Voir mes demandes"   class="p-button-outlined" (onClick)="goToDemandes()"></p-button>
+      <p-button label="Retour au catalogue"                            (onClick)="goToCatalogue()"></p-button>
+    </div>
+  </div>
+</div>

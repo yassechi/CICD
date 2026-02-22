@@ -1,5 +1,5 @@
-import { Injectable, inject, signal } from '@angular/core';
-import { HttpClient, httpResource } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
@@ -20,28 +20,6 @@ export class AmortissementService {
   private apiUrl = `${environment.urls.coreApi}/Amortissement`;
 
   private readonly http = inject(HttpClient);
-  private readonly amortissementId = signal<number | null>(null);
-
-  readonly amortissementsResource = httpResource<Amortissement[]>(() => `${this.apiUrl}/get-all`, {
-    defaultValue: [],
-  });
-
-  readonly amortissementResource = httpResource<Amortissement | null>(
-    () => {
-      const id = this.amortissementId();
-      return id ? `${this.apiUrl}/${id}` : undefined;
-    },
-    { defaultValue: null },
-  );
-
-  getAllResource() {
-    return this.amortissementsResource;
-  }
-
-  getOneResource(id: number | null) {
-    this.amortissementId.set(id);
-    return this.amortissementResource;
-  }
 
   getAll(): Observable<Amortissement[]> {
     return this.http.get<Amortissement[]>(`${this.apiUrl}/get-all`);

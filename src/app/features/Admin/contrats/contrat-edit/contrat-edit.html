@@ -1,0 +1,86 @@
+<div class="contrat-edit-container page-shell">
+  <p-toast></p-toast>
+
+  <div class="page-header">
+    <div class="flex align-items-center gap-3">
+      <p-button icon="pi pi-arrow-left" [text]="true" [rounded]="true" (onClick)="goBack()" pTooltip="Retour au détail"></p-button>
+      <div>
+        <h1 class="page-title">Modifier le contrat</h1>
+        <p class="page-subtitle">Modification des informations du contrat</p>
+      </div>
+    </div>
+  </div>
+
+  @if (!loading()) {
+    <p-card>
+      <form [formGroup]="contratForm" (ngSubmit)="onSubmit()">
+        <div class="grid">
+
+          <div class="col-12 md:col-6">
+            <label class="block text-600 mb-2">Référence *</label>
+            <input type="text" pInputText formControlName="ref" class="w-full" />
+          </div>
+
+          <div class="col-12 md:col-6">
+            <label class="block text-600 mb-2">Vélo *</label>
+            <p-select formControlName="veloId" [options]="velos()" optionLabel="marque" optionValue="id" placeholder="Sélectionnez un vélo" class="w-full" [style]="{ 'width': '100%' }">
+              <ng-template let-velo pTemplate="item">{{ velo.marque }} {{ velo.modele }} ({{ velo.numeroSerie }})</ng-template>
+            </p-select>
+          </div>
+
+          <div class="col-12 md:col-6">
+            <label class="block text-600 mb-2">Bénéficiaire *</label>
+            <p-select formControlName="beneficiaireId" [options]="users()" optionLabel="firstName" optionValue="id" placeholder="Sélectionnez un bénéficiaire" class="w-full" [style]="{ 'width': '100%' }">
+              <ng-template let-user pTemplate="item">{{ user.firstName }} {{ user.lastName }}</ng-template>
+            </p-select>
+          </div>
+
+          <div class="col-12 md:col-6">
+            <label class="block text-600 mb-2">Responsable RH *</label>
+            <p-select formControlName="userRhId" [options]="users()" optionLabel="firstName" optionValue="id" placeholder="Sélectionnez un responsable RH" class="w-full" [style]="{ 'width': '100%' }">
+              <ng-template let-user pTemplate="item">{{ user.firstName }} {{ user.lastName }}</ng-template>
+            </p-select>
+          </div>
+
+          <div class="col-12 md:col-6">
+            <label class="block text-600 mb-2">Date début *</label>
+            <p-datepicker formControlName="dateDebut" dateFormat="dd/mm/yy" [showIcon]="true" class="w-full" [style]="{ 'width': '100%' }"></p-datepicker>
+          </div>
+
+          <div class="col-12 md:col-6">
+            <label class="block text-600 mb-2">Date fin *</label>
+            <p-datepicker formControlName="dateFin" dateFormat="dd/mm/yy" [showIcon]="true" class="w-full" [style]="{ 'width': '100%' }"></p-datepicker>
+          </div>
+
+          <div class="col-12 md:col-6">
+            <label class="block text-600 mb-2">Durée (mois) *</label>
+            <p-inputnumber formControlName="duree" class="w-full" [style]="{ 'width': '100%' }"></p-inputnumber>
+          </div>
+
+          <div class="col-12 md:col-6">
+            <label class="block text-600 mb-2">Loyer mensuel HT (€) *</label>
+            <p-inputnumber formControlName="loyerMensuelHT" mode="decimal" [minFractionDigits]="2" class="w-full" [style]="{ 'width': '100%' }"></p-inputnumber>
+          </div>
+
+          <div class="col-12 md:col-6">
+            <label class="block text-600 mb-2">Statut *</label>
+            <p-select formControlName="statutContrat" [options]="statutOptions" optionLabel="label" optionValue="value" placeholder="Sélectionnez un statut" class="w-full" [style]="{ 'width': '100%' }"></p-select>
+          </div>
+
+        </div>
+
+        <div class="flex gap-2 justify-content-end mt-4">
+          <p-button label="Annuler"      severity="secondary" (onClick)="goBack()" type="button"></p-button>
+          <p-button label="Enregistrer"  icon="pi pi-check"   type="submit" [disabled]="contratForm.invalid"></p-button>
+        </div>
+      </form>
+    </p-card>
+  }
+
+  @if (loading()) {
+    <div class="text-center py-8">
+      <i class="pi pi-spin pi-spinner" style="font-size: 3rem; color: #1e3a8a"></i>
+      <p class="mt-3 text-600">Chargement...</p>
+    </div>
+  }
+</div>

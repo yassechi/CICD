@@ -65,7 +65,7 @@ export interface DemandeDetail {
   messages: DemandeMessage[];
 }
 
-export interface BikeSnapshotPayload {
+export interface VeloSnapshotPayload {
   cmsId: number;
   marque: string;
   modele: string;
@@ -73,13 +73,13 @@ export interface BikeSnapshotPayload {
   prixAchat: number;
 }
 
-export interface CreateDemandeWithBikePayload {
+export interface CreateDemandeWithVeloPayload {
   idUser: string;
   mojoId?: string | null;
-  bike: BikeSnapshotPayload;
+  velo: VeloSnapshotPayload;
 }
 
-export interface CreateDemandeWithBikeResponse {
+export interface CreateDemandeWithVeloResponse {
   success?: boolean;
   message?: string;
   id?: number;
@@ -178,8 +178,9 @@ export class DemandeService {
     return this.http.post(`${this.apiUrl}/add`, demande);
   }
 
-  createWithBike(payload: CreateDemandeWithBikePayload): Observable<CreateDemandeWithBikeResponse> {
-    return this.http.post<CreateDemandeWithBikeResponse>(`${this.apiUrl}/create-with-bike`, payload);
+  createWithVelo(payload: CreateDemandeWithVeloPayload): Observable<CreateDemandeWithVeloResponse> {
+    const { velo, ...rest } = payload;
+    return this.http.post<CreateDemandeWithVeloResponse>(`${this.apiUrl}/create-with-bike`, { ...rest, bike: velo });
   }
 
   update(demande: Demande): Observable<any> {
@@ -194,7 +195,6 @@ export class DemandeService {
     return this.http.put(`${this.apiUrl}/update-status/${id}`, { status });
   }
 
-  //retour en string
   getStatusLabel(status: DemandeStatus): string {
     switch (status) {
       case DemandeStatus.Encours:
@@ -212,7 +212,6 @@ export class DemandeService {
     }
   }
 
-  // retour des couleur par status
   getStatusSeverity(
     status: DemandeStatus,
   ): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
@@ -232,7 +231,6 @@ export class DemandeService {
     }
   }
 
-  // retour design par demande status 
   getStatusClass(status: DemandeStatus): string {
     switch (status) {
       case DemandeStatus.Encours:

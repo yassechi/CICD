@@ -1,0 +1,74 @@
+<div class="employe-detail-page page-shell">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Détails de l'employé</h1>
+      <p class="page-subtitle">Consultation d'un employé</p>
+    </div>
+    <div class="flex gap-2">
+      <p-button label="Retour"   icon="pi pi-arrow-left" class="p-button-text" (click)="goBack()"></p-button>
+      <p-button label="Modifier" icon="pi pi-pencil"     (click)="goEdit()" [disabled]="!userId()"></p-button>
+    </div>
+  </div>
+
+  @if (user()) {
+    <p-card>
+      <div class="grid">
+        <div class="col-12 md:col-6">
+          <div class="field mb-3">
+            <div class="text-600 text-sm">Nom d'utilisateur</div>
+            <div class="font-semibold">{{ user()!.userName }}</div>
+          </div>
+        </div>
+        <div class="col-12 md:col-6">
+          <div class="field mb-3">
+            <div class="text-600 text-sm">Email</div>
+            <div class="font-semibold">{{ user()!.email }}</div>
+          </div>
+        </div>
+        <div class="col-12 md:col-6">
+          <div class="field mb-3">
+            <div class="text-600 text-sm">Prénom</div>
+            <div class="font-semibold">{{ user()!.firstName }}</div>
+          </div>
+        </div>
+        <div class="col-12 md:col-6">
+          <div class="field mb-3">
+            <div class="text-600 text-sm">Nom</div>
+            <div class="font-semibold">{{ user()!.lastName }}</div>
+          </div>
+        </div>
+        <div class="col-12 md:col-6">
+          <div class="field mb-3">
+            <div class="text-600 text-sm">Téléphone</div>
+            <div class="font-semibold">{{ user()!.phoneNumber }}</div>
+          </div>
+        </div>
+        <div class="col-12 md:col-6">
+          <div class="field mb-3">
+            <div class="text-600 text-sm">Rôle</div>
+            <p-tag [value]="getRoleLabel(user()!.role)" [severity]="getRoleSeverity(user()!.role)"></p-tag>
+          </div>
+        </div>
+        <div class="col-12 md:col-6">
+          <div class="field mb-3">
+            <div class="text-600 text-sm">Statut</div>
+            <p-tag
+              [value]="user()!.isActif ? 'Actif' : 'Inactif'"
+              [severity]="user()!.isActif ? 'success' : 'danger'"
+            ></p-tag>
+          </div>
+        </div>
+        <div class="col-12 md:col-6">
+          <div class="field mb-3">
+            <div class="text-600 text-sm">Organisation</div>
+            <div class="font-semibold">{{ getOrganisationName(user()!) }}</div>
+          </div>
+        </div>
+      </div>
+    </p-card>
+  } @else {
+    <p-card>
+      <div class="text-600">Chargement...</div>
+    </p-card>
+  }
+</div>
