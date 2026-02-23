@@ -1,7 +1,7 @@
+import { environment } from '../../../environments/environment';
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
 
 export enum StatutContrat {
   EnCours = 1,
@@ -21,14 +21,11 @@ export interface Contrat {
   loyerMensuelHT: number;
   statutContrat: StatutContrat;
   isActif?: boolean;
-}
-
-export interface ContratDetail extends Contrat {
-  beneficiaireName: string;
-  userRhName: string;
   veloMarque?: string;
   veloModele?: string;
   veloNumeroSerie?: string | null;
+  beneficiaireName?: string;
+  userRhName?: string;
 }
 
 export interface ContratEditUser {
@@ -68,32 +65,6 @@ export interface ContratListParams {
   userId?: string | null;
 }
 
-export interface AdminContratListItem {
-  id: number;
-  ref: string;
-  beneficiaireId: string;
-  beneficiaireName: string;
-  userRhId: string;
-  userRhName: string;
-  organisationId: number;
-  organisationName: string;
-  veloId: number;
-  veloMarque: string;
-  veloModele: string;
-  veloType?: string | null;
-  veloPrixAchat: number;
-  dateDebut: string;
-  dateFin: string;
-  loyerMensuelHT: number;
-  duree: number;
-  statutContrat: StatutContrat;
-  incidentsCount: number;
-  maintenanceBudget: number;
-  maintenanceUsed: number;
-  maintenanceProgress: number;
-  isEndingSoon: boolean;
-}
-
 @Injectable({
   providedIn: 'root',
 })
@@ -110,8 +81,8 @@ export class ContratService {
     return this.http.request<Contrat>('GET', `${this.apiUrl}/get-one/${id}`);
   }
 
-  getDetail(id: number): Observable<ContratDetail> {
-    return this.http.request<ContratDetail>('GET', `${this.apiUrl}/get-detail/${id}`);
+  getDetail(id: number): Observable<Contrat> {
+    return this.http.request<Contrat>('GET', `${this.apiUrl}/get-one/${id}`);
   }
 
   getEditData(id: number): Observable<ContratEditData> {
@@ -132,9 +103,9 @@ export class ContratService {
     );
   }
 
-  getList(params?: ContratListParams): Observable<AdminContratListItem[]> {
+  getList(params?: ContratListParams): Observable<Contrat[]> {
     const suffix = this.buildQueryParams(params);
-    return this.http.get<AdminContratListItem[]>(
+    return this.http.get<Contrat[]>(
       `${this.apiUrl}/list${suffix ? `?${suffix}` : ''}`,
     );
   }

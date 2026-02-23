@@ -32,15 +32,15 @@
               <th>Durée (mois)</th>
               <th>Loyer HT</th>
               <th>Statut</th>
-              <th style="width: 100px">Actions</th>
+              <th style="width: 180px">Actions</th>
             </tr>
           </ng-template>
 
           <ng-template pTemplate="body" let-contrat>
             <tr>
               <td>{{ contrat.ref }}</td>
-              <td>{{ contrat.beneficiaireName || contrat.beneficiaireId }}</td>
-              <td>{{ contrat.userRhName || contrat.userRhId }}</td>
+              <td>{{ contrat.beneficiaireId }}</td>
+              <td>{{ contrat.userRhId }}</td>
               <td>{{ contrat.veloId }}</td>
               <td>{{ formatDate(contrat.dateDebut) }}</td>
               <td>{{ formatDate(contrat.dateFin) }}</td>
@@ -50,7 +50,10 @@
                 <p-tag [value]="getStatutLabel(contrat.statutContrat)" [severity]="getStatutSeverity(contrat.statutContrat)"></p-tag>
               </td>
               <td>
-                <p-button icon="pi pi-trash" class="p-button-rounded p-button-text p-button-danger" (click)="onDelete(contrat)" [pTooltip]="'Supprimer'"></p-button>
+                <div class="flex gap-2">
+                  <p-button label="Voir" icon="pi pi-eye" class="p-button-text" (click)="onViewDetail(contrat)"></p-button>
+                  <p-button icon="pi pi-trash" class="p-button-rounded p-button-text p-button-danger" (click)="onDelete(contrat)" [pTooltip]="'Supprimer'"></p-button>
+                </div>
               </td>
             </tr>
           </ng-template>

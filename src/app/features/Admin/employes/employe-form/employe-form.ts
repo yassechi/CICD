@@ -1,22 +1,17 @@
-import { Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Organisation, OrganisationService } from '../../../../core/services/organisation.service';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-
-// PrimeNG
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
+import { User, UserRole, UserService } from '../../../../core/services/user.service';
+import { MessageService } from '../../../../core/services/message.service';
+import { Component, inject, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
-import { SelectModule } from 'primeng/select';
 import { PasswordModule } from 'primeng/password';
+import { CommonModule } from '@angular/common';
+import { ButtonModule } from 'primeng/button';
+import { SelectModule } from 'primeng/select';
 import { ToastModule } from 'primeng/toast';
-import { MessageService as PrimeMessageService } from 'primeng/api';
-
-// Services
-import { User, UserRole, UserService } from '../../../../core/services/user.service';
-import { Organisation, OrganisationService } from '../../../../core/services/organisation.service';
-import { ErrorService } from '../../../../core/services/error.service';
+import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-employe-form',
@@ -26,70 +21,56 @@ import { ErrorService } from '../../../../core/services/error.service';
     CardModule, ButtonModule, InputTextModule,
     CheckboxModule, SelectModule, PasswordModule, ToastModule,
   ],
-  providers: [PrimeMessageService],
   templateUrl: './employe-form.html',
   styleUrls: ['./employe-form.scss'],
 })
 export class EmployeFormDialogComponent {
-
-  // --- DONNÉES ---
-  loading       = signal(false);
+  loading = signal(false);
   organisations = signal<Organisation[]>([]);
-  isEdit        = false;
+  isEdit = false;
   userId: string | null = null;
 
   roleOptions = [
     { label: 'Administrateur', value: UserRole.Admin },
-    { label: 'Manager',        value: UserRole.Manager },
-    { label: 'Utilisateur',    value: UserRole.User },
+    { label: 'Manager', value: UserRole.Manager },
+    { label: 'Utilisateur', value: UserRole.User },
   ];
 
-  // --- FORMULAIRE ---
   private readonly fb = inject(FormBuilder);
   form: FormGroup = this.fb.group({
-    id:              [null],
-    userName:        ['', Validators.required],
-    firstName:       ['', Validators.required],
-    lastName:        ['', Validators.required],
-    email:           ['', [Validators.required, Validators.email]],
-    phoneNumber:     ['', Validators.required],
-    password:        ['', [Validators.required, Validators.minLength(8)]],
+    id: [null],
+    userName: ['', Validators.required],
+    firstName: ['', Validators.required],
+    lastName: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    phoneNumber: ['', Validators.required],
+    password: ['', [Validators.required, Validators.minLength(8)]],
     confirmPassword: ['', Validators.required],
-    role:            [UserRole.User, Validators.required],
-    isActif:         [true],
-    organisationId:  [null, Validators.required],
-    tailleCm:        [177],
+    role: [UserRole.User, Validators.required],
+    isActif: [true],
+    organisationId: [null, Validators.required],
+    tailleCm: [177],
   }, { validators: this.passwordMatchValidator });
 
-  // --- SERVICES ---
-  private readonly userService         = inject(UserService);
+  private readonly userService = inject(UserService);
   private readonly organisationService = inject(OrganisationService);
-  private readonly messageService      = inject(PrimeMessageService);
-  private readonly errorService        = inject(ErrorService);
-  private readonly route               = inject(ActivatedRoute);
-  private readonly router              = inject(Router);
+  private readonly messageService = inject(MessageService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
 
-  // --- INIT ---
   constructor() {
-    this.loadOrganisations();
+    this.organisationService.getAll().subscribe({ next: (data) => this.organisations.set(data ?? []) });
 
     const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.isEdit = true;
-      this.userId = id;
-      this.updatePasswordValidators();
-      this.loadUser(id);
-    }
-  }
+    if (!id) return;
 
-  // --- CHARGEMENT ---
-  loadOrganisations(): void {
-    this.organisationService.getAll().subscribe({
-      next: (data) => this.organisations.set(data),
-    });
-  }
+    this.isEdit = true;
+    this.userId = id;
+    this.form.get('password')?.setValidators([]);
+    this.form.get('confirmPassword')?.setValidators([]);
+    this.form.get('password')?.updateValueAndValidity();
+    this.form.get('confirmPassword')?.updateValueAndValidity();
 
-  loadUser(id: string): void {
     this.loading.set(true);
     this.userService.getOne(id).subscribe({
       next: (u: any) => {
@@ -101,46 +82,39 @@ export class EmployeFormDialogComponent {
         this.loading.set(false);
       },
       error: () => {
-        this.errorService.showError("Impossible de charger l'employé");
+        this.messageService.showError("Impossible de charger l'employ?");
         this.loading.set(false);
         this.goBack();
       },
     });
   }
 
-  // --- SOUMISSION ---
   onSubmit(): void {
     if (this.form.invalid) { this.form.markAllAsTouched(); return; }
 
     this.loading.set(true);
     const v = this.form.getRawValue();
-
     const payload: any = {
-      id:             this.userId ?? v.id,
-      userName:       v.userName,
-      firstName:      v.firstName,
-      lastName:       v.lastName,
-      email:          v.email,
-      phoneNumber:    v.phoneNumber,
-      role:           Number(v.role),
-      tailleCm:       Number(v.tailleCm),
-      isActif:        Boolean(v.isActif),
+      id: this.userId ?? v.id,
+      userName: v.userName,
+      firstName: v.firstName,
+      lastName: v.lastName,
+      email: v.email,
+      phoneNumber: v.phoneNumber,
+      role: Number(v.role),
+      tailleCm: Number(v.tailleCm),
+      isActif: Boolean(v.isActif),
       organisationId: Number(v.organisationId),
     };
 
-    // Mot de passe seulement si renseigné
     if (v.password?.trim()) {
-      payload.password        = v.password;
+      payload.password = v.password;
       payload.confirmPassword = v.confirmPassword ?? v.password;
     }
 
-    const operation = this.isEdit
-      ? this.userService.update(payload)
-      : this.userService.create(payload);
-
-    operation.subscribe({
+    (this.isEdit ? this.userService.update(payload) : this.userService.create(payload)).subscribe({
       next: () => {
-        this.messageService.add({ severity: 'success', summary: 'Succès', detail: this.isEdit ? 'Employé modifié' : 'Employé créé' });
+        this.messageService.showSuccess(this.isEdit ? 'Employ? modifi?' : 'Employ? cr??', 'Succ?s');
         this.loading.set(false);
         this.goBack();
       },
@@ -148,24 +122,10 @@ export class EmployeFormDialogComponent {
     });
   }
 
-  // --- NAVIGATION ---
-  goBack(): void { this.router.navigate([this.basePath()]); }
+  goBack(): void { this.router.navigate([this.router.url.startsWith('/manager/') ? '/manager/employes' : '/admin/employes']); }
 
-  private basePath(): string {
-    return this.router.url.startsWith('/manager/') ? '/manager/employes' : '/admin/employes';
-  }
-
-  // Mot de passe optionnel en mode édition
-  private updatePasswordValidators(): void {
-    this.form.get('password')?.setValidators([]);
-    this.form.get('confirmPassword')?.setValidators([]);
-    this.form.get('password')?.updateValueAndValidity();
-    this.form.get('confirmPassword')?.updateValueAndValidity();
-  }
-
-  // Vérifie que les 2 mots de passe sont identiques
   private passwordMatchValidator(form: FormGroup) {
-    const pwd     = form.get('password')?.value;
+    const pwd = form.get('password')?.value;
     const confirm = form.get('confirmPassword');
     if (!pwd && !confirm?.value) return null;
     if (pwd !== confirm?.value) {

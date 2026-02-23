@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',

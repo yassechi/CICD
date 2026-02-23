@@ -51,33 +51,30 @@
         >
           <ng-template pTemplate="header">
             <tr>
-              <th>Employé</th>
+              <th>Référence</th>
+              <th>Bénéficiaire</th>
+              <th>Responsable RH</th>
               <th>Vélo</th>
               <th>Début</th>
               <th>Fin</th>
-              <th>Prix</th>
-              <th>Budget entretien</th>
+              <th>Durée (mois)</th>
+              <th>Loyer HT</th>
+              <th>Statut</th>
               <th style="width: 180px">Actions</th>
             </tr>
           </ng-template>
 
           <ng-template pTemplate="body" let-contrat>
             <tr>
-              <td>
-                <div class="font-semibold">{{ contrat.beneficiaireName }}</div>
-                <div class="text-600 text-sm">{{ contrat.ref }}</div>
-              </td>
-              <td>
-                <div class="font-semibold">{{ contrat.veloModele || '#' + contrat.veloId }}</div>
-                <div class="text-600 text-sm">{{ contrat.veloMarque || 'Marque non renseignée' }}</div>
-              </td>
+              <td>{{ contrat.ref }}</td>
+              <td>{{ contrat.beneficiaireId }}</td>
+              <td>{{ contrat.userRhId }}</td>
+              <td>{{ contrat.veloId }}</td>
               <td>{{ formatDate(contrat.dateDebut) }}</td>
-              <td [class.end-soon]="contrat.isEndingSoon">{{ formatDate(contrat.dateFin) }}</td>
+              <td>{{ formatDate(contrat.dateFin) }}</td>
+              <td>{{ contrat.duree }}</td>
               <td>{{ formatCurrency(contrat.loyerMensuelHT) }}</td>
-              <td>
-                <p-progressBar [value]="contrat.maintenanceProgress" [showValue]="false" class="maintenance-bar"></p-progressBar>
-                <div class="text-600 text-sm mt-1">{{ formatCurrency(contrat.maintenanceUsed) }} / {{ formatCurrency(contrat.maintenanceBudget) }}</div>
-              </td>
+              <td>{{ getStatutLabel(contrat.statutContrat) }}</td>
               <td>
                 <div class="flex gap-2">
                   <p-button label="Voir"     icon="pi pi-eye"   class="p-button-text"                   (click)="onViewDetail(contrat)"></p-button>
@@ -89,7 +86,7 @@
 
           <ng-template pTemplate="emptymessage">
             <tr>
-              <td colspan="7" class="text-center py-5">
+              <td colspan="10" class="text-center py-5">
                 <i class="pi pi-inbox" style="font-size: 3rem; color: #ccc"></i>
                 <p class="mt-3 text-600">Aucun contrat trouvé</p>
               </td>

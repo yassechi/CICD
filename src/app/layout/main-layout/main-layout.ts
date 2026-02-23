@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { SidebarComponent } from '../sidebar/sidebar';
+import { NavbarComponent } from '../navbar/navbar';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { NavbarComponent } from '../navbar/navbar';
-import { SidebarComponent } from '../sidebar/sidebar';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-main-layout',

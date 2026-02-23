@@ -1,10 +1,10 @@
+import { AuthResponse, LoginRequest } from '../models/auth.model';
+import { environment } from '../../../environments/environment';
+import { Observable, BehaviorSubject, tap } from 'rxjs';
+import { User, UserRole } from '../models/user.model';
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, tap } from 'rxjs';
 import { Router } from '@angular/router';
-import { environment } from '../../../environments/environment';
-import { AuthResponse, LoginRequest } from '../models/auth.model';
-import { User, UserRole } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -41,8 +41,7 @@ export class AuthService {
         if (reponse && reponse.token) {
           localStorage.setItem('token', reponse.token);
           this.getUserInfo(reponse.id).subscribe((utilisateur) => {
-            localStorage.setItem('currentUser', JSON.stringify(utilisateur));
-            this.currentUserSubject.next(utilisateur);
+            this.setCurrentUser(utilisateur);
             this.redirectToRoleDashboard(utilisateur.role);
           });
         }
@@ -56,9 +55,17 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('token');
-    localStorage.removeItem('currentUser');
-    this.currentUserSubject.next(null);
+    this.setCurrentUser(null);
     this.router.navigate(['/login']);
+  }
+
+  setCurrentUser(user: User | null): void {
+    if (user) {
+      localStorage.setItem('currentUser', JSON.stringify(user));
+    } else {
+      localStorage.removeItem('currentUser');
+    }
+    this.currentUserSubject.next(user);
   }
 
   getToken(): string | null {
@@ -66,7 +73,7 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return !!this.getToken();
+    return !!(this.getToken() || this.getCurrentUser());
   }
 
   private redirectToRoleDashboard(role: UserRole): void {

@@ -1,0 +1,117 @@
+<div class="demande-landing page-shell">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Faire une demande</h1>
+      <p class="page-subtitle">Demandez une offre vélo adaptée à votre entreprise</p>
+    </div>
+  </div>
+
+  <div class="section-card precheck-card">
+    <div class="precheck-header">
+      <div class="precheck-icon"><i class="pi pi-building"></i></div>
+      <div class="precheck-text">
+        <h2 class="precheck-title">Votre société</h2>
+        <p class="precheck-subtitle">Sélectionnez votre entreprise déjà enregistrée.</p>
+      </div>
+    </div>
+    <div class="precheck-body">
+      <label class="block mb-2 font-semibold">Société</label>
+      <p-select
+        class="w-full precheck-select"
+        [options]="organisationOptions"
+        optionLabel="name"
+        [filter]="true"
+        filterBy="name,code,emailAutorise"
+        [showClear]="true"
+        placeholder="Rechercher une société"
+        [(ngModel)]="organisation"
+      >
+        <ng-template pTemplate="item" let-org>
+          <div class="organisation-option">
+            <div class="organisation-name">{{ org.name }}</div>
+            <small class="text-600">{{ org.emailAutorise }}</small>
+          </div>
+        </ng-template>
+      </p-select>
+      <div class="precheck-help">
+        Votre société n'apparaît pas ?
+        <a class="precheck-email" [href]="supportMailto">Envoyer un email</a>
+      </div>
+      @if (loading()) {
+        <div class="text-600 text-sm">Chargement des sociétés...</div>
+      }
+      @if (!loading() && organisationOptions.length === 0) {
+        <div class="precheck-warning">
+          <i class="pi pi-exclamation-triangle"></i>
+          <span>Aucune société disponible. Contactez-nous par email.</span>
+        </div>
+      }
+      @if (!organisation && !loading() && organisationOptions.length > 0) {
+        <div class="precheck-warning">
+          <i class="pi pi-exclamation-triangle"></i>
+          <span>Sélectionnez votre société pour continuer.</span>
+        </div>
+      }
+    </div>
+  </div>
+
+  @if (organisation; as org) {
+    <div class="section-card hero-card">
+      <div class="hero-grid">
+        <div class="hero-brand">
+          <div class="logo-shell">
+            @if (org.logoUrl) {
+              <img [src]="org.logoUrl" alt="Logo" />
+            } @else {
+              <div class="logo-fallback"><i class="pi pi-building"></i></div>
+            }
+          </div>
+          <div class="company-info">
+            <div class="company-name">{{ org.name }}</div>
+            <div class="company-domain"><span>Domaine : {{ org.emailAutorise }}</span></div>
+          </div>
+        </div>
+
+        <div class="hero-content">
+          <h2 class="brand-title hero-title">Leasing Vélo pour le personnel de {{ org.name }}</h2>
+          <p class="hero-subtitle">Durée 36 mois | Entretien et assurance inclus</p>
+          <div class="hero-actions">
+            <p-button
+              label="Demander une offre"
+              icon="pi pi-arrow-right"
+              (click)="onPrimaryAction()"
+              [disabled]="!isAuthenticated && !organisation"
+            ></p-button>
+          </div>
+          @if (loading()) {
+            <p class="hero-loading">Détection de la compagnie...</p>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="grid feature-grid">
+      <div class="col-12 md:col-4">
+        <div class="section-card feature-card">
+          <div class="feature-icon"><i class="pi pi-wallet"></i></div>
+          <h3>Financement</h3>
+          <p>Prise en charge via la prime de fin d'année.</p>
+        </div>
+      </div>
+      <div class="col-12 md:col-4">
+        <div class="section-card feature-card">
+          <div class="feature-icon"><i class="pi pi-shield"></i></div>
+          <h3>Services inclus</h3>
+          <p>Entretien, assurance vol et dégâts, assistance 24/7.</p>
+        </div>
+      </div>
+      <div class="col-12 md:col-4">
+        <div class="section-card feature-card">
+          <div class="feature-icon"><i class="pi pi-star"></i></div>
+          <h3>Large choix</h3>
+          <p>Vélos ville, cargo, course, VTT, électriques ou non.</p>
+        </div>
+      </div>
+    </div>
+  }
+</div>

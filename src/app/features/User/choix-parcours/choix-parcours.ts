@@ -1,6 +1,6 @@
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
@@ -11,34 +11,29 @@ import { ButtonModule } from 'primeng/button';
   styleUrls: ['./choix-parcours.scss'],
 })
 export class ChoixParcoursUtilisateurComponent {
-
-  // --- DONNÉES ---
-  firstName:           string = '';
-  lastName:            string = '';
-  organisationName:    string = '';
+  firstName = '';
+  lastName = '';
+  organisationName = '';
   organisationLogoUrl: string | null = null;
 
-  // --- SERVICES ---
   private readonly router = inject(Router);
+  private readonly params = inject(ActivatedRoute).snapshot.queryParams;
 
-  // --- INIT ---
   constructor() {
-    const params = inject(ActivatedRoute).snapshot.queryParams;
-    this.firstName           = params['firstName']           || '';
-    this.lastName            = params['lastName']            || '';
-    this.organisationName    = params['organisationName']    || '';
-    this.organisationLogoUrl = params['organisationLogoUrl'] || null;
+    this.firstName = this.params['firstName'] || '';
+    this.lastName = this.params['lastName'] || '';
+    this.organisationName = this.params['organisationName'] || '';
+    this.organisationLogoUrl = this.params['organisationLogoUrl'] || null;
   }
 
-  // --- NAVIGATION ---
   goToQuestionnaire(): void { this.router.navigate(['/questionnaire-guide'], { queryParams: this.queryParams() }); }
-  goToCatalogue():     void { this.router.navigate(['/catalogue-velos'],     { queryParams: this.queryParams() }); }
+  goToCatalogue(): void { this.router.navigate(['/catalogue-velos'], { queryParams: this.queryParams() }); }
 
   private queryParams(): Record<string, string> {
     const p: Record<string, string> = {};
-    if (this.firstName)           p['firstName']           = this.firstName;
-    if (this.lastName)            p['lastName']            = this.lastName;
-    if (this.organisationName)    p['organisationName']    = this.organisationName;
+    if (this.firstName) p['firstName'] = this.firstName;
+    if (this.lastName) p['lastName'] = this.lastName;
+    if (this.organisationName) p['organisationName'] = this.organisationName;
     if (this.organisationLogoUrl) p['organisationLogoUrl'] = this.organisationLogoUrl;
     return p;
   }

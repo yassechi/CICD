@@ -189,14 +189,14 @@
           icon="pi pi-times"
           class="p-button-text"
           (click)="goBack()"
-          [disabled]="loading"
+          [disabled]="loading()"
         ></p-button>
         <p-button
           [label]="isEdit ? 'Modifier' : 'Créer'"
           icon="pi pi-check"
           (onClick)="onSubmit()"
-          [loading]="loading"
-          [disabled]="form.invalid"
+          [loading]="loading()"
+          [disabled]="form.invalid || loading()"
         />
       </div>
     </form>

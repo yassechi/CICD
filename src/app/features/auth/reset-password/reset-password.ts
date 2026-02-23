@@ -1,30 +1,19 @@
-import { Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { MessageService } from '../../../core/services/message.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { ErrorService } from '../../../core/services/error.service';
-
-import { CardModule } from 'primeng/card';
+import { Component, inject, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
+import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
-import { MessageService as PrimeMessageService } from 'primeng/api';
+import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    CardModule,
-    InputTextModule,
-    PasswordModule,
-    ButtonModule,
-    ToastModule
-  ],
-  providers: [PrimeMessageService],
+  imports: [CommonModule, ReactiveFormsModule, CardModule, InputTextModule, PasswordModule, ButtonModule, ToastModule],
   templateUrl: './reset-password.html',
   styleUrls: ['./reset-password.scss']
 })
@@ -33,30 +22,24 @@ export class ResetPasswordComponent {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private authService = inject(AuthService);
-  private messageService = inject(PrimeMessageService);
-  private errorService = inject(ErrorService);
+  private messageService = inject(MessageService);
 
   resetForm: FormGroup = this.fb.group({
     newPassword: ['', [Validators.required, Validators.minLength(8)]],
     confirmPassword: ['', [Validators.required]]
-  }, {
-    validators: this.passwordMatchValidator
-  });
+  }, { validators: this.passwordMatchValidator });
+
   loading = signal(false);
-  token: string = '';
-  email: string = '';
+  token = '';
+  email = '';
 
   constructor() {
-    // Récupérer token et email depuis l'URL
     this.route.queryParams.subscribe(params => {
       this.token = params['token'] || '';
       this.email = params['email'] || '';
-
       if (!this.token || !this.email) {
-        this.errorService.showError('Lien invalide ou expiré');
-        setTimeout(() => {
-          this.router.navigate(['/login']);
-        }, 2000);
+        this.messageService.showError('Lien invalide ou expir?');
+        setTimeout(() => this.router.navigate(['/login']), 2000);
       }
     });
   }
@@ -64,7 +47,6 @@ export class ResetPasswordComponent {
   passwordMatchValidator(form: FormGroup) {
     const newPassword = form.get('newPassword')?.value;
     const confirmPassword = form.get('confirmPassword')?.value;
-
     if (newPassword !== confirmPassword) {
       form.get('confirmPassword')?.setErrors({ passwordMismatch: true });
       return { passwordMismatch: true };
@@ -73,47 +55,25 @@ export class ResetPasswordComponent {
   }
 
   onSubmit(): void {
-    if (this.resetForm.invalid) {
-      this.resetForm.markAllAsTouched();
-      return;
-    }
-
+    if (this.resetForm.invalid) { this.resetForm.markAllAsTouched(); return; }
     this.loading.set(true);
-
-    const payload = {
+    this.authService.resetPassword({
       email: this.email,
       token: this.token,
       newPassword: this.resetForm.value.newPassword
-    };
-
-    this.authService.resetPassword(payload).subscribe({
+    }).subscribe({
       next: () => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Succès',
-          detail: 'Mot de passe réinitialisé avec succès !'
-        });
-        setTimeout(() => {
-          this.router.navigate(['/login']);
-        }, 2000);
-        this.loading = signal(false);
+        this.messageService.showSuccess('Mot de passe r?initialis? avec succ?s !', 'Succ?s');
+        setTimeout(() => this.router.navigate(['/login']), 2000);
+        this.loading.set(false);
       },
       error: (error) => {
-        this.loading = signal(false);
-        this.errorService.showError(
-          error.error?.message || 'Impossible de réinitialiser le mot de passe',
-        );
+        this.loading.set(false);
+        this.messageService.showError(error.error?.message || 'Impossible de r?initialiser le mot de passe');
       }
     });
   }
 
-  get newPassword() {
-    return this.resetForm.get('newPassword');
-  }
-
-  get confirmPassword() {
-    return this.resetForm.get('confirmPassword');
-  }
+  get newPassword() { return this.resetForm.get('newPassword'); }
+  get confirmPassword() { return this.resetForm.get('confirmPassword'); }
 }
-
-

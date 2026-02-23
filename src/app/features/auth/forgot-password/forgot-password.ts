@@ -1,73 +1,45 @@
-import { Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { MessageService } from '../../../core/services/message.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { ErrorService } from '../../../core/services/error.service';
-
-import { CardModule } from 'primeng/card';
+import { Component, inject, signal } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
-import { MessageService as PrimeMessageService } from 'primeng/api';
+import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    RouterModule,
-    CardModule,
-    InputTextModule,
-    ButtonModule,
-    ToastModule
-  ],
-  providers: [PrimeMessageService],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, CardModule, InputTextModule, ButtonModule, ToastModule],
   templateUrl: './forgot-password.html',
   styleUrls: ['./forgot-password.scss']
 })
 export class ForgotPasswordComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
-  private router = inject(Router);
-  private messageService = inject(PrimeMessageService);
-  private errorService = inject(ErrorService);
+  private messageService = inject(MessageService);
 
-  forgotForm: FormGroup = this.fb.group({
-    email: ['', [Validators.required, Validators.email]]
-  });
+  forgotForm: FormGroup = this.fb.group({ email: ['', [Validators.required, Validators.email]] });
   loading = signal(false);
   emailSent = signal(false);
 
   onSubmit(): void {
-    if (this.forgotForm.invalid) {
-      this.forgotForm.markAllAsTouched();
-      return;
-    }
-
+    if (this.forgotForm.invalid) { this.forgotForm.markAllAsTouched(); return; }
     this.loading.set(true);
-
     this.authService.forgotPassword(this.forgotForm.value).subscribe({
       next: () => {
-        this.loading = signal(false);
+        this.loading.set(false);
         this.emailSent.set(true);
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Email envoyé',
-          detail: 'Si cet email existe, vous recevrez un lien de réinitialisation.'
-        });
+        this.messageService.showSuccess('Si cet email existe, vous recevrez un lien de r?initialisation.', 'Email envoy?');
       },
       error: () => {
-        this.loading = signal(false);
-        this.errorService.showError('Une erreur est survenue. Veuillez réessayer.');
+        this.loading.set(false);
+        this.messageService.showError('Une erreur est survenue. Veuillez r?essayer.');
       }
     });
   }
 
-  get email() {
-    return this.forgotForm.get('email');
-  }
+  get email() { return this.forgotForm.get('email'); }
 }
-
-

@@ -1,15 +1,11 @@
-import { Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-
-// PrimeNG
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { TagModule } from 'primeng/tag';
-
-// Services
 import { User, UserRole, UserService } from '../../../../core/services/user.service';
-import { ErrorService } from '../../../../core/services/error.service';
+import { MessageService } from '../../../../core/services/message.service';
+import { Component, inject, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { TagModule } from 'primeng/tag';
 
 @Component({
   selector: 'app-employe-detail',
@@ -19,62 +15,33 @@ import { ErrorService } from '../../../../core/services/error.service';
   styleUrls: ['./employe-detail.scss'],
 })
 export class EmployeDetailComponent {
-
-  // --- DONNÉES ---
-  user   = signal<User | null>(null);
+  user = signal<User | null>(null);
   userId = signal<string | null>(null);
 
-  // --- SERVICES ---
-  private readonly userService  = inject(UserService);
-  private readonly errorService = inject(ErrorService);
-  private readonly route        = inject(ActivatedRoute);
-  private readonly router       = inject(Router);
+  private readonly userService = inject(UserService);
+  private readonly messageService = inject(MessageService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
 
-  // --- INIT ---
   constructor() {
     const id = this.route.snapshot.paramMap.get('id');
     if (!id) { this.goBack(); return; }
-
     this.userId.set(id);
-    this.load(id);
-  }
-
-  // --- CHARGEMENT ---
-  load(id: string): void {
     this.userService.getOne(id).subscribe({
-      next:  (data) => this.user.set(data),
-      error: ()     => {
-        this.errorService.showError("Impossible de charger l'employé");
-        this.goBack();
-      },
+      next: (data) => this.user.set(data),
+      error: () => { this.messageService.showError("Impossible de charger l'employ?"); this.goBack(); },
     });
   }
 
-  // --- NAVIGATION ---
-  goBack(): void { this.router.navigate([this.basePath()]); }
-  goEdit(): void { this.router.navigate([`${this.basePath()}/${this.userId()}/edit`]); }
+  goBack(): void { this.router.navigate([this.router.url.startsWith('/manager/') ? '/manager/employes' : '/admin/employes']); }
+  goEdit(): void { this.router.navigate([`${this.router.url.startsWith('/manager/') ? '/manager/employes' : '/admin/employes'}/${this.userId()}/edit`]); }
 
-  // Détecte si on est dans admin ou manager
-  private basePath(): string {
-    return this.router.url.startsWith('/manager/') ? '/manager/employes' : '/admin/employes';
-  }
-
-  // --- UTILITAIRES ---
   getRoleLabel(role: UserRole): string { return this.userService.getRoleLabel(role); }
-
   getRoleSeverity(role: UserRole): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
-    switch (role) {
-      case UserRole.Admin:   return 'danger';
-      case UserRole.Manager: return 'warn';
-      case UserRole.User:    return 'info';
-      default:               return 'secondary';
-    }
+    return role === UserRole.Admin ? 'danger' : role === UserRole.Manager ? 'warn' : role === UserRole.User ? 'info' : 'secondary';
   }
-
   getOrganisationName(user: User): string {
     const org = user.organisationId;
-    if (org && typeof org === 'object') return org.name || 'N/A';
-    if (typeof org === 'number')        return String(org);
-    return 'N/A';
+    return org && typeof org === 'object' ? org.name || 'N/A' : typeof org === 'number' ? String(org) : 'N/A';
   }
 }

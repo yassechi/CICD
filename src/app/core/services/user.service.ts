@@ -1,8 +1,8 @@
+import { environment } from '../../../environments/environment';
+import { User, UserRole } from '../models/user.model';
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
-import { User, UserRole } from '../models/user.model';
 
 export type { User } from '../models/user.model';
 export { UserRole } from '../models/user.model';
