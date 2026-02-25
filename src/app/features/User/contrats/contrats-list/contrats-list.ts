@@ -2,17 +2,15 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } 
 import { Contrat, ContratService, StatutContrat } from '../../../../core/services/contrat.service';
 import { MessageService } from '../../../../core/services/message.service';
 import { AuthService } from '../../../../core/services/auth.service';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
-import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
 
 @Component({
   selector: 'app-user-contrats',
   standalone: true,
-  imports: [CommonModule, CardModule, TableModule, TagModule, ToastModule],
+  imports: [CommonModule, CardModule, TableModule, TagModule],
   templateUrl: './contrats-list.html',
   styleUrls: ['./contrats-list.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,7 +20,7 @@ export class ContratsUtilisateurComponent {
   private readonly authService = inject(AuthService);
   private readonly messageService = inject(MessageService);
 
-  readonly currentUser = toSignal(this.authService.currentUser, { initialValue: this.authService.getCurrentUser() });
+  readonly currentUser = this.authService.currentUser;
   readonly currentUserId = computed(() => this.currentUser()?.id ?? null);
 
   readonly loading = signal(false);

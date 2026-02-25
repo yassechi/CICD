@@ -1,4 +1,4 @@
-import { Component, DestroyRef, Input, inject, signal } from '@angular/core';
+import { Component, DestroyRef, Input, effect, inject, signal } from '@angular/core';
 import { MessageApiService } from '../../core/services/message-api.service';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -21,7 +21,6 @@ export class SidebarComponent {
 
   menuItems = signal<MenuItem[]>([]);
   private unreadCount = signal(0);
-  private currentUser: User | null = null;
 
   private readonly authService = inject(AuthService);
   private readonly messageApiService = inject(MessageApiService);
@@ -29,9 +28,14 @@ export class SidebarComponent {
   private readonly destroyRef = inject(DestroyRef);
 
   constructor() {
-    this.authService.currentUser
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((user) => { this.currentUser = user; this.setMenu(); this.refreshBadge(); });
+    effect(
+      () => {
+        const user = this.authService.currentUser();
+        this.setMenu(user);
+        this.refreshBadge(user);
+      },
+      { allowSignalWrites: true },
+    );
 
     merge(
       interval(5000),
@@ -39,47 +43,43 @@ export class SidebarComponent {
       this.router.events.pipe(filter((e) => e instanceof NavigationEnd)),
     )
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.refreshBadge());
+      .subscribe(() => this.refreshBadge(this.authService.currentUser()));
   }
 
-  private setMenu(): void {
+  private setMenu(user: User | null): void {
     const badge = this.unreadCount() > 0 ? { badge: String(this.unreadCount()), badgeStyleClass: 'sidebar-badge' } : {};
-    const role = this.currentUser?.role ?? 3;
+    const role = user?.role ?? 3;
     this.menuItems.set(
       role === 1
         ? [
             { label: 'Dashboard', icon: 'pi pi-home', routerLink: ['/admin/dashboard'] },
             { label: 'Compagnies', icon: 'pi pi-building', routerLink: ['/admin/compagnies'] },
-            { label: 'Employ?s', icon: 'pi pi-users', routerLink: ['/admin/employes'] },
+            { label: 'Employés', icon: 'pi pi-users', routerLink: ['/admin/employes'] },
             { label: 'Contrats', icon: 'pi pi-file', routerLink: ['/admin/contrats'] },
             { label: 'Demandes', icon: 'pi pi-inbox', routerLink: ['/admin/demandes'], ...badge },
-            { label: 'Param?tres', icon: 'pi pi-cog', routerLink: ['/admin/parametres'] },
-          ]
+            { label: 'Paramètres', icon: 'pi pi-cog', routerLink: ['/admin/parametres'] }]
         : role === 2
         ? [
             { label: 'Dashboard', icon: 'pi pi-home', routerLink: ['/manager/dashboard'] },
-            { label: 'Employ?s', icon: 'pi pi-users', routerLink: ['/manager/employes'] },
+            { label: 'Employés', icon: 'pi pi-users', routerLink: ['/manager/employes'] },
             { label: 'Contrats', icon: 'pi pi-file', routerLink: ['/manager/contrats'] },
             { label: 'Demandes', icon: 'pi pi-inbox', routerLink: ['/manager/demandes'], ...badge },
-            { label: 'Param?tres', icon: 'pi pi-cog', routerLink: ['/manager/parametres'] },
-          ]
+            { label: 'Paramètres', icon: 'pi pi-cog', routerLink: ['/manager/parametres'] }]
         : [
             { label: 'Dashboard', icon: 'pi pi-home', routerLink: ['/user/dashboard'] },
             { label: 'Mes Contrats', icon: 'pi pi-file', routerLink: ['/user/contrats'] },
             { label: 'Mes Demandes', icon: 'pi pi-inbox', routerLink: ['/user/demandes'], ...badge },
-            { label: 'Param?tres', icon: 'pi pi-cog', routerLink: ['/user/parametres'] },
-          ],
+            { label: 'Paramètres', icon: 'pi pi-cog', routerLink: ['/user/parametres'] }],
     );
   }
 
-  private refreshBadge(): void {
-    const user = this.currentUser;
-    if (!user?.id) { this.unreadCount.set(0); this.setMenu(); return; }
+  private refreshBadge(user: User | null): void {
+    if (!user?.id) { this.unreadCount.set(0); this.setMenu(user); return; }
     const org = user.organisationId;
     const organisationId = typeof org === 'number' ? org : org && typeof org === 'object' && 'id' in org ? (typeof org.id === 'number' ? org.id : null) : null;
 
     this.messageApiService.getUnreadCount({ userId: user.id, role: user.role, organisationId })
       .pipe(catchError(() => of(0)), takeUntilDestroyed(this.destroyRef))
-      .subscribe((n) => { this.unreadCount.set(Number.isFinite(n) ? Math.max(0, n) : 0); this.setMenu(); });
+      .subscribe((n) => { this.unreadCount.set(Number.isFinite(n) ? Math.max(0, n) : 0); this.setMenu(user); });
   }
 }

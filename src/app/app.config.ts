@@ -25,8 +25,7 @@ export const appConfig: ApplicationConfig = {
         }
       }
     }),
-    PrimeMessageService,
-  ]
+    PrimeMessageService]
 };
 
 

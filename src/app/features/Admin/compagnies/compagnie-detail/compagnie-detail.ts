@@ -25,9 +25,15 @@ export class CompagnieDetailComponent {
 
   constructor() {
     this.organisationId = Number(this.route.snapshot.paramMap.get('id')) || null;
-    if (!this.organisationId) { this.goBack(); return; }
+    if (!this.organisationId) {
+      this.goBack();
+      return;
+    }
     this.organisationService.getOne(this.organisationId).subscribe({
-      next: (data) => this.organisation.set(data),
+      next: (data) => {
+        this.organisation.set(data);
+        this.loadLogo(this.organisationId!);
+      },
       error: () => {
         this.messageService.showError('Impossible de charger la compagnie');
         this.goBack();
@@ -35,6 +41,22 @@ export class CompagnieDetailComponent {
     });
   }
 
-  goBack(): void { this.router.navigate(['/admin/compagnies']); }
-  goEdit(): void { this.router.navigate(['/admin/compagnies', this.organisationId, 'edit']); }
+  private loadLogo(organisationId: number): void {
+    this.organisationService.getActiveLogo(organisationId).subscribe({
+      next: (logo) => {
+        const current = this.organisation();
+        if (!current) return;
+        const url = this.organisationService.buildLogoDataUrl(logo);
+        this.organisation.set({ ...current, logoUrl: url ?? undefined });
+      },
+      error: () => {},
+    });
+  }
+
+  goBack(): void {
+    this.router.navigate(['/admin/compagnies']);
+  }
+  goEdit(): void {
+    this.router.navigate(['/admin/compagnies', this.organisationId, 'edit']);
+  }
 }

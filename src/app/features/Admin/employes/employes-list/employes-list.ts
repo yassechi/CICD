@@ -10,7 +10,6 @@ import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
-import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
 import { TagModule } from 'primeng/tag';
@@ -20,9 +19,7 @@ import { finalize } from 'rxjs';
   selector: 'app-employes',
   standalone: true,
   imports: [
-    CommonModule, FormsModule, CardModule, ButtonModule, TableModule, TagModule,
-    ToastModule, TooltipModule, ConfirmDialogModule, SelectModule, InputTextModule,
-  ],
+    CommonModule, FormsModule, CardModule, ButtonModule, TableModule, TagModule, TooltipModule, ConfirmDialogModule, SelectModule, InputTextModule],
   providers: [ConfirmationService],
   templateUrl: './employes-list.html',
   styleUrls: ['./employes-list.scss'],
@@ -39,14 +36,12 @@ export class AdminEmployesComponent {
     { label: 'Tous', value: 'all' },
     { label: 'Administrateur', value: UserRole.Admin },
     { label: 'Manager', value: UserRole.Manager },
-    { label: 'Utilisateur', value: UserRole.User },
-  ];
+    { label: 'Utilisateur', value: UserRole.User }];
 
   statusOptions = [
     { label: 'Tous', value: 'all' },
     { label: 'Actif', value: 'active' },
-    { label: 'Inactif', value: 'inactive' },
-  ];
+    { label: 'Inactif', value: 'inactive' }];
 
   private readonly userService = inject(UserService);
   private readonly confirmationService = inject(ConfirmationService);

@@ -16,6 +16,7 @@ export interface VeloItem {
   title: { rendered: string };
   velos_brand?: number[];
   acf?: VeloAcf;
+  yoast_head_json: any,
   _embedded?: {
     'wp:featuredmedia'?: Array<{
       source_url?: string;

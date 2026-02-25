@@ -1,7 +1,5 @@
 <div class="login-shell flex align-items-center justify-content-center">
-  <p-toast></p-toast>
-
-  <div style="width: 450px;">
+  <div style="width: 450px">
     <p-card class="shadow-8">
       <ng-template pTemplate="header">
         <div class="text-center pt-4">
@@ -13,39 +11,80 @@
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <div class="field mb-4">
           <label for="email" class="block mb-2 font-semibold">Email</label>
-          <input pInputText id="email" type="email" formControlName="email" placeholder="exemple@email.com"
-            class="w-full" [class.ng-invalid]="email?.invalid && email?.touched" />
+          <input
+            pInputText
+            id="email"
+            type="email"
+            formControlName="email"
+            placeholder="exemple@email.com"
+            class="w-full"
+            [class.ng-invalid]="email?.invalid && email?.touched"
+          />
           @if (email?.invalid && email?.touched) {
             <small class="text-red-500">
-              @if (email?.errors?.['required']) { <span>L'email est requis.</span> }
-              @if (email?.errors?.['email'])    { <span>Format d'email invalide.</span> }
+              @if (email?.errors?.['required']) {
+                <span>L'email est requis.</span>
+              }
+              @if (email?.errors?.['email']) {
+                <span>Format d'email invalide.</span>
+              }
             </small>
           }
         </div>
 
         <div class="field mb-4">
           <label for="password" class="block mb-2 font-semibold">Mot de passe</label>
-          <p-password id="password" formControlName="password" placeholder="Entrez votre mot de passe"
-            [toggleMask]="true" [feedback]="false" class="w-full" [inputStyleClass]="'w-full'"
-            [class.ng-invalid]="password?.invalid && password?.touched"></p-password>
+          <p-password
+            id="password"
+            formControlName="password"
+            placeholder="Entrez votre mot de passe"
+            [toggleMask]="true"
+            [feedback]="false"
+            class="w-full"
+            [inputStyleClass]="'w-full'"
+            [class.ng-invalid]="password?.invalid && password?.touched"
+          ></p-password>
           @if (password?.invalid && password?.touched) {
             <small class="text-red-500">
-              @if (password?.errors?.['required'])  { <span>Le mot de passe est requis.</span> }
-              @if (password?.errors?.['minlength']) { <span>Minimum 8 caractères.</span> }
+              @if (password?.errors?.['required']) {
+                <span>Le mot de passe est requis.</span>
+              }
+              @if (password?.errors?.['minlength']) {
+                <span>Minimum 8 caractères.</span>
+              }
             </small>
           }
         </div>
 
         <div class="flex justify-content-end mb-4">
-          <a routerLink="/forgot-password" class="text-blue font-semibold cursor-pointer hover:underline">
+          <a
+            routerLink="/forgot-password"
+            class="text-blue font-semibold cursor-pointer hover:underline"
+          >
             Mot de passe oublié ?
           </a>
         </div>
 
-        <p-button label="Se connecter" type="submit" [loading]="loading()" class="w-full" [disabled]="loginForm.invalid"></p-button>
+        <div class="cb">
+          <div>
+            <p-button
+              class="btnn"
+              label="Se connecter"
+              type="submit"
+              [loading]="loading()"
+              class="w-full"
+              [disabled]="loginForm.invalid"
+            ></p-button>
+          </div>
 
-        <div class="mt-3">
-          <p-button label="Pas de compte" class="w-full no-account-btn" [routerLink]="['/faire-demande']"></p-button>
+          <div class="mt-3">
+            <p-button
+              class="btnn b2"
+              label="Pas de compte"
+              class="w-full no-account-btn"
+              [routerLink]="['/faire-demande']"
+            ></p-button>
+          </div>
         </div>
       </form>
     </p-card>

@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { ToolbarModule } from 'primeng/toolbar';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
@@ -22,17 +21,16 @@ export class NavbarComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
-  readonly currentUser = toSignal(this.authService.currentUser, { initialValue: this.authService.getCurrentUser() });
+  readonly currentUser = this.authService.currentUser;
 
   userMenuItems: MenuItem[] = [
     {
-      label: 'Param?tres',
+      label: 'Paramètres',
       icon: 'pi pi-cog',
       command: () => this.router.navigate([this.currentUser()?.role === 1 ? '/admin/parametres' : this.currentUser()?.role === 2 ? '/manager/parametres' : '/user/parametres']),
     },
     { separator: true },
-    { label: 'D?connexion', icon: 'pi pi-sign-out', command: () => this.authService.logout() },
-  ];
+    { label: 'Déconnexion', icon: 'pi pi-sign-out', command: () => this.authService.logout() }];
 
   onToggleSidebar(): void { this.toggleSidebar.emit(); }
 }

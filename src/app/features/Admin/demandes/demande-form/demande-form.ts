@@ -9,13 +9,12 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
-import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-demande-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CardModule, ButtonModule, SelectModule, CheckboxModule, InputNumberModule, ToastModule],
+  imports: [CommonModule, ReactiveFormsModule, CardModule, ButtonModule, SelectModule, CheckboxModule, InputNumberModule],
   templateUrl: './demande-form.html',
   styleUrls: ['./demande-form.scss'],
 })
@@ -30,8 +29,7 @@ export class DemandeFormDialogComponent {
     { label: 'Attente Compagnie', value: DemandeStatus.AttenteComagnie },
     { label: 'Finalisation', value: DemandeStatus.Finalisation },
     { label: 'Valid?', value: DemandeStatus.Valide },
-    { label: 'Refus?', value: DemandeStatus.Refuse },
-  ];
+    { label: 'Refus?', value: DemandeStatus.Refuse }];
 
   private readonly fb = inject(FormBuilder);
   form: FormGroup = this.fb.group({

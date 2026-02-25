@@ -1,8 +1,8 @@
 import { AuthResponse, LoginRequest } from '../models/auth.model';
 import { environment } from '../../../environments/environment';
-import { Observable, BehaviorSubject, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { User, UserRole } from '../models/user.model';
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
@@ -14,25 +14,12 @@ export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
 
-  private readonly currentUserSubject = new BehaviorSubject<User | null>(
-    (() => {
-      const storedUser = localStorage.getItem('currentUser');
-      if (!storedUser) {
-        return null;
-      }
-      try {
-        return JSON.parse(storedUser) as User;
-      } catch {
-        localStorage.removeItem('currentUser');
-        return null;
-      }
-    })(),
-  );
+  private readonly currentUserSignal = signal<User | null>(this.loadStoredUser());
 
-  public readonly currentUser: Observable<User | null> = this.currentUserSubject.asObservable();
+  readonly currentUser = this.currentUserSignal.asReadonly();
 
   public getCurrentUser(): User | null {
-    return this.currentUserSubject.value;
+    return this.currentUserSignal();
   }
 
   login(identifiants: LoginRequest): Observable<AuthResponse> {
@@ -65,7 +52,7 @@ export class AuthService {
     } else {
       localStorage.removeItem('currentUser');
     }
-    this.currentUserSubject.next(user);
+    this.currentUserSignal.set(user);
   }
 
   getToken(): string | null {
@@ -74,6 +61,19 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     return !!(this.getToken() || this.getCurrentUser());
+  }
+
+  private loadStoredUser(): User | null {
+    const storedUser = localStorage.getItem('currentUser');
+    if (!storedUser) {
+      return null;
+    }
+    try {
+      return JSON.parse(storedUser) as User;
+    } catch {
+      localStorage.removeItem('currentUser');
+      return null;
+    }
   }
 
   private redirectToRoleDashboard(role: UserRole): void {

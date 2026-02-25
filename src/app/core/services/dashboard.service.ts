@@ -12,9 +12,12 @@ export interface ActivityFeedItem {
 export interface AdminDashboard {
   pendingDemandes: number;
   activeContrats: number;
-  budgetTotal: number;
+  expiringContrats: number;
   activityFeed: ActivityFeedItem[];
-  veloTypeCounts: Array<{ label: string; value: number }>;
+  // Backend returns `bikeTypeCounts` (camelCase from BikeTypeCounts).
+  // Keep `veloTypeCounts` for backward compatibility.
+  bikeTypeCounts?: Array<{ label: string; value: number }>;
+  veloTypeCounts?: Array<{ label: string; value: number }>;
 }
 
 export interface ManagerDashboard {

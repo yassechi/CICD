@@ -13,7 +13,6 @@ import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
-import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
 import { TagModule } from 'primeng/tag';
@@ -21,7 +20,7 @@ import { TagModule } from 'primeng/tag';
 @Component({
   selector: 'app-manager-demandes',
   standalone: true,
-  imports: [CommonModule, FormsModule, CardModule, ButtonModule, TableModule, TagModule, ToastModule, TooltipModule, ConfirmDialogModule, SelectModule],
+  imports: [CommonModule, FormsModule, CardModule, ButtonModule, TableModule, TagModule, TooltipModule, ConfirmDialogModule, SelectModule],
   providers: [ConfirmationService],
   templateUrl: './demandes-list.html',
   styleUrls: ['./demandes-list.scss'],
@@ -36,8 +35,7 @@ export class ManagerDemandesComponent {
     { label: 'Attente Compagnie', value: DemandeStatus.AttenteComagnie },
     { label: 'Finalisation', value: DemandeStatus.Finalisation },
     { label: 'Valid?', value: DemandeStatus.Valide },
-    { label: 'Refus?', value: DemandeStatus.Refuse },
-  ];
+    { label: 'Refus?', value: DemandeStatus.Refuse }];
 
   private readonly demandeService = inject(DemandeService);
   private readonly authService = inject(AuthService);

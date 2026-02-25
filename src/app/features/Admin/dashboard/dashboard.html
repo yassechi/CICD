@@ -1,4 +1,4 @@
-﻿<div class="dashboard-container page-shell">
+<div class="dashboard-container page-shell">
   <div class="page-header">
     <div>
       <h1 class="page-title">Dashboard RH</h1>
@@ -16,34 +16,54 @@
       <div class="stat-value">{{ stats().activeContrats }}</div>
     </div>
     <div class="stat-card stat-card--accent">
-      <div class="stat-label">Budget total engage</div>
-      <div class="stat-value">{{ formatCurrency(stats().budgetTotal) }}</div>
+      <div class="stat-label">Contrats expirant bientot (30j)</div>
+      <div class="stat-value">{{ stats().expiringContrats }}</div>
     </div>
   </div>
 
   <div class="grid mt-4">
     <div class="col-12 lg:col-7">
-      <p-card class="chart-card">
-        <ng-template pTemplate="header">
-          <div class="p-3">
-            <h3 class="m-0 chart-title">Repartition par type de velo</h3>
-          </div>
-        </ng-template>
-        <p-chart
-          type="bar"
-          class="mojo-chart"
-          [data]="veloTypeChartData()"
-          [options]="barChartOptions"
-          style="height: 320px"
-        ></p-chart>
-      </p-card>
+      <div class="grid">
+        <div class="col-12 md:col-6">
+          <p-card class="chart-card">
+            <ng-template pTemplate="header">
+              <div class="p-3">
+                <h3 class="m-0 chart-title">Demandes par statut</h3>
+              </div>
+            </ng-template>
+            <p-chart
+              type="doughnut"
+              class="mojo-chart"
+              [data]="demandeStatusChartData()"
+              [options]="donutChartOptions"
+              style="height: 260px"
+            ></p-chart>
+          </p-card>
+        </div>
+        <div class="col-12 md:col-6">
+          <p-card class="chart-card">
+            <ng-template pTemplate="header">
+              <div class="p-3">
+                <h3 class="m-0 chart-title">Contrats par statut</h3>
+              </div>
+            </ng-template>
+            <p-chart
+              type="doughnut"
+              class="mojo-chart"
+              [data]="contratStatusChartData()"
+              [options]="donutChartOptions"
+              style="height: 260px"
+            ></p-chart>
+          </p-card>
+        </div>
+      </div>
     </div>
 
     <div class="col-12 lg:col-5">
       <p-card class="section-card activity-card">
         <ng-template pTemplate="header">
           <div class="p-3">
-            <h3 class="m-0 chart-title">Dernieres activites</h3>
+            <h3 class="m-0 chart-title">Dernieres demandes</h3>
           </div>
         </ng-template>
         <div class="activity-list">
@@ -65,39 +85,4 @@
     </div>
   </div>
 
-  <div class="grid mt-4">
-    <div class="col-12 lg:col-6">
-      <p-card class="chart-card">
-        <ng-template pTemplate="header">
-          <div class="p-3">
-            <h3 class="m-0 chart-title">Demandes par statut</h3>
-          </div>
-        </ng-template>
-        <p-chart
-          type="doughnut"
-          class="mojo-chart"
-          [data]="demandeStatusChartData()"
-          [options]="donutChartOptions"
-          style="height: 280px"
-        ></p-chart>
-      </p-card>
-    </div>
-
-    <div class="col-12 lg:col-6">
-      <p-card class="chart-card">
-        <ng-template pTemplate="header">
-          <div class="p-3">
-            <h3 class="m-0 chart-title">Contrats par statut</h3>
-          </div>
-        </ng-template>
-        <p-chart
-          type="doughnut"
-          class="mojo-chart"
-          [data]="contratStatusChartData()"
-          [options]="donutChartOptions"
-          style="height: 280px"
-        ></p-chart>
-      </p-card>
-    </div>
-  </div>
 </div>

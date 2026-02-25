@@ -34,7 +34,9 @@ export class FaireDemandeComponent {
     this.loading.set(true);
     this.organisationService.getAll().subscribe({
       next: (orgs) => {
-        this.organisations.set(orgs ?? []);
+        const items = orgs ?? [];
+        this.organisations.set(items);
+        this.loadLogos(items);
         this.loading.set(false);
       },
       error: () => {
@@ -51,9 +53,24 @@ export class FaireDemandeComponent {
     if (this.organisation) {
       qp['organisationId'] = String(this.organisation.id);
       qp['organisationName'] = this.organisation.name;
-      if (this.organisation.logoUrl) qp['organisationLogoUrl'] = this.organisation.logoUrl;
     }
     this.router.navigate(['/create-lamda-user'], { queryParams: qp });
+  }
+
+  private loadLogos(organisations: Organisation[]): void {
+    organisations.forEach((org) => {
+      this.organisationService.getActiveLogo(org.id).subscribe({
+        next: (logo) => {
+          const url = this.organisationService.buildLogoDataUrl(logo);
+          const current = this.organisations();
+          const target = current.find((item) => item.id === org.id);
+          if (!target) return;
+          target.logoUrl = url ?? undefined;
+          this.organisations.set([...current]);
+        },
+        error: () => {},
+      });
+    });
   }
 
   get organisationOptions(): Organisation[] {

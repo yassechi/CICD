@@ -14,31 +14,10 @@ import { CardModule } from 'primeng/card';
   styleUrls: ['./dashboard.scss'],
 })
 export class AdminDashboardComponent {
-  stats = signal({ pendingDemandes: 0, activeContrats: 0, budgetTotal: 0 });
+  stats = signal({ pendingDemandes: 0, activeContrats: 0, expiringContrats: 0 });
   activityFeed = signal<Array<{ title: string; detail: string; time: string }>>([]);
-  veloTypeChartData = signal<any>(null);
   demandeStatusChartData = signal<any>(null);
   contratStatusChartData = signal<any>(null);
-
-  readonly barChartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    indexAxis: 'y',
-    plugins: {
-      legend: { display: false },
-      tooltip: {
-        backgroundColor: 'rgba(15, 23, 42, 0.92)',
-        titleFont: { family: 'Space Grotesk', size: 13, weight: '700' },
-        bodyFont: { family: 'Manrope', size: 12, weight: '600' },
-        padding: 12,
-        cornerRadius: 12,
-      },
-    },
-    scales: {
-      x: { grid: { display: false }, ticks: { color: '#64748B', font: { family: 'Manrope' } } },
-      y: { grid: { display: false }, ticks: { color: '#334155', font: { family: 'Manrope', weight: '600' } } },
-    },
-  };
 
   readonly donutChartOptions = {
     responsive: true,
@@ -68,39 +47,50 @@ export class AdminDashboardComponent {
         this.stats.set({
           pendingDemandes: data.pendingDemandes,
           activeContrats: data.activeContrats,
-          budgetTotal: data.budgetTotal,
+          expiringContrats: data.expiringContrats,
         });
         this.activityFeed.set(data.activityFeed ?? []);
-        const counts = data.veloTypeCounts ?? [];
-        this.veloTypeChartData.set({
-          labels: counts.map((c: any) => c.label),
-          datasets: [{ data: counts.map((c: any) => c.value), backgroundColor: '#0F766E', borderRadius: 8, barThickness: 18 }],
-        });
       },
     });
 
-    this.demandeService.getAll().subscribe({
+    this.demandeService.getList().subscribe({
       next: (demandes) => {
-        const statuses = [DemandeStatus.Encours, DemandeStatus.AttenteComagnie, DemandeStatus.Finalisation, DemandeStatus.Valide, DemandeStatus.Refuse];
+        const items = Array.isArray(demandes) ? demandes : (demandes as any)?.items ?? [];
+        const statuses = [
+          DemandeStatus.Encours,
+          DemandeStatus.AttenteComagnie,
+          DemandeStatus.Finalisation,
+          DemandeStatus.Valide,
+          DemandeStatus.Refuse];
         this.demandeStatusChartData.set({
           labels: statuses.map((s) => this.demandeService.getStatusLabel(s)),
-          datasets: [{ data: statuses.map((s) => demandes.filter((d) => d.status === s).length), backgroundColor: ['#bbf7d0', '#86efac', '#4ade80', '#22c55e', '#16a34a'], borderColor: '#ffffff', borderWidth: 2 }],
+          datasets: [
+            {
+              data: statuses.map((s) => items.filter((d: any) => d.status === s).length),
+              backgroundColor: ['#bbf7d0', '#86efac', '#4ade80', '#22c55e', '#16a34a'],
+              borderColor: '#ffffff',
+              borderWidth: 2,
+            }],
         });
       },
     });
 
-    this.contratService.getAll().subscribe({
+    this.contratService.getList().subscribe({
       next: (contrats) => {
+        const items = Array.isArray(contrats) ? contrats : (contrats as any)?.items ?? [];
         const statuses = [StatutContrat.EnCours, StatutContrat.Termine, StatutContrat.Resilie];
         this.contratStatusChartData.set({
           labels: statuses.map((s) => this.contratService.getStatutLabel(s)),
-          datasets: [{ data: statuses.map((s) => contrats.filter((c) => c.statutContrat === s).length), backgroundColor: ['#bbf7d0', '#4ade80', '#16a34a'], borderColor: '#ffffff', borderWidth: 2 }],
+          datasets: [
+            {
+              data: statuses.map((s) => items.filter((c: any) => c.statutContrat === s).length),
+              backgroundColor: ['#bbf7d0', '#4ade80', '#16a34a'],
+              borderColor: '#ffffff',
+              borderWidth: 2,
+            }],
         });
       },
     });
   }
 
-  formatCurrency(amount: number): string {
-    return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(amount);
-  }
 }

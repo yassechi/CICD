@@ -1,4 +1,9 @@
-import { Contrat, ContratEditData, ContratService, StatutContrat } from '../../../../core/services/contrat.service';
+import {
+  Contrat,
+  ContratEditData,
+  ContratService,
+  StatutContrat,
+} from '../../../../core/services/contrat.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from '../../../../core/services/message.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,13 +14,20 @@ import { CommonModule } from '@angular/common';
 import { InputText } from 'primeng/inputtext';
 import { Button } from 'primeng/button';
 import { Select } from 'primeng/select';
-import { Toast } from 'primeng/toast';
 import { Card } from 'primeng/card';
 
 @Component({
   selector: 'app-contrat-edit',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, Card, Button, InputText, Select, DatePicker, InputNumber, Toast],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    Card,
+    Button,
+    InputText,
+    Select,
+    DatePicker,
+    InputNumber],
   templateUrl: './contrat-edit.html',
   styleUrls: ['./contrat-edit.scss'],
 })
@@ -46,13 +58,15 @@ export class ContratEditComponent {
   readonly statutOptions = [
     { label: 'En cours', value: StatutContrat.EnCours },
     { label: 'Termin?', value: StatutContrat.Termine },
-    { label: 'R?sili?', value: StatutContrat.Resilie },
-  ];
+    { label: 'R?sili?', value: StatutContrat.Resilie }];
 
   constructor() {
     const id = Number(this.route.snapshot.paramMap.get('id')) || null;
     this.contratId = id;
-    if (!id) { this.goBack(); return; }
+    if (!id) {
+      this.goBack();
+      return;
+    }
 
     this.loading = true;
     this.contratService.getEditData(id).subscribe({
@@ -76,10 +90,19 @@ export class ContratEditComponent {
   }
 
   onSubmit(): void {
-    if (this.contratForm.invalid) { this.messageService.showWarn('Veuillez remplir tous les champs obligatoires'); return; }
+    if (this.contratForm.invalid) {
+      this.messageService.showWarn('Veuillez remplir tous les champs obligatoires');
+      return;
+    }
 
     const v = this.contratForm.getRawValue();
-    if (!v.dateDebut || !v.dateFin || v.veloId === null || v.duree === null || v.loyerMensuelHT === null) {
+    if (
+      !v.dateDebut ||
+      !v.dateFin ||
+      v.veloId === null ||
+      v.duree === null ||
+      v.loyerMensuelHT === null
+    ) {
       this.messageService.showError('Formulaire incomplet');
       return;
     }
@@ -101,11 +124,13 @@ export class ContratEditComponent {
     this.contratService.update(contrat).subscribe({
       next: () => {
         this.messageService.showSuccess('Contrat modifi? avec succ?s');
-        setTimeout(() => window.location.href = `/admin/contrats/${this.contratId}`, 1000);
+        setTimeout(() => (window.location.href = `/admin/contrats/${this.contratId}`), 1000);
       },
       error: () => this.messageService.showError('Impossible de modifier le contrat'),
     });
   }
 
-  goBack(): void { this.router.navigate(['/admin/contrats', this.contratId ?? '']); }
+  goBack(): void {
+    this.router.navigate(['/admin/contrats', this.contratId ?? '']);
+  }
 }

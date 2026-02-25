@@ -6,6 +6,7 @@
       var(--mojo-button-end) 100%
     ) !important;
     border: none !important;
+    min-width: 300px;
 
     &:hover {
       background: linear-gradient(
@@ -34,7 +35,10 @@
   background: linear-gradient(160deg, #065f46 0%, #0f766e 45%, #0b3b2e 100%);
 }
 
-
 .text-blue {
   color: #1e3a8a;
+}
+
+.cb {
+ text-align: center;
 }

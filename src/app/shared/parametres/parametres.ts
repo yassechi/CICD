@@ -7,13 +7,12 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
-import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-parametres',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CardModule, InputTextModule, ButtonModule, PasswordModule, ToastModule],
+  imports: [CommonModule, ReactiveFormsModule, CardModule, InputTextModule, ButtonModule, PasswordModule],
   templateUrl: './parametres.html',
   styleUrls: ['./parametres.scss'],
 })
@@ -43,23 +42,7 @@ export class ParametresComponent {
   private readonly messageService = inject(MessageService);
 
   constructor() {
-    const user = this.authService.getCurrentUser();
-    if (!user?.id) return;
-
-    this.userService.getOne(user.id).subscribe({
-      next: (data: any) => {
-        this.currentUser.set(data);
-        this.profileForm.patchValue({
-          userName: data.userName,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          email: data.email,
-          phoneNumber: data.phoneNumber,
-          tailleCm: data.tailleCm || 177,
-        });
-      },
-      error: () => this.messageService.showError('Impossible de charger vos informations'),
-    });
+    this.loadProfile();
   }
 
   updateProfile(): void {
@@ -84,22 +67,7 @@ export class ParametresComponent {
       next: () => {
         this.loading.set(false);
         this.messageService.showSuccess('Informations mises a jour', 'Succes');
-        const user = this.authService.getCurrentUser();
-        if (!user?.id) return;
-        this.userService.getOne(user.id).subscribe({
-          next: (data: any) => {
-            this.currentUser.set(data);
-            this.profileForm.patchValue({
-              userName: data.userName,
-              firstName: data.firstName,
-              lastName: data.lastName,
-              email: data.email,
-              phoneNumber: data.phoneNumber,
-              tailleCm: data.tailleCm || 177,
-            });
-          },
-          error: () => this.messageService.showError('Impossible de charger vos informations'),
-        });
+        this.loadProfile();
       },
       error: () => {
         this.loading.set(false);
@@ -133,6 +101,36 @@ export class ParametresComponent {
   }
 
   setActiveTab(tab: 'profile' | 'password'): void { this.activeTab = tab; }
+
+  private loadProfile(): void {
+    const storedId = this.authService.getCurrentUser()?.id;
+
+    this.userService.getMe().subscribe({
+      next: (data: any) => this.applyUserData(data),
+      error: () => {
+        if (!storedId) {
+          this.messageService.showError('Impossible de charger vos informations');
+          return;
+        }
+        this.userService.getOne(storedId).subscribe({
+          next: (data: any) => this.applyUserData(data),
+          error: () => this.messageService.showError('Impossible de charger vos informations'),
+        });
+      },
+    });
+  }
+
+  private applyUserData(data: any): void {
+    this.currentUser.set(data);
+    this.profileForm.patchValue({
+      userName: data.userName,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      phoneNumber: data.phoneNumber,
+      tailleCm: data.tailleCm || 177,
+    });
+  }
 
   private passwordMatchValidator(form: FormGroup) {
     const pwd = form.get('newPassword')?.value;

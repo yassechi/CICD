@@ -15,7 +15,6 @@ import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
-import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
 import { TagModule } from 'primeng/tag';
@@ -26,8 +25,7 @@ import { finalize } from 'rxjs';
   standalone: true,
   imports: [
     CommonModule, FormsModule, CardModule, ButtonModule, TagModule, TableModule,
-    ConfirmDialogModule, ToastModule, TooltipModule, SelectModule, InputTextModule,
-  ],
+    ConfirmDialogModule, TooltipModule, SelectModule, InputTextModule],
   providers: [ConfirmationService],
   templateUrl: './demandes-list.html',
   styleUrls: ['./demandes-list.scss'],
@@ -49,8 +47,7 @@ export class AdminDemandesComponent {
     { label: 'Attente Compagnie', value: DemandeStatus.AttenteComagnie },
     { label: 'Finalisation', value: DemandeStatus.Finalisation },
     { label: 'Valide', value: DemandeStatus.Valide },
-    { label: 'Refuse', value: DemandeStatus.Refuse },
-  ];
+    { label: 'Refuse', value: DemandeStatus.Refuse }];
 
   private readonly demandeService = inject(DemandeService);
   private readonly veloService = inject(VeloService);

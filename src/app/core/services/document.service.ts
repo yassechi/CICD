@@ -44,6 +44,7 @@ export class DocumentService {
     return this.http.delete(`${this.apiUrl}/delete/${id}`);
   }
 
+  /////////////////////////////////////////////////////////
   downloadDocument(doc: Document): void {
     // Convertir base64 en Blob
     const byteCharacters = atob(doc.fichier);

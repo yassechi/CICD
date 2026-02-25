@@ -8,7 +8,6 @@ import { TooltipModule } from 'primeng/tooltip';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
-import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
 import { TagModule } from 'primeng/tag';
@@ -16,7 +15,7 @@ import { TagModule } from 'primeng/tag';
 @Component({
   selector: 'app-manager-contrats',
   standalone: true,
-  imports: [CommonModule, CardModule, ButtonModule, TableModule, TagModule, ToastModule, TooltipModule, ConfirmDialogModule],
+  imports: [CommonModule, CardModule, ButtonModule, TableModule, TagModule, TooltipModule, ConfirmDialogModule],
   providers: [ConfirmationService],
   templateUrl: './contrats-list.html',
   styleUrls: ['./contrats-list.scss'],

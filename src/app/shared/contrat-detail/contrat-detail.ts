@@ -1,15 +1,29 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { AuthService } from './../../core/services/auth.service';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  inject,
+  signal,
+} from '@angular/core';
+import {
+  ActivatedRoute,
+  Router,
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet,
+} from '@angular/router';
 import { Contrat, ContratService, StatutContrat } from '../../core/services/contrat.service';
-import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { MessageService } from '../../core/services/message.service';
 import { TooltipModule } from 'primeng/tooltip';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
-import { ToastModule } from 'primeng/toast';
-import { filter, Subscription } from 'rxjs';
-import { TabsModule } from 'primeng/tabs';
+import { Subscription } from 'rxjs';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
+import { User } from '../../core/models/user.model';
 
 @Component({
   selector: 'app-contrat-detail',
@@ -20,10 +34,9 @@ import { TagModule } from 'primeng/tag';
     ButtonModule,
     TagModule,
     TooltipModule,
-    ToastModule,
-    TabsModule,
-    RouterOutlet,
-  ],
+    RouterLink,
+    RouterLinkActive,
+    RouterOutlet],
   templateUrl: './contrat-detail.html',
   styleUrls: ['./contrat-detail.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,22 +48,19 @@ export class ContratDetailComponent implements OnInit, OnDestroy {
   private readonly messageService = inject(MessageService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly sub = new Subscription();
+  private readonly AuthService = inject(AuthService);
 
   contratId: number | null = null;
   contrat: Contrat | null = null;
   loading = false;
-  tableActive = 'detail';
+  role = signal<number | null>(null);
 
   tabs: Array<{ route: string; label: string; icon: string }> = [];
 
   ngOnInit(): void {
+    this.role.set(this.AuthService.getCurrentUser()?.role!);
+
     this.tabs = this.buildTabs();
-    this.modifierActiveTab();
-    this.sub.add(
-      this.router.events
-        .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
-        .subscribe(() => this.modifierActiveTab()),
-    );
     this.sub.add(
       this.route.paramMap.subscribe((p) => {
         this.contratId = Number(p.get('id')) || null;
@@ -68,16 +78,13 @@ export class ContratDetailComponent implements OnInit, OnDestroy {
       { route: 'detail', label: 'Donnees du contrat', icon: 'pi pi-id-card' },
       { route: 'documents', label: 'Documents', icon: 'pi pi-file-pdf' },
       { route: 'entretien', label: 'Entretien', icon: 'pi pi-wrench' },
-    ];
-    return this.isManager() ? tabs : [...tabs, { route: 'amortissement', label: 'Amortissement', icon: 'pi pi-chart-line' }];
-  }
+      { route: 'amortissement', label: 'Amortissement', icon: 'pi pi-chart-line' }];
 
-  private isManager(): boolean {
-    return this.route.parent?.snapshot.data?.['role'] === 2;
-  }
-
-  private modifierActiveTab(): void {
-    this.tableActive = this.route.snapshot.firstChild?.routeConfig?.path ?? 'detail';
+    if (this.role() === 1) return tabs;
+    if (this.role() === 2) {
+      return tabs.filter((tab) => tab.route !== 'amortissement');
+    }
+    return [];
   }
 
   private load(): void {
@@ -88,7 +95,7 @@ export class ContratDetailComponent implements OnInit, OnDestroy {
       return;
     }
     this.loading = true;
-    this.cdr.markForCheck();
+    this.cdr.markForCheck(); /////////////
     this.sub.add(
       this.contratService.getDetail(this.contratId).subscribe({
         next: (data) => {
@@ -108,9 +115,6 @@ export class ContratDetailComponent implements OnInit, OnDestroy {
 
   goBack(): void {
     this.router.navigate(['../'], { relativeTo: this.route });
-  }
-  onTabChange(value: string): void {
-    this.router.navigate([value], { relativeTo: this.route });
   }
   getStatutLabel(statut: StatutContrat): string {
     return this.contratService.getStatutLabel(statut);

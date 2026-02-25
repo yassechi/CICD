@@ -11,7 +11,6 @@ import { TooltipModule } from 'primeng/tooltip';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
-import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
 import { TagModule } from 'primeng/tag';
@@ -19,7 +18,7 @@ import { TagModule } from 'primeng/tag';
 @Component({
   selector: 'app-user-demandes',
   standalone: true,
-  imports: [CommonModule, CardModule, ButtonModule, TableModule, TagModule, ToastModule, TooltipModule, ConfirmDialogModule],
+  imports: [CommonModule, CardModule, ButtonModule, TableModule, TagModule, TooltipModule, ConfirmDialogModule],
   providers: [ConfirmationService],
   templateUrl: './demandes-list.html',
   styleUrls: ['./demandes-list.scss'],
@@ -71,7 +70,7 @@ export class DemandesUtilisateurComponent {
 
   onDelete(d: AdminDemandeListItem): void {
     this.confirmationService.confirm({
-      message: '?tes-vous s?r de vouloir supprimer cette demande ?',
+      message: 'Êtes-vous sûr de vouloir supprimer cette demande ? ?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'Oui',

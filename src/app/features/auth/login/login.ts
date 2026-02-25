@@ -7,7 +7,6 @@ import { PasswordModule } from 'primeng/password';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
-import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
 
 @Component({
@@ -15,7 +14,7 @@ import { CardModule } from 'primeng/card';
   standalone: true,
   imports: [
     CommonModule, ReactiveFormsModule, CardModule, InputTextModule,
-    PasswordModule, ButtonModule, ToastModule, RouterModule
+    PasswordModule, ButtonModule, RouterModule
   ],
   templateUrl: './login.html',
   styleUrls: ['./login.scss']
@@ -37,7 +36,7 @@ export class LoginComponent {
     this.authService.login(this.loginForm.value).subscribe({
       next: (response) => {
         this.loading.set(false);
-        this.messageService.showSuccess(`Bienvenue ${response.userName}!`, 'Connexion r?ussie');
+        this.messageService.showSuccess(`Bienvenue ${response.userName}!`, 'Connexion réussie');
       },
       error: (error) => {
         this.loading.set(false);

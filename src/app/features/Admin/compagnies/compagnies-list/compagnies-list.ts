@@ -10,7 +10,6 @@ import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
-import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
 import { Router } from '@angular/router';
 import { TagModule } from 'primeng/tag';
@@ -20,11 +19,16 @@ import { finalize } from 'rxjs';
   selector: 'app-compagnies',
   standalone: true,
   imports: [
-    CommonModule, FormsModule,
-    CardModule, ButtonModule, TableModule, TagModule,
-    ToastModule, TooltipModule, ConfirmDialogModule,
-    SelectModule, InputTextModule,
-  ],
+    CommonModule,
+    FormsModule,
+    CardModule,
+    ButtonModule,
+    TableModule,
+    TagModule,
+    TooltipModule,
+    ConfirmDialogModule,
+    SelectModule,
+    InputTextModule],
   providers: [ConfirmationService],
   templateUrl: './compagnies-list.html',
   styleUrls: ['./compagnies-list.scss'],
@@ -38,15 +42,16 @@ export class AdminCompagniesComponent {
   statusOptions = [
     { label: 'Tous', value: 'all' },
     { label: 'Actif', value: 'active' },
-    { label: 'Inactif', value: 'inactive' },
-  ];
+    { label: 'Inactif', value: 'inactive' }];
 
   private readonly organisationService = inject(OrganisationService);
   private readonly confirmationService = inject(ConfirmationService);
   private readonly messageService = inject(MessageService);
   private readonly router = inject(Router);
 
-  constructor() { this.load(); }
+  constructor() {
+    this.load();
+  }
 
   load(): void {
     this.loading.set(true);
@@ -57,14 +62,40 @@ export class AdminCompagniesComponent {
       })
       .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
-        next: (data) => this.organisations.set(data ?? []),
+        next: (data) => {
+          const organisations = data ?? [];
+          this.organisations.set(organisations);
+          this.loadLogos(organisations);
+        },
         error: () => this.messageService.showError('Impossible de charger les organisations'),
       });
   }
 
-  onCreate(): void { this.router.navigate(['/admin/compagnies/new']); }
-  onView(org: Organisation): void { this.router.navigate(['/admin/compagnies', org.id]); }
-  onEdit(org: Organisation): void { this.router.navigate(['/admin/compagnies', org.id, 'edit']); }
+  private loadLogos(organisations: Organisation[]): void {
+    organisations.forEach((org) => {
+      this.organisationService.getActiveLogo(org.id).subscribe({
+        next: (logo) => {
+          const url = this.organisationService.buildLogoDataUrl(logo);
+          const current = this.organisations();
+          const target = current.find((item) => item.id === org.id);
+          if (!target) return;
+          target.logoUrl = url ?? undefined;
+          this.organisations.set([...current]);
+        },
+        error: () => {},
+      });
+    });
+  }
+
+  onCreate(): void {
+    this.router.navigate(['/admin/compagnies/new']);
+  }
+  onView(org: Organisation): void {
+    this.router.navigate(['/admin/compagnies', org.id]);
+  }
+  onEdit(org: Organisation): void {
+    this.router.navigate(['/admin/compagnies', org.id, 'edit']);
+  }
 
   onDelete(org: Organisation): void {
     this.confirmationService.confirm({
@@ -73,10 +104,14 @@ export class AdminCompagniesComponent {
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'Oui',
       rejectLabel: 'Non',
-      accept: () => this.organisationService.delete(org.id).subscribe({
-        next: () => { this.messageService.showSuccess('Compagnie supprim?e', 'Succ?s'); this.load(); },
-        error: () => this.messageService.showError('Impossible de supprimer la compagnie'),
-      }),
+      accept: () =>
+        this.organisationService.delete(org.id).subscribe({
+          next: () => {
+            this.messageService.showSuccess('Compagnie supprim?e', 'Succ?s');
+            this.load();
+          },
+          error: () => this.messageService.showError('Impossible de supprimer la compagnie'),
+        }),
     });
   }
 }

@@ -1,6 +1,4 @@
-﻿<div class="contrat-detail-container page-shell">
-  <p-toast></p-toast>
-
+<div class="contrat-detail-container page-shell">
   <div class="page-header">
     <div class="flex align-items-center gap-3">
       <p-button icon="pi pi-arrow-left" [text]="true" [rounded]="true" (onClick)="goBack()" pTooltip="Retour à la liste"></p-button>
@@ -18,16 +16,19 @@
 
   @if (contrat) {
     <div class="section-card p-2 contract-tabs">
-      <p-tabs [value]="tableActive" (valueChange)="onTabChange($event == null ? 'detail' : ($event + ''))">
-        <p-tablist>
-          @for (tab of tabs; track tab.route) {
-            <p-tab [value]="tab.route" class="flex items-center gap-2 text-inherit">
-              <i [ngClass]="tab.icon"></i>
-              <span>{{ tab.label }}</span>
-            </p-tab>
-          }
-        </p-tablist>
-      </p-tabs>
+      <div class="contract-tablist" role="tablist">
+        @for (tab of tabs; track tab.route) {
+          <a
+            class="contract-tab"
+            role="tab"
+            [routerLink]="[tab.route]"
+            routerLinkActive="is-active"
+          >
+            <i [ngClass]="tab.icon"></i>
+            <span>{{ tab.label }}</span>
+          </a>
+        }
+      </div>
     </div>
 
     <router-outlet></router-outlet>

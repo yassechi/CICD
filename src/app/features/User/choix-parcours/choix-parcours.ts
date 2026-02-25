@@ -1,3 +1,4 @@
+import { OrganisationService } from '../../../core/services/organisation.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -15,15 +16,25 @@ export class ChoixParcoursUtilisateurComponent {
   lastName = '';
   organisationName = '';
   organisationLogoUrl: string | null = null;
+  organisationId: number | null = null;
 
   private readonly router = inject(Router);
   private readonly params = inject(ActivatedRoute).snapshot.queryParams;
+  private readonly organisationService = inject(OrganisationService);
 
   constructor() {
     this.firstName = this.params['firstName'] || '';
     this.lastName = this.params['lastName'] || '';
     this.organisationName = this.params['organisationName'] || '';
-    this.organisationLogoUrl = this.params['organisationLogoUrl'] || null;
+    this.organisationId = this.params['organisationId'] ? Number(this.params['organisationId']) : null;
+    if (this.organisationId) {
+      this.organisationService.getActiveLogo(this.organisationId).subscribe({
+        next: (logo) => {
+          this.organisationLogoUrl = this.organisationService.buildLogoDataUrl(logo);
+        },
+        error: () => {},
+      });
+    }
   }
 
   goToQuestionnaire(): void { this.router.navigate(['/questionnaire-guide'], { queryParams: this.queryParams() }); }
@@ -34,7 +45,7 @@ export class ChoixParcoursUtilisateurComponent {
     if (this.firstName) p['firstName'] = this.firstName;
     if (this.lastName) p['lastName'] = this.lastName;
     if (this.organisationName) p['organisationName'] = this.organisationName;
-    if (this.organisationLogoUrl) p['organisationLogoUrl'] = this.organisationLogoUrl;
+    if (this.organisationId) p['organisationId'] = String(this.organisationId);
     return p;
   }
 }

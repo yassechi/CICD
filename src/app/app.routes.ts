@@ -80,11 +80,9 @@ export const routes: Routes = [
           { path: 'detail',        component: ContratDetailInfoComponent },
           { path: 'documents',     component: ContratDocumentsComponent },
           { path: 'entretien',     component: ContratEntretienComponent },
-          { path: 'amortissement', component: ContratAmortissementComponent },
-        ],
+          { path: 'amortissement', component: ContratAmortissementComponent }],
       },
-      { path: 'parametres', component: ParametresComponent },
-    ],
+      { path: 'parametres', component: ParametresComponent }],
   },
 
   // Manager
@@ -112,11 +110,9 @@ export const routes: Routes = [
           { path: '',              redirectTo: 'detail', pathMatch: 'full' },
           { path: 'detail',        component: ContratDetailInfoComponent },
           { path: 'documents',     component: ContratDocumentsComponent },
-          { path: 'entretien',     component: ContratEntretienComponent },
-        ],
+          { path: 'entretien',     component: ContratEntretienComponent }],
       },
-      { path: 'parametres',         component: ParametresComponent },
-    ],
+      { path: 'parametres',         component: ParametresComponent }],
   },
 
   // User
@@ -133,10 +129,8 @@ export const routes: Routes = [
       { path: 'demandes/new',      component: DemandeCatalogueComponent },
       { path: 'demandes/:id/edit', component: DemandeCatalogueComponent },
       { path: 'demandes/:id',      component: DemandeDetailComponent },
-      { path: 'parametres',        component: ParametresComponent },
-    ],
+      { path: 'parametres',        component: ParametresComponent }],
   },
 
   { path: '',   redirectTo: 'login', pathMatch: 'full' },
-  { path: '**', redirectTo: 'login' },
-];
+  { path: '**', redirectTo: 'login' }];

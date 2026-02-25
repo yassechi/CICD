@@ -9,14 +9,13 @@ import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
-import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-contrat-amortissement',
   standalone: true,
-  imports: [CommonModule, FormsModule, CardModule, TableModule, InputNumberModule, ButtonModule, ToastModule],
+  imports: [CommonModule, FormsModule, CardModule, TableModule, InputNumberModule, ButtonModule],
   templateUrl: './contrat-amortissement.html',
   styleUrls: ['./contrat-amortissement.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

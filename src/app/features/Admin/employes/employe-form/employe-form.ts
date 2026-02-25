@@ -10,7 +10,6 @@ import { PasswordModule } from 'primeng/password';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
-import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
 
 @Component({
@@ -19,8 +18,7 @@ import { CardModule } from 'primeng/card';
   imports: [
     CommonModule, ReactiveFormsModule,
     CardModule, ButtonModule, InputTextModule,
-    CheckboxModule, SelectModule, PasswordModule, ToastModule,
-  ],
+    CheckboxModule, SelectModule, PasswordModule],
   templateUrl: './employe-form.html',
   styleUrls: ['./employe-form.scss'],
 })
@@ -33,8 +31,7 @@ export class EmployeFormDialogComponent {
   roleOptions = [
     { label: 'Administrateur', value: UserRole.Admin },
     { label: 'Manager', value: UserRole.Manager },
-    { label: 'Utilisateur', value: UserRole.User },
-  ];
+    { label: 'Utilisateur', value: UserRole.User }];
 
   private readonly fb = inject(FormBuilder);
   form: FormGroup = this.fb.group({

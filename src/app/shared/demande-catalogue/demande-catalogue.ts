@@ -11,14 +11,13 @@ import { InputNumber } from 'primeng/inputnumber';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
-import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
 import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-demande-catalogue',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, CardModule, ButtonModule, InputTextModule, SelectModule, InputNumber, ToastModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, CardModule, ButtonModule, InputTextModule, SelectModule, InputNumber],
   templateUrl: './demande-catalogue.html',
   styleUrls: ['./demande-catalogue.scss'],
 })

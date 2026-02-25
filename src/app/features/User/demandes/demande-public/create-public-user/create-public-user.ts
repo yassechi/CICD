@@ -10,12 +10,10 @@ import { PasswordModule } from 'primeng/password';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
-import { ToastModule } from 'primeng/toast';
-
 @Component({
   selector: 'app-create-lamda-user',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ButtonModule, InputTextModule, PasswordModule, SelectModule, ToastModule],
+  imports: [CommonModule, ReactiveFormsModule, ButtonModule, InputTextModule, PasswordModule, SelectModule],
   templateUrl: './create-public-user.html',
   styleUrls: ['./create-public-user.scss'],
 })
@@ -32,7 +30,6 @@ export class CreateLamdaUserComponent {
   loadingOrganisations = false;
   organisations: Organisation[] = [];
   organisationName = '';
-  organisationLogoUrl: string | null = null;
   private preselectedOrganisationId: number | null = null;
   organisationLocked = false;
 
@@ -52,7 +49,6 @@ export class CreateLamdaUserComponent {
     const params = this.route.snapshot.queryParams;
     this.preselectedOrganisationId = params['organisationId'] ? Number(params['organisationId']) : null;
     this.organisationName = params['organisationName'] || '';
-    this.organisationLogoUrl = params['organisationLogoUrl'] || null;
     this.organisationLocked = !!this.preselectedOrganisationId || !!this.organisationName;
 
     this.loadingOrganisations = true;
@@ -107,7 +103,6 @@ export class CreateLamdaUserComponent {
       const selected = this.organisations.find((org) => org.id === this.preselectedOrganisationId);
       if (selected) {
         this.organisationName = selected.name;
-        this.organisationLogoUrl = selected.logoUrl ?? this.organisationLogoUrl;
       }
       return;
     }
@@ -116,7 +111,6 @@ export class CreateLamdaUserComponent {
       if (selected) {
         this.form.patchValue({ organisationId: selected.id });
         this.preselectedOrganisationId = selected.id;
-        this.organisationLogoUrl = selected.logoUrl ?? this.organisationLogoUrl;
       }
     }
   }
@@ -189,8 +183,8 @@ export class CreateLamdaUserComponent {
     if (values.firstName) queryParams['firstName'] = String(values.firstName).trim();
     if (values.lastName) queryParams['lastName'] = String(values.lastName).trim();
     if (organisation?.name || this.organisationName) queryParams['organisationName'] = organisation?.name ?? this.organisationName;
-    const logoUrl = organisation?.logoUrl ?? this.organisationLogoUrl;
-    if (logoUrl) queryParams['organisationLogoUrl'] = logoUrl;
+    const organisationId = organisation?.id ?? (values.organisationId ? Number(values.organisationId) : this.preselectedOrganisationId);
+    if (organisationId) queryParams['organisationId'] = String(organisationId);
     this.router.navigate(['/choix-parcours'], { queryParams });
   }
 }

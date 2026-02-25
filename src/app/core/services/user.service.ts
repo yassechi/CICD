@@ -24,6 +24,10 @@ export class UserService {
     return this.http.request<User>('GET', `${this.apiUrl}/get-one/${id}`);
   }
 
+  getMe(): Observable<User> {
+    return this.http.request<User>('GET', `${this.apiUrl}/me`);
+  }
+
   getByOrganisation(organisationId: number, role?: number): Observable<User[]> {
     const params = role !== undefined ? `?role=${encodeURIComponent(String(role))}` : '';
     return this.http.request<User[]>(
