@@ -91,6 +91,17 @@ export class OrganisationService {
   createLogo(payload: OrganisationLogoPayload): Observable<any> {
     return this.http.post(`${this.logoApiUrl}/add`, payload);
   }
+  updateLogo(payload: OrganisationLogo): Observable<any> {
+    return this.http.put(`${this.logoApiUrl}/update`, payload);
+  }
+
+  setLogoActive(logoId: number): Observable<any> {
+    return this.http.put(`${this.logoApiUrl}/set-active/${logoId}`, {});
+  }
+
+  deleteLogo(id: number): Observable<any> {
+    return this.http.delete(`${this.logoApiUrl}/delete/${id}`);
+  }
 
   buildLogoDataUrl(logo: OrganisationLogo | null | undefined): string | null {
     if (!logo?.fichier || !logo.typeFichier) return null;

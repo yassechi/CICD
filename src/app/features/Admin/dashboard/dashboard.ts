@@ -55,59 +55,41 @@ export class AdminDashboardComponent {
 
     this.demandeService.getList().subscribe({
       next: (demandes) => {
-        const items = this.toArray<any>(demandes);
+        const items = Array.isArray(demandes) ? demandes : (demandes as any)?.items ?? [];
         const statuses = [
           DemandeStatus.Encours,
           DemandeStatus.AttenteComagnie,
           DemandeStatus.Finalisation,
           DemandeStatus.Valide,
           DemandeStatus.Refuse];
-        this.demandeStatusChartData.set(
-          this.buildDonut(
-            statuses,
-            (s) => this.demandeService.getStatusLabel(s),
-            (s) => items.filter((d) => d.status === s).length,
-            ['#bbf7d0', '#86efac', '#4ade80', '#22c55e', '#16a34a'],
-          ),
-        );
+        this.demandeStatusChartData.set({
+          labels: statuses.map((s) => this.demandeService.getStatusLabel(s)),
+          datasets: [
+            {
+              data: statuses.map((s) => items.filter((d: any) => d.status === s).length),
+              backgroundColor: ['#bbf7d0', '#86efac', '#4ade80', '#22c55e', '#16a34a'],
+              borderColor: '#ffffff',
+              borderWidth: 2,
+            }],
+        });
       },
     });
 
     this.contratService.getList().subscribe({
       next: (contrats) => {
-        const items = this.toArray<any>(contrats);
+        const items = Array.isArray(contrats) ? contrats : (contrats as any)?.items ?? [];
         const statuses = [StatutContrat.EnCours, StatutContrat.Termine, StatutContrat.Resilie];
-        this.contratStatusChartData.set(
-          this.buildDonut(
-            statuses,
-            (s) => this.contratService.getStatutLabel(s),
-            (s) => items.filter((c) => c.statutContrat === s).length,
-            ['#bbf7d0', '#4ade80', '#16a34a'],
-          ),
-        );
+        this.contratStatusChartData.set({
+          labels: statuses.map((s) => this.contratService.getStatutLabel(s)),
+          datasets: [
+            {
+              data: statuses.map((s) => items.filter((c: any) => c.statutContrat === s).length),
+              backgroundColor: ['#bbf7d0', '#4ade80', '#16a34a'],
+              borderColor: '#ffffff',
+              borderWidth: 2,
+            }],
+        });
       },
     });
-  }
-
-  private toArray<T>(data: any): T[] {
-    return Array.isArray(data) ? data : data?.items ?? [];
-  }
-
-  private buildDonut<T>(
-    statuses: T[],
-    label: (s: T) => string,
-    count: (s: T) => number,
-    colors: string[],
-  ): any {
-    return {
-      labels: statuses.map(label),
-      datasets: [
-        {
-          data: statuses.map(count),
-          backgroundColor: colors,
-          borderColor: '#ffffff',
-          borderWidth: 2,
-        }],
-    };
   }
 }
