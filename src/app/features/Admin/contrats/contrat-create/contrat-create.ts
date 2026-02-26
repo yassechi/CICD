@@ -1,6 +1,7 @@
 import {
   Contrat,
-  ContratEditData,
+  ContratEditUser,
+  ContratEditVelo,
   ContratService,
   StatutContrat,
 } from '../../../../core/services/contrat.service';
@@ -8,7 +9,6 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from '../../../../core/services/message.service';
 import { UserService } from '../../../../core/services/user.service';
 import { VeloService } from '../../../../core/services/velo.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Component, inject } from '@angular/core';
 import { InputNumber } from 'primeng/inputnumber';
 import { DatePicker } from 'primeng/datepicker';
@@ -17,10 +17,11 @@ import { InputText } from 'primeng/inputtext';
 import { Button } from 'primeng/button';
 import { Select } from 'primeng/select';
 import { Card } from 'primeng/card';
+import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 @Component({
-  selector: 'app-contrat-edit',
+  selector: 'app-contrat-create',
   standalone: true,
   imports: [
     CommonModule,
@@ -31,24 +32,21 @@ import { forkJoin } from 'rxjs';
     Select,
     DatePicker,
     InputNumber],
-  templateUrl: './contrat-edit.html',
-  styleUrls: ['./contrat-edit.scss'],
+  templateUrl: './contrat-create.html',
+  styleUrls: ['./contrat-create.scss'],
 })
-export class ContratEditComponent {
+export class ContratCreateComponent {
   private readonly fb = inject(FormBuilder);
-  private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly contratService = inject(ContratService);
   private readonly messageService = inject(MessageService);
   private readonly userService = inject(UserService);
   private readonly veloService = inject(VeloService);
 
-  contratId: number | null = null;
-  isEdit = false;
-  users: ContratEditData['users'] = [];
-  beneficiaires: ContratEditData['users'] = [];
-  responsablesRh: ContratEditData['users'] = [];
-  velos: ContratEditData['velos'] = [];
+  users: ContratEditUser[] = [];
+  beneficiaires: ContratEditUser[] = [];
+  responsablesRh: ContratEditUser[] = [];
+  velos: ContratEditVelo[] = [];
   loading = false;
 
   readonly contratForm = this.fb.group({
@@ -69,16 +67,7 @@ export class ContratEditComponent {
     { label: 'Résilié', value: StatutContrat.Resilie }];
 
   constructor() {
-    const idParam = this.route.snapshot.paramMap.get('id');
-    const id = idParam ? Number(idParam) : null;
-    this.contratId = id;
-    this.isEdit = !!id;
-
-    if (this.isEdit && id) {
-      this.loadEditData(id);
-    } else {
-      this.loadCreateData();
-    }
+    this.loadCreateData();
   }
 
   onSubmit(): void {
@@ -100,7 +89,6 @@ export class ContratEditComponent {
     }
 
     const contrat: Contrat = {
-      id: this.contratId ?? undefined,
       ref: v.ref,
       veloId: v.veloId,
       beneficiaireId: v.beneficiaireId,
@@ -113,61 +101,25 @@ export class ContratEditComponent {
       isActif: true,
     };
 
-    if (this.isEdit) {
-      this.contratService.update(contrat).subscribe({
-        next: () => {
-          this.messageService.showSuccess('Contrat modifié avec succès');
-          setTimeout(() => (window.location.href = `/admin/contrats/${this.contratId}`), 1000);
-        },
-        error: () => this.messageService.showError('Impossible de modifier le contrat'),
-      });
-      return;
-    }
-
     this.contratService.create(contrat).subscribe({
       next: (response) => {
         this.messageService.showSuccess('Contrat créé avec succès');
         const newId = response?.id;
         if (newId) {
           setTimeout(() => (window.location.href = `/admin/contrats/${newId}`), 1000);
-        } else {
-          this.goBack();
+          return;
         }
+        this.goBack();
       },
-      error: () => this.messageService.showError('Impossible de créer le contrat'),
+      error: (err) =>
+        this.messageService.showError(
+          err?.error?.message ?? err?.error?.Message ?? 'Impossible de créer le contrat',
+        ),
     });
   }
 
   goBack(): void {
-    if (this.isEdit && this.contratId) {
-      this.router.navigate(['/admin/contrats', this.contratId]);
-      return;
-    }
     this.router.navigate(['/admin/contrats']);
-  }
-
-  private loadEditData(id: number): void {
-    this.loading = true;
-    this.contratService.getEditData(id).subscribe({
-      next: (data) => {
-        this.users = (data.users ?? []);
-        this.beneficiaires = this.users;
-        this.responsablesRh = this.users;
-        this.velos = (data.velos ?? []);
-        if (data.contrat) {
-          this.contratForm.patchValue({
-            ...data.contrat,
-            dateDebut: new Date(data.contrat.dateDebut),
-            dateFin: new Date(data.contrat.dateFin),
-          });
-        }
-        this.loading = false;
-      },
-      error: () => {
-        this.loading = false;
-        this.messageService.showError('Impossible de charger le contrat');
-      },
-    });
   }
 
   private loadCreateData(): void {
@@ -177,11 +129,11 @@ export class ContratEditComponent {
       velos: this.veloService.getAll(),
     }).subscribe({
       next: ({ users, velos }) => {
-        const usersList = (users ?? []) as ContratEditData['users'];
+        const usersList = (users ?? []) as ContratEditUser[];
         this.users = usersList;
         this.beneficiaires = usersList;
         this.responsablesRh = usersList;
-        this.velos = (velos ?? []) as ContratEditData['velos'];
+        this.velos = (velos ?? []) as ContratEditVelo[];
         this.loading = false;
       },
       error: () => {

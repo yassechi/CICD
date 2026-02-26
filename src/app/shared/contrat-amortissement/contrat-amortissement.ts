@@ -83,10 +83,6 @@ export class ContratAmortissementComponent implements OnInit, OnDestroy {
     }));
   }
 
-  updateMontant(index: number, newValue: number): void {
-    this.moisEditable = this.moisEditable.map((m, i) => (i === index ? { ...m, montant: newValue } : m));
-  }
-
   onSave(): void {
     if (!this.moisEditable.length) return;
     this.saving = true;

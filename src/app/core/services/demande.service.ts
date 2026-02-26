@@ -110,10 +110,6 @@ export class DemandeService {
     return this.http.get<DemandeDetail>(`${this.apiUrl}/get-detail/${id}`);
   }
 
-  getByUser(userId: string): Observable<Demande[]> {
-    return this.http.get<Demande[]>(`${this.apiUrl}/get-by-user/${encodeURIComponent(userId)}`);
-  }
-
   getByOrganisation(organisationId: number): Observable<Demande[]> {
     return this.http.get<Demande[]>(`${this.apiUrl}/get-by-organisation/${organisationId}`);
   }

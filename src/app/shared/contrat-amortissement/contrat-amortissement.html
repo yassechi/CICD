@@ -56,12 +56,14 @@
           <td class="font-semibold">Mois {{ m.numeroMois }}</td>
           <td>
             <p-inputNumber
-              [(ngModel)]="moisEditable[i].montant"
-              mode="currency"
-              currency="EUR"
+              [(ngModel)]="m.montant"
+              mode="decimal"
               locale="fr-FR"
               [min]="0"
-              (ngModelChange)="updateMontant(i, $event)"
+              [minFractionDigits]="2"
+              [maxFractionDigits]="2"
+              [useGrouping]="false"
+              inputStyleClass="w-full"
             ></p-inputNumber>
           </td>
         </tr>

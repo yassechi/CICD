@@ -63,7 +63,17 @@ export class ContratDetailComponent implements OnInit, OnDestroy {
     this.tabs = this.buildTabs();
     this.sub.add(
       this.route.paramMap.subscribe((p) => {
-        this.contratId = Number(p.get('id')) || null;
+        const rawId = p.get('id');
+        const parsed = rawId ? Number(rawId) : NaN;
+        if (!rawId || Number.isNaN(parsed)) {
+          this.contratId = null;
+          this.contrat = null;
+          this.loading = false;
+          this.cdr.markForCheck();
+          this.router.navigate(['/admin/contrats']);
+          return;
+        }
+        this.contratId = parsed;
         this.load();
       }),
     );
