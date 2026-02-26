@@ -103,7 +103,8 @@ export class ContratCreateComponent {
 
     this.contratService.create(contrat).subscribe({
       next: (response) => {
-        this.messageService.showSuccess('Contrat créé avec succès');
+        this.messageService.showSuccess('Contrat crée avec succès');
+        // si c est crée on a l'Id et en redirige vers le contrat crée
         const newId = response?.id;
         if (newId) {
           setTimeout(() => (window.location.href = `/admin/contrats/${newId}`), 1000);
@@ -124,22 +125,16 @@ export class ContratCreateComponent {
 
   private loadCreateData(): void {
     this.loading = true;
-    forkJoin({
-      users: this.userService.getList({ isActif: true }),
-      velos: this.veloService.getAll(),
-    }).subscribe({
-      next: ({ users, velos }) => {
-        const usersList = (users ?? []) as ContratEditUser[];
-        this.users = usersList;
-        this.beneficiaires = usersList;
-        this.responsablesRh = usersList;
+    this.userService.getList({ isActif: true }).subscribe((users) => {
+      const usersList = (users ?? []) as ContratEditUser[];
+      this.users = usersList;
+      this.beneficiaires = usersList;
+      this.responsablesRh = usersList;
+
+      this.veloService.getAll().subscribe((velos) => {
         this.velos = (velos ?? []) as ContratEditVelo[];
         this.loading = false;
-      },
-      error: () => {
-        this.loading = false;
-        this.messageService.showError('Impossible de charger les données');
-      },
+      });
     });
   }
 

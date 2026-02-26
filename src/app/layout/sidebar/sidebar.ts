@@ -1,8 +1,6 @@
-import { Component, DestroyRef, Input, effect, inject, signal } from '@angular/core';
+import { Component, Input, effect, inject, signal } from '@angular/core';
 import { MessageApiService } from '../../core/services/message-api.service';
-import { NavigationEnd, Router, RouterModule } from '@angular/router';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { catchError, filter, interval, merge, of } from 'rxjs';
+import { RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { User } from '../../core/models/user.model';
@@ -24,26 +22,21 @@ export class SidebarComponent {
 
   private readonly authService = inject(AuthService);
   private readonly messageApiService = inject(MessageApiService);
-  private readonly router = inject(Router);
-  private readonly destroyRef = inject(DestroyRef);
 
   constructor() {
     effect(
       () => {
         const user = this.authService.currentUser();
+        // dans l'effect ca déclanche un refresh du component
+        // et donc il refais le sideBar
+        this.messageApiService.refreshSignal();
         this.setMenu(user);
+
+        // a chaque relance le this.refreshBadge(user);
         this.refreshBadge(user);
       },
       { allowSignalWrites: true },
     );
-
-    merge(
-      interval(5000),
-      this.messageApiService.refresh$,
-      this.router.events.pipe(filter((e) => e instanceof NavigationEnd)),
-    )
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.refreshBadge(this.authService.currentUser()));
   }
 
   private setMenu(user: User | null): void {
@@ -74,12 +67,21 @@ export class SidebarComponent {
   }
 
   private refreshBadge(user: User | null): void {
-    if (!user?.id) { this.unreadCount.set(0); this.setMenu(user); return; }
-    const org = user.organisationId;
-    const organisationId = typeof org === 'number' ? org : org && typeof org === 'object' && 'id' in org ? (typeof org.id === 'number' ? org.id : null) : null;
+    this.setMenu(user);
+    if (!user?.id) {
+      this.unreadCount.set(0);
+      return;
+    }
+    const organisationId =
+      typeof user.organisationId === 'number'
+        ? user.organisationId
+        : user.organisationId?.id ?? null;
 
-    this.messageApiService.getUnreadCount({ userId: user.id, role: user.role, organisationId })
-      .pipe(catchError(() => of(0)), takeUntilDestroyed(this.destroyRef))
-      .subscribe((n) => { this.unreadCount.set(Number.isFinite(n) ? Math.max(0, n) : 0); this.setMenu(user); });
+    this.messageApiService
+      .getUnreadCount({ userId: user.id, role: user.role, organisationId })
+      .subscribe((n) => {
+        this.unreadCount.set(Number(n) || 0);
+        this.setMenu(user);
+      });
   }
 }

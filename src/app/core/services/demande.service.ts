@@ -90,6 +90,14 @@ export interface CreateDemandeWithVeloResponse {
   errors?: string[];
 }
 
+export interface DemandeListParams {
+  status?: number | null;
+  type?: string | null;
+  search?: string | null;
+  organisationId?: number | null;
+  userId?: string | null;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -97,10 +105,6 @@ export class DemandeService {
   private apiUrl = `${environment.urls.coreApi}/Demande`;
 
   private readonly http = inject(HttpClient);
-
-  getAll(): Observable<Demande[]> {
-    return this.http.get<Demande[]>(`${this.apiUrl}/get-all`);
-  }
 
   getOne(id: number): Observable<Demande> {
     return this.http.get<Demande>(`${this.apiUrl}/get-one/${id}`);
@@ -110,64 +114,9 @@ export class DemandeService {
     return this.http.get<DemandeDetail>(`${this.apiUrl}/get-detail/${id}`);
   }
 
-  getByOrganisation(organisationId: number): Observable<Demande[]> {
-    return this.http.get<Demande[]>(`${this.apiUrl}/get-by-organisation/${organisationId}`);
-  }
-
-  getList(params?: {
-    status?: number | null;
-    type?: string | null;
-    search?: string | null;
-    organisationId?: number | null;
-    userId?: string | null;
-  }): Observable<AdminDemandeListItem[]> {
-    const query = new URLSearchParams();
-    if (params?.status !== null && params?.status !== undefined) {
-      query.set('status', String(params.status));
-    }
-    if (params?.type) {
-      query.set('type', params.type);
-    }
-    if (params?.search) {
-      query.set('search', params.search);
-    }
-    if (params?.organisationId) {
-      query.set('organisationId', String(params.organisationId));
-    }
-    if (params?.userId) {
-      query.set('userId', params.userId);
-    }
-    const suffix = query.toString();
+  getList(params?: DemandeListParams): Observable<AdminDemandeListItem[]> {
+    const suffix = this.buildQueryParams(params);
     return this.http.get<AdminDemandeListItem[]>(`${this.apiUrl}/list${suffix ? `?${suffix}` : ''}`);
-  }
-
-  exportCsv(params?: {
-    status?: number | null;
-    type?: string | null;
-    search?: string | null;
-    organisationId?: number | null;
-    userId?: string | null;
-  }): Observable<Blob> {
-    const query = new URLSearchParams();
-    if (params?.status !== null && params?.status !== undefined) {
-      query.set('status', String(params.status));
-    }
-    if (params?.type) {
-      query.set('type', params.type);
-    }
-    if (params?.search) {
-      query.set('search', params.search);
-    }
-    if (params?.organisationId) {
-      query.set('organisationId', String(params.organisationId));
-    }
-    if (params?.userId) {
-      query.set('userId', params.userId);
-    }
-    const suffix = query.toString();
-    return this.http.get(`${this.apiUrl}/export${suffix ? `?${suffix}` : ''}`, {
-      responseType: 'blob',
-    });
   }
 
   create(demande: Demande): Observable<any> {
@@ -189,6 +138,26 @@ export class DemandeService {
 
   updateStatus(id: number, status: DemandeStatus): Observable<any> {
     return this.http.put(`${this.apiUrl}/update-status/${id}`, { status });
+  }
+
+  private buildQueryParams(params?: DemandeListParams): string {
+    const query = new URLSearchParams();
+    if (params?.status !== null && params?.status !== undefined) {
+      query.set('status', String(params.status));
+    }
+    if (params?.type) {
+      query.set('type', params.type);
+    }
+    if (params?.search) {
+      query.set('search', params.search);
+    }
+    if (params?.organisationId !== null && params?.organisationId !== undefined) {
+      query.set('organisationId', String(params.organisationId));
+    }
+    if (params?.userId) {
+      query.set('userId', params.userId);
+    }
+    return query.toString();
   }
 
   getStatusLabel(status: DemandeStatus): string {

@@ -104,6 +104,7 @@ export class OrganisationService {
     return this.http.delete(`${this.logoApiUrl}/delete/${id}`);
   }
 
+  //return un URL
   buildLogoDataUrl(logo: OrganisationLogo | null | undefined): string | null {
     if (!logo?.fichier || !logo.typeFichier) return null;
     return `data:${logo.typeFichier};base64,${logo.fichier}`;

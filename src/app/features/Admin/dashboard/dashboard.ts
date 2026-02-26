@@ -42,54 +42,49 @@ export class AdminDashboardComponent {
   private readonly contratService = inject(ContratService);
 
   constructor() {
-    this.dashboardService.getAdminDashboard().subscribe({
-      next: (data) => {
-        this.stats.set({
-          pendingDemandes: data.pendingDemandes,
-          activeContrats: data.activeContrats,
-          expiringContrats: data.expiringContrats,
-        });
-        this.activityFeed.set(data.activityFeed ?? []);
-      },
+    this.dashboardService.getAdminDashboard().subscribe((data) => {
+      this.stats.set({
+        pendingDemandes: data.pendingDemandes,
+        activeContrats: data.activeContrats,
+        expiringContrats: data.expiringContrats,
+      });
+      this.activityFeed.set(data.activityFeed || []);
     });
 
-    this.demandeService.getList().subscribe({
-      next: (demandes) => {
-        const items = Array.isArray(demandes) ? demandes : (demandes as any)?.items ?? [];
-        const statuses = [
-          DemandeStatus.Encours,
-          DemandeStatus.AttenteComagnie,
-          DemandeStatus.Finalisation,
-          DemandeStatus.Valide,
-          DemandeStatus.Refuse];
-        this.demandeStatusChartData.set({
-          labels: statuses.map((s) => this.demandeService.getStatusLabel(s)),
-          datasets: [
-            {
-              data: statuses.map((s) => items.filter((d: any) => d.status === s).length),
-              backgroundColor: ['#bbf7d0', '#86efac', '#4ade80', '#22c55e', '#16a34a'],
-              borderColor: '#ffffff',
-              borderWidth: 2,
-            }],
-        });
-      },
+    this.demandeService.getList().subscribe((demandes) => {
+      const enCours = demandes.filter((d) => d.status === DemandeStatus.Encours).length;
+      const attente = demandes.filter((d) => d.status === DemandeStatus.AttenteComagnie).length;
+      const finalisation = demandes.filter((d) => d.status === DemandeStatus.Finalisation).length;
+      const valide = demandes.filter((d) => d.status === DemandeStatus.Valide).length;
+      const refuse = demandes.filter((d) => d.status === DemandeStatus.Refuse).length;
+
+      // Remplir le chart 
+      this.demandeStatusChartData.set({
+        labels: ['En cours', 'Attente Compagnie', 'Finalisation', 'Valide', 'Refuse'],
+        datasets: [
+          {
+            data: [enCours, attente, finalisation, valide, refuse],
+            backgroundColor: ['#bbf7d0', '#86efac', '#4ade80', '#22c55e', '#16a34a'],
+            borderColor: '#ffffff',
+            borderWidth: 2,
+          },
+        ],
+      });
     });
 
-    this.contratService.getList().subscribe({
-      next: (contrats) => {
-        const items = Array.isArray(contrats) ? contrats : (contrats as any)?.items ?? [];
-        const statuses = [StatutContrat.EnCours, StatutContrat.Termine, StatutContrat.Resilie];
-        this.contratStatusChartData.set({
-          labels: statuses.map((s) => this.contratService.getStatutLabel(s)),
-          datasets: [
-            {
-              data: statuses.map((s) => items.filter((c: any) => c.statutContrat === s).length),
-              backgroundColor: ['#bbf7d0', '#4ade80', '#16a34a'],
-              borderColor: '#ffffff',
-              borderWidth: 2,
-            }],
-        });
-      },
+    this.contratService.getList().subscribe((contrats) => {
+      const statuses = [StatutContrat.EnCours, StatutContrat.Termine, StatutContrat.Resilie];
+      this.contratStatusChartData.set({
+        labels: statuses.map((s) => this.contratService.getStatutLabel(s)),
+        datasets: [
+          {
+            data: statuses.map((s) => contrats.filter((c) => c.statutContrat === s).length),
+            backgroundColor: ['#bbf7d0', '#4ade80', '#16a34a'],
+            borderColor: '#ffffff',
+            borderWidth: 2,
+          },
+        ],
+      });
     });
   }
 }

@@ -99,7 +99,7 @@ export class AdminCompagniesComponent {
 
   onDelete(org: Organisation): void {
     this.confirmationService.confirm({
-      message: `?tes-vous s?r de vouloir supprimer "${org.name}" ?`,
+      message: `êtes-vous sur de vouloir supprimer "${org.name}" ?`,
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'Oui',
@@ -107,7 +107,7 @@ export class AdminCompagniesComponent {
       accept: () =>
         this.organisationService.delete(org.id).subscribe({
           next: () => {
-            this.messageService.showSuccess('Compagnie supprim?e', 'Succ?s');
+            this.messageService.showSuccess('Compagnie supprimée', 'Succès');
             this.load();
           },
           error: () => this.messageService.showError('Impossible de supprimer la compagnie'),

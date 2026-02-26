@@ -69,6 +69,7 @@ export class AuthService {
       return null;
     }
     try {
+      // recharge le User du local storage As User..
       return JSON.parse(storedUser) as User;
     } catch {
       localStorage.removeItem('currentUser');

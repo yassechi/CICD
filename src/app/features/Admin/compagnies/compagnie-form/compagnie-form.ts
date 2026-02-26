@@ -76,12 +76,9 @@ export class CompagnieFormComponent {
 
   constructor() {
     this.loadingUsers.set(true);
-    this.userService.getAll().subscribe({
-      next: (data) => {
-        this.users.set(data ?? []);
-        this.loadingUsers.set(false);
-      },
-      error: () => this.loadingUsers.set(false),
+    this.userService.getAll().subscribe((data) => {
+      this.users.set(data ?? []);
+      this.loadingUsers.set(false);
     });
 
     const id = Number(this.route.snapshot.paramMap.get('id')) || 0;
@@ -89,25 +86,18 @@ export class CompagnieFormComponent {
     if (!id) return;
 
     this.loading.set(true);
-    this.organisationService.getOne(id).subscribe({
-      next: (data) => {
-        this.form.patchValue(data);
-        this.loadActiveLogo(id);
-        this.loading.set(false);
-      },
-      error: () => {
-        this.messageService.showError('Impossible de charger la compagnie');
-        this.loading.set(false);
-        this.goBack();
-      },
+    this.organisationService.getOne(id).subscribe((data) => {
+      // remplir les champs
+      this.form.patchValue(data);
+      this.loadActiveLogo(id);
+      this.loading.set(false);
     });
   }
 
   private loadActiveLogo(organisationId: number): void {
-    this.organisationService.getActiveLogo(organisationId).subscribe({
-      next: (logo) => this.uploadedLogo.set(this.organisationService.buildLogoDataUrl(logo)),
-      error: () => {},
-    });
+    this.organisationService
+      .getActiveLogo(organisationId)
+      .subscribe((logo) => this.uploadedLogo.set(this.organisationService.buildLogoDataUrl(logo)));
   }
 
   onUpload(event: any): void {
@@ -142,33 +132,21 @@ export class CompagnieFormComponent {
     const op = payload.id
       ? this.organisationService.update(payload)
       : this.organisationService.create(payload);
-    op.subscribe({
-      next: (response) => {
-        const organisationId = payload.id || response?.id;
-        if (this.pendingLogo) {
-          if (!organisationId) {
-            this.messageService.showError('Logo non enregistre');
-            this.finishSave(!!payload.id);
-            return;
-          }
-          this.organisationService.createLogo({
+    op.subscribe((response) => {
+      const organisationId = payload.id || response?.id;
+      if (this.pendingLogo) {
+        this.organisationService
+          .createLogo({
             organisationId,
             fichier: this.pendingLogo.base64,
             nomFichier: this.pendingLogo.fileName,
             typeFichier: this.pendingLogo.mimeType,
             isActif: true,
-          }).subscribe({
-            next: () => this.finishSave(!!payload.id),
-            error: () => {
-              this.loading.set(false);
-              this.messageService.showError('Logo non enregistre');
-            },
-          });
-          return;
-        }
-        this.finishSave(!!payload.id);
-      },
-      error: () => this.loading.set(false),
+          })
+          .subscribe(() => this.finishSave(!!payload.id));
+        return;
+      }
+      this.finishSave(!!payload.id);
     });
   }
 

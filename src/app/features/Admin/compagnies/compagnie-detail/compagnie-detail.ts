@@ -42,14 +42,14 @@ export class CompagnieDetailComponent {
   }
 
   private loadLogo(organisationId: number): void {
-    this.organisationService.getActiveLogo(organisationId).subscribe({
-      next: (logo) => {
-        const current = this.organisation();
-        if (!current) return;
-        const url = this.organisationService.buildLogoDataUrl(logo);
-        this.organisation.set({ ...current, logoUrl: url ?? undefined });
-      },
-      error: () => {},
+    this.organisationService.getActiveLogo(organisationId).subscribe((logo) => {
+      const current = this.organisation();
+      if (current) {
+        this.organisation.set({
+          ...current,
+          logoUrl: this.organisationService.buildLogoDataUrl(logo) ?? undefined,
+        });
+      }
     });
   }
 

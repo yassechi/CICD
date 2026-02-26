@@ -52,14 +52,14 @@ export class AdminEmployesComponent {
 
   load(): void {
     this.loading.set(true);
-    this.userService.getList({
-      role: this.roleFilter === 'all' ? undefined : this.roleFilter,
-      isActif: this.statusFilter === 'all' ? undefined : this.statusFilter === 'active',
-      search: this.searchTerm.trim() || undefined,
-    }).pipe(finalize(() => this.loading.set(false))).subscribe({
-      next: (data) => this.users.set(data ?? []),
-      error: () => this.messageService.showError('Impossible de charger les employ?s'),
-    });
+    this.userService
+      .getList({
+        role: this.roleFilter === 'all' ? undefined : this.roleFilter,
+        isActif: this.statusFilter === 'all' ? undefined : this.statusFilter === 'active',
+        search: this.searchTerm.trim() || undefined,
+      })
+      .pipe(finalize(() => this.loading.set(false)))
+      .subscribe((data) => this.users.set(data ?? []));
   }
 
   onCreate(): void { this.router.navigate(['/admin/employes/new']); }
@@ -68,13 +68,13 @@ export class AdminEmployesComponent {
 
   onDelete(user: User): void {
     this.confirmationService.confirm({
-      message: '?tes-vous s?r de vouloir supprimer cet utilisateur ?',
+      message: 'êtes-vous sur de vouloir supprimer cet utilisateur ?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'Oui',
       rejectLabel: 'Non',
       accept: () => this.userService.delete(user.id!).subscribe({
-        next: () => { this.messageService.showSuccess('Utilisateur supprim?', 'Succ?s'); this.load(); },
+        next: () => { this.messageService.showSuccess('Utilisateur supprimé', 'Succès'); this.load(); },
         error: () => this.messageService.showError("Impossible de supprimer l'utilisateur"),
       }),
     });

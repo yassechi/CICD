@@ -14,10 +14,6 @@ export interface AdminDashboard {
   activeContrats: number;
   expiringContrats: number;
   activityFeed: ActivityFeedItem[];
-  // Backend returns `bikeTypeCounts` (camelCase from BikeTypeCounts).
-  // Keep `veloTypeCounts` for backward compatibility.
-  bikeTypeCounts?: Array<{ label: string; value: number }>;
-  veloTypeCounts?: Array<{ label: string; value: number }>;
 }
 
 export interface ManagerDashboard {
@@ -59,6 +55,7 @@ export class DashboardService {
     return this.http.get<ManagerDashboard>(`${this.apiUrl}/manager/${organisationId}`);
   }
 
+  // encodeURIComponent securise le userId
   getUserDashboard(userId: string): Observable<UserDashboard> {
     return this.http.get<UserDashboard>(`${this.apiUrl}/user/${encodeURIComponent(userId)}`);
   }

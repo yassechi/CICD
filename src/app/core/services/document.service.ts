@@ -45,22 +45,14 @@ export class DocumentService {
   }
 
   /////////////////////////////////////////////////////////
+  //data =>  l’URL contient directement le fichier
+  //application/pdf => type PDF
+  //base64 => encodé en base64
+  //${doc.fichier} => contenu du PDF encodé en base64
   downloadDocument(doc: Document): void {
-    // Convertir base64 en Blob
-    const byteCharacters = atob(doc.fichier);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], { type: 'application/pdf' });
-
-    // Créer un lien de téléchargement
-    const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.href = url;
+    link.href = `data:application/pdf; base64, ${doc.fichier}`;
     link.download = doc.nomFichier;
     link.click();
-    window.URL.revokeObjectURL(url);
   }
 }

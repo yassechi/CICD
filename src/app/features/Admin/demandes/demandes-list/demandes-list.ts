@@ -5,10 +5,9 @@ import {
 } from '../../../../core/services/demande.service';
 import { MessageApiService } from '../../../../core/services/message-api.service';
 import { MessageService } from '../../../../core/services/message.service';
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { VeloService } from '../../../../core/services/velo.service';
 import { AuthService } from '../../../../core/services/auth.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { User } from '../../../../core/models/user.model';
 import { InputTextModule } from 'primeng/inputtext';
@@ -72,23 +71,23 @@ export class AdminDemandesComponent {
   private readonly authService = inject(AuthService);
   private readonly messageApiService = inject(MessageApiService);
   private readonly router = inject(Router);
-  private readonly destroyRef = inject(DestroyRef);
   private readonly currentUser = this.authService.getCurrentUser();
 
   constructor() {
-    this.veloService.getTypes().subscribe({
-      next: (types) =>
+    this.veloService
+      .getTypes()
+      .subscribe((types) =>
         this.typeOptions.set([
           { label: 'Tous', value: 'all' },
           ...types.map((v) => ({ label: v, value: v })),
         ]),
-      error: () => this.messageService.showError('Impossible de charger les types de velo'),
-    });
+      );
 
     this.load();
-    this.messageApiService.refresh$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.loadUnreadDiscussions());
+    effect(() => {
+      this.messageApiService.refreshSignal();
+      this.loadUnreadDiscussions();
+    });
   }
 
   load(): void {
@@ -100,12 +99,9 @@ export class AdminDemandesComponent {
         search: this.searchTerm.trim() || undefined,
       })
       .pipe(finalize(() => this.loading.set(false)))
-      .subscribe({
-        next: (data) => {
-          this.demandes.set(data ?? []);
-          this.loadUnreadDiscussions();
-        },
-        error: () => this.messageService.showError('Impossible de charger les demandes'),
+      .subscribe((data) => {
+        this.demandes.set(data ?? []);
+        this.loadUnreadDiscussions();
       });
   }
 
@@ -119,20 +115,9 @@ export class AdminDemandesComponent {
       .getUnreadDiscussions({
         userId: user.id,
         role: user.role,
-        organisationId: this.resolveOrganisationId(user),
+        organisationId: user.organisationId as number | null,
       })
-      .subscribe({ next: (ids) => this.unreadDiscussionIds.set(new Set(ids ?? [])) });
-  }
-
-  private resolveOrganisationId(user: User): number | null {
-    const org = user.organisationId;
-    return typeof org === 'number'
-      ? org
-      : org && typeof org === 'object' && 'id' in org
-        ? typeof org.id === 'number'
-          ? org.id
-          : null
-        : null;
+      .subscribe((ids) => this.unreadDiscussionIds.set(new Set(ids ?? [])));
   }
 
   onCreate(): void {
@@ -152,57 +137,29 @@ export class AdminDemandesComponent {
   }
 
   onStatusChange(d: AdminDemandeListItem, newStatus: DemandeStatus): void {
-    this.demandeService.updateStatus(d.id!, newStatus).subscribe({
-      next: () => {
-        d.status = newStatus;
-        this.messageService.showSuccess('Statut mis ? jour', 'Succés');
-      },
-      error: () => this.messageService.showError('Impossible de mettre ? jour le statut'),
+    this.demandeService.updateStatus(d.id!, newStatus).subscribe(() => {
+      d.status = newStatus;
+      this.messageService.showSuccess('Statut mis à jour', 'Succés');
     });
   }
 
   onDelete(d: AdminDemandeListItem): void {
     this.confirmationService.confirm({
-      message: '?tes-vous sur de vouloir supprimer cette demande ?',
+      message: 'êtes-vous sur de vouloir supprimer cette demande ?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'Oui',
       rejectLabel: 'Non',
       accept: () =>
-        this.demandeService.delete(d.id!).subscribe({
-          next: () => {
-            this.messageService.showSuccess('Demande supprim?e', 'Succ?s');
-            this.load();
-          },
-          error: () => this.messageService.showError('Impossible de supprimer la demande'),
+        this.demandeService.delete(d.id!).subscribe(() => {
+          this.messageService.showSuccess('Demande supprimée', 'Succès');
+          this.load();
         }),
     });
   }
 
-  exportDemandes(): void {
-    this.demandeService
-      .exportCsv({
-        status: this.statusFilter === 'all' ? undefined : this.statusFilter,
-        type: this.typeFilter === 'all' ? undefined : this.typeFilter,
-        search: this.searchTerm.trim() || undefined,
-      })
-      .subscribe({
-        next: (blob) => {
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = url;
-          link.setAttribute('download', 'demandes-export.csv');
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          URL.revokeObjectURL(url);
-        },
-        error: () => this.messageService.showError("Impossible d'exporter les demandes"),
-      });
-  }
-
   hasUnreadMessages(d: AdminDemandeListItem): boolean {
-    return !!d.discussionId && this.unreadDiscussionIds().has(d.discussionId);
+    return d.discussionId != null && this.unreadDiscussionIds().has(d.discussionId);
   }
   getStatusLabel(status: DemandeStatus): string {
     return this.demandeService.getStatusLabel(status);

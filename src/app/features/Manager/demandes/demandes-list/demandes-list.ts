@@ -1,9 +1,8 @@
 import { AdminDemandeListItem, DemandeService, DemandeStatus } from '../../../../core/services/demande.service';
 import { MessageApiService } from '../../../../core/services/message-api.service';
 import { MessageService } from '../../../../core/services/message.service';
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { AuthService } from '../../../../core/services/auth.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { User } from '../../../../core/models/user.model';
 import { ConfirmationService } from 'primeng/api';
@@ -43,7 +42,6 @@ export class ManagerDemandesComponent {
   private readonly confirmationService = inject(ConfirmationService);
   private readonly messageService = inject(MessageService);
   private readonly router = inject(Router);
-  private readonly destroyRef = inject(DestroyRef);
 
   private readonly currentUser: User | null = this.authService.getCurrentUser();
   private readonly orgId: number | null = this.currentUser?.organisationId
@@ -53,9 +51,10 @@ export class ManagerDemandesComponent {
   constructor() {
     if (!this.orgId) { this.demandes.set([]); return; }
     this.load();
-    this.messageApiService.refresh$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.loadUnreadDiscussions());
+    effect(() => {
+      this.messageApiService.refreshSignal();
+      this.loadUnreadDiscussions();
+    });
   }
 
   load(): void {
