@@ -89,13 +89,6 @@ export class ContratService {
     return this.http.request<ContratEditData>('GET', `${this.apiUrl}/edit-data/${id}`);
   }
 
-  getByUser(userId: string): Observable<Contrat[]> {
-    return this.http.request<Contrat[]>(
-      'GET',
-      `${this.apiUrl}/get-by-user/${encodeURIComponent(userId)}`,
-    );
-  }
-
   getByOrganisation(organisationId: number): Observable<Contrat[]> {
     return this.http.request<Contrat[]>(
       'GET',

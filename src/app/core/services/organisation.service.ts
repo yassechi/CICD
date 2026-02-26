@@ -64,11 +64,6 @@ export class OrganisationService {
     return this.http.get<Organisation>(`${this.apiUrl}/get-one/${id}`);
   }
 
-  resolveByEmailOrDomain(emailOrDomain: string): Observable<Organisation | null> {
-    const value = encodeURIComponent(emailOrDomain || '');
-    return this.http.get<Organisation | null>(`${this.apiUrl}/resolve?emailOrDomain=${value}`);
-  }
-
   create(organisation: Organisation): Observable<any> {
     return this.http.post(`${this.apiUrl}/add`, organisation);
   }
@@ -95,18 +90,6 @@ export class OrganisationService {
 
   createLogo(payload: OrganisationLogoPayload): Observable<any> {
     return this.http.post(`${this.logoApiUrl}/add`, payload);
-  }
-
-  updateLogo(payload: OrganisationLogo): Observable<any> {
-    return this.http.put(`${this.logoApiUrl}/update`, payload);
-  }
-
-  setLogoActive(logoId: number): Observable<any> {
-    return this.http.put(`${this.logoApiUrl}/set-active/${logoId}`, {});
-  }
-
-  deleteLogo(id: number): Observable<any> {
-    return this.http.delete(`${this.logoApiUrl}/delete/${id}`);
   }
 
   buildLogoDataUrl(logo: OrganisationLogo | null | undefined): string | null {
