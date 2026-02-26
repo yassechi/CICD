@@ -43,10 +43,6 @@ export class MessageApiService {
     return this.http.post(`${this.apiUrl}/add`, message);
   }
 
-  getByDiscussion(discussionId: number): Observable<DiscussionMessage[]> {
-    return this.http.get<DiscussionMessage[]>(`${this.apiUrl}/get-by-discussion/${discussionId}`);
-  }
-
   getUnreadCount(params: {
     userId: string;
     role?: number;

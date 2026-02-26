@@ -1,14 +1,10 @@
 <div class="contrat-edit-container page-shell">
-  <p-toast></p-toast>
-
   <div class="page-header">
     <div class="flex align-items-center gap-3">
-      <p-button icon="pi pi-arrow-left" [text]="true" [rounded]="true" (onClick)="goBack()" pTooltip="Retour au détail"></p-button>
+      <p-button icon="pi pi-arrow-left" [text]="true" [rounded]="true" (onClick)="goBack()" pTooltip="Retour à la liste"></p-button>
       <div>
-        <h1 class="page-title">{{ isEdit ? 'Modifier le contrat' : 'Créer un contrat' }}</h1>
-        <p class="page-subtitle">
-          {{ isEdit ? 'Modification des informations du contrat' : 'Création d’un nouveau contrat' }}
-        </p>
+        <h1 class="page-title">Créer un contrat</h1>
+        <p class="page-subtitle">Création d’un nouveau contrat</p>
       </div>
     </div>
   </div>
@@ -72,8 +68,8 @@
         </div>
 
         <div class="flex gap-2 justify-content-end mt-4">
-          <p-button label="Annuler"      severity="secondary" (onClick)="goBack()" type="button"></p-button>
-          <p-button label="Enregistrer"  icon="pi pi-check"   type="submit" [disabled]="contratForm.invalid"></p-button>
+          <p-button label="Annuler" severity="secondary" (onClick)="goBack()" type="button"></p-button>
+          <p-button label="Enregistrer" icon="pi pi-check" type="submit" [disabled]="contratForm.invalid"></p-button>
         </div>
       </form>
     </p-card>

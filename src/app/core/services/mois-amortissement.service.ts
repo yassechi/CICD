@@ -26,12 +26,6 @@ export class MoisAmortissementService {
     return this.http.get<MoisAmortissement>(`${this.apiUrl}/get-one/${id}`);
   }
 
-  getByAmortissement(amortissementId: number): Observable<MoisAmortissement[]> {
-    return this.http.get<MoisAmortissement[]>(
-      `${this.apiUrl}/get-by-amortissement/${amortissementId}`,
-    );
-  }
-
   getByContrat(contratId: number): Observable<MoisAmortissement[]> {
     return this.http.get<MoisAmortissement[]>(`${this.apiUrl}/get-by-contrat/${contratId}`);
   }

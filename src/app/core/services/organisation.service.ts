@@ -1,7 +1,25 @@
 import { environment } from '../../../environments/environment';
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
+
+export interface OrganisationLogo {
+  id: number;
+  organisationId: number;
+  fichier: string;
+  nomFichier: string;
+  typeFichier: string;
+  isActif: boolean;
+  createdAt?: string;
+}
+
+export interface OrganisationLogoPayload {
+  organisationId: number;
+  fichier: string;
+  nomFichier: string;
+  typeFichier: string;
+  isActif?: boolean;
+}
 
 export interface Organisation {
   id: number;
@@ -16,18 +34,21 @@ export interface Organisation {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class OrganisationService {
-  private apiUrl = `${environment.urls.coreApi}/Organisation`;
-
   private readonly http = inject(HttpClient);
+  private readonly apiUrl = `${environment.urls.coreApi}/Organisation`;
+  private readonly logoApiUrl = `${environment.urls.coreApi}/OrganisationLogo`;
 
   getAll(): Observable<Organisation[]> {
     return this.http.get<Organisation[]>(`${this.apiUrl}/get-all`);
   }
 
-  getList(params?: { isActif?: boolean | null; search?: string | null }): Observable<Organisation[]> {
+  getList(params?: {
+    isActif?: boolean | null;
+    search?: string | null;
+  }): Observable<Organisation[]> {
     const query = new URLSearchParams();
     if (params?.isActif !== null && params?.isActif !== undefined) {
       query.set('isActif', String(params.isActif));
@@ -43,11 +64,6 @@ export class OrganisationService {
     return this.http.get<Organisation>(`${this.apiUrl}/get-one/${id}`);
   }
 
-  resolveByEmailOrDomain(emailOrDomain: string): Observable<Organisation | null> {
-    const value = encodeURIComponent(emailOrDomain || '');
-    return this.http.get<Organisation | null>(`${this.apiUrl}/resolve?emailOrDomain=${value}`);
-  }
-
   create(organisation: Organisation): Observable<any> {
     return this.http.post(`${this.apiUrl}/add`, organisation);
   }
@@ -58,5 +74,26 @@ export class OrganisationService {
 
   delete(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/delete/${id}`);
+  }
+
+  getLogosByOrganisation(organisationId: number): Observable<OrganisationLogo[]> {
+    return this.http.get<OrganisationLogo[]>(
+      `${this.logoApiUrl}/get-by-organisation/${organisationId}`,
+    );
+  }
+
+  getActiveLogo(organisationId: number): Observable<OrganisationLogo | null> {
+    return this.getLogosByOrganisation(organisationId).pipe(
+      map((logos) => logos.find((logo) => logo.isActif) ?? logos[0] ?? null),
+    );
+  }
+
+  createLogo(payload: OrganisationLogoPayload): Observable<any> {
+    return this.http.post(`${this.logoApiUrl}/add`, payload);
+  }
+
+  buildLogoDataUrl(logo: OrganisationLogo | null | undefined): string | null {
+    if (!logo?.fichier || !logo.typeFichier) return null;
+    return `data:${logo.typeFichier};base64,${logo.fichier}`;
   }
 }

@@ -16,6 +16,7 @@ import { EmployeDetailComponent } from './features/Admin/employes/employe-detail
 import { DemandeFormDialogComponent } from './features/Admin/demandes/demande-form/demande-form';
 import { DemandeDetailComponent } from './features/Admin/demandes/demande-detail/demande-detail';
 import { AdminContratsComponent } from './features/Admin/contrats/contrats-list/contrats-list';
+import { ContratCreateComponent } from './features/Admin/contrats/contrat-create/contrat-create';
 import { AdminEmployesComponent } from './features/Admin/employes/employes-list/employes-list';
 import { AdminDemandesComponent } from './features/Admin/demandes/demandes-list/demandes-list';
 import { ContratEditComponent } from './features/Admin/contrats/contrat-edit/contrat-edit';
@@ -70,7 +71,8 @@ export const routes: Routes = [
       { path: 'demandes/:id/edit',  component: DemandeFormDialogComponent },
       { path: 'demandes/:id',       component: DemandeDetailComponent },
       { path: 'contrats',           component: AdminContratsComponent },
-      { path: 'contrats/new',       component: ContratEditComponent },
+      { path: 'contrats/detail',    component: ContratCreateComponent },
+      { path: 'contrats/new',       component: ContratCreateComponent },
       { path: 'contrats/edit/:id',  component: ContratEditComponent },
       {
         path: 'contrats/:id',
