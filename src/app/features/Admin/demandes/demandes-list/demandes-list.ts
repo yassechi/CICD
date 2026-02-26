@@ -155,7 +155,7 @@ export class AdminDemandesComponent {
     this.demandeService.updateStatus(d.id!, newStatus).subscribe({
       next: () => {
         d.status = newStatus;
-        this.messageService.showSuccess('Statut mis ? jour', 'Succ?s');
+        this.messageService.showSuccess('Statut mis ? jour', 'Succés');
       },
       error: () => this.messageService.showError('Impossible de mettre ? jour le statut'),
     });
@@ -163,7 +163,7 @@ export class AdminDemandesComponent {
 
   onDelete(d: AdminDemandeListItem): void {
     this.confirmationService.confirm({
-      message: '?tes-vous s?r de vouloir supprimer cette demande ?',
+      message: '?tes-vous sur de vouloir supprimer cette demande ?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'Oui',
