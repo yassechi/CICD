@@ -213,9 +213,4 @@ export class AdminDemandesComponent {
   getStatusSeverity(status: DemandeStatus): 'success' | 'secondary' | 'info' | 'warn' | 'danger' {
     return this.demandeService.getStatusSeverity(status);
   }
-  formatCurrency(amount: number | null): string {
-    return amount
-      ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(amount)
-      : '-';
-  }
 }

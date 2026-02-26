@@ -93,7 +93,7 @@
                 <div class="text-600 text-sm">{{ demande.veloMarque || 'Marque non renseignee' }}</div>
               </td>
               <td>{{ demande.veloType || demande.organisationName || '-' }}</td>
-              <td>{{ formatCurrency(demande.veloPrixAchat ?? null) }}</td>
+              <td>{{ demande.veloPrixAchat == null ? '-' : (demande.veloPrixAchat | currency:'EUR') }}</td>
               <td>
                 <div class="status-with-indicator">
                   <p-tag

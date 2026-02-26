@@ -88,6 +88,7 @@ export class AdminDashboardComponent {
       },
     });
   }
+<<<<<<< HEAD
 
   private toArray<T>(data: any): T[] {
     return Array.isArray(data) ? data : data?.items ?? [];
@@ -110,4 +111,6 @@ export class AdminDashboardComponent {
         }],
     };
   }
+=======
+>>>>>>> master
 }
