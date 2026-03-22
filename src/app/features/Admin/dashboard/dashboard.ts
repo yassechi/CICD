@@ -1,15 +1,37 @@
 import { DemandeService, DemandeStatus } from '../../../core/services/demande.service';
 import { ContratService, StatutContrat } from '../../../core/services/contrat.service';
 import { DashboardService } from '../../../core/services/dashboard.service';
+import {
+  AiService,
+  AiUploadMultipleResponse,
+  AiPdfInfo,
+  AiUploadSingleResponse,
+} from '../../../core/services/ai.service';
+import { MessageService } from '../../../core/services/message.service';
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ChartModule } from 'primeng/chart';
 import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
+import { TextareaModule } from 'primeng/textarea';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, CardModule, ChartModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    CardModule,
+    ChartModule,
+    ButtonModule,
+    ConfirmDialogModule,
+    TextareaModule,
+  ],
+  providers: [ConfirmationService],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss'],
 })
@@ -18,6 +40,18 @@ export class AdminDashboardComponent {
   activityFeed = signal<Array<{ title: string; detail: string; time: string }>>([]);
   demandeStatusChartData = signal<any>(null);
   contratStatusChartData = signal<any>(null);
+  selectedAiFiles = signal<File[]>([]);
+  uploadedAiFiles = signal<AiPdfInfo[]>([]);
+  showUploadedFiles = signal(false);
+  isDragOver = signal(false);
+  aiMessages = signal<Array<{ role: 'user' | 'assistant'; text: string; time: string }>>([]);
+  uploadLoading = signal(false);
+  uploadedListLoading = signal(false);
+  askLoading = signal(false);
+  lastUploadSummary = signal<string | null>(null);
+  aiQuestion = '';
+
+  private readonly maxFileBytes = 10 * 1024 * 1024;
 
   readonly donutChartOptions = {
     responsive: true,
@@ -40,6 +74,9 @@ export class AdminDashboardComponent {
   private readonly dashboardService = inject(DashboardService);
   private readonly demandeService = inject(DemandeService);
   private readonly contratService = inject(ContratService);
+  private readonly aiService = inject(AiService);
+  private readonly messageService = inject(MessageService);
+  private readonly confirmationService = inject(ConfirmationService);
 
   constructor() {
     this.dashboardService.getAdminDashboard().subscribe((data) => {
@@ -86,5 +123,202 @@ export class AdminDashboardComponent {
         ],
       });
     });
+  }
+
+  onAiFileInputChange(event: Event): void {
+    const input = event.target as HTMLInputElement | null;
+    const files = input?.files ? Array.from(input.files) : [];
+    if (!files.length) return;
+
+    this.processAiFiles(files);
+
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  private processAiFiles(files: File[]): void {
+    const validFiles: File[] = [];
+    const rejected: string[] = [];
+
+    files.forEach((file) => {
+      const isPdf =
+        file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+      if (!isPdf) {
+        rejected.push(`${file.name} (format non PDF)`);
+        return;
+      }
+      if (file.size > this.maxFileBytes) {
+        rejected.push(`${file.name} (trop volumineux)`);
+        return;
+      }
+      validFiles.push(file);
+    });
+
+    if (rejected.length) {
+      this.messageService.showWarn(`Fichiers ignorés: ${rejected.join(' | ')}`);
+    }
+    this.selectedAiFiles.set(validFiles);
+  }
+
+  clearAiFiles(): void {
+    this.selectedAiFiles.set([]);
+  }
+
+  removeSelectedAiFile(index: number): void {
+    this.selectedAiFiles.update((files) => files.filter((_, i) => i !== index));
+  }
+
+  uploadAiFiles(): void {
+    const files = this.selectedAiFiles();
+    if (this.uploadLoading()) return;
+    if (!files.length) {
+      this.messageService.showWarn('Sélectionnez au moins un PDF.');
+      return;
+    }
+
+    this.uploadLoading.set(true);
+    const request$: Observable<AiUploadSingleResponse | AiUploadMultipleResponse> =
+      files.length > 1
+        ? this.aiService.uploadAdminMultiple(files)
+        : this.aiService.uploadAdminSingle(files[0]);
+
+    request$.subscribe({
+      next: (response: any) => {
+        if (response?.message) {
+          this.messageService.showSuccess(response.message);
+          this.lastUploadSummary.set(response.message);
+        } else {
+          const uploaded = response?.uploades ?? [];
+          const errors = response?.erreurs ?? [];
+          if (uploaded.length) {
+            this.messageService.showSuccess(`${uploaded.length} fichier(s) uploadé(s).`);
+            this.lastUploadSummary.set(`Uploadés : ${uploaded.join(', ')}`);
+          }
+          if (errors.length) {
+            this.messageService.showWarn(`Erreurs: ${errors.join(' | ')}`);
+          }
+        }
+        this.selectedAiFiles.set([]);
+        if (this.showUploadedFiles()) {
+          this.loadUploadedAiFiles();
+        }
+      },
+      error: () => {
+        this.messageService.showError("Impossible d'uploader les documents.");
+        this.uploadLoading.set(false);
+      },
+      complete: () => this.uploadLoading.set(false),
+    });
+  }
+
+  loadUploadedAiFiles(): void {
+    this.uploadedListLoading.set(true);
+    this.aiService.getAdminFiles().subscribe({
+      next: (files) => this.uploadedAiFiles.set(files ?? []),
+      error: () => {
+        this.messageService.showError("Impossible de charger la liste des PDFs.");
+        this.uploadedListLoading.set(false);
+      },
+      complete: () => this.uploadedListLoading.set(false),
+    });
+  }
+
+  onAiDragOver(event: DragEvent): void {
+    event.preventDefault();
+    if (event.dataTransfer) {
+      event.dataTransfer.dropEffect = 'copy';
+    }
+    this.isDragOver.set(true);
+  }
+
+  onAiDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragOver.set(false);
+  }
+
+  onAiDrop(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragOver.set(false);
+    const files = event.dataTransfer?.files ? Array.from(event.dataTransfer.files) : [];
+    if (!files.length) return;
+    this.processAiFiles(files);
+  }
+
+  toggleUploadedFiles(): void {
+    const next = !this.showUploadedFiles();
+    this.showUploadedFiles.set(next);
+    if (next && this.uploadedAiFiles().length === 0 && !this.uploadedListLoading()) {
+      this.loadUploadedAiFiles();
+    }
+  }
+
+
+  deleteUploadedAiFile(file: AiPdfInfo): void {
+    this.confirmationService.confirm({
+      message: `Etes-vous sur de vouloir supprimer "${file.fileName}" ?`,
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Oui',
+      rejectLabel: 'Non',
+      accept: () => {
+        this.uploadedListLoading.set(true);
+        this.aiService.deleteAdminFile(file.fileName).subscribe({
+          next: (response) => {
+            this.messageService.showSuccess(response?.message ?? 'Fichier supprime.');
+            this.loadUploadedAiFiles();
+          },
+          error: () => {
+            this.messageService.showError("Impossible de supprimer le fichier.");
+            this.uploadedListLoading.set(false);
+          },
+        });
+      },
+    });
+  }
+
+  askAi(): void {
+    const question = this.aiQuestion.trim();
+    if (!question || this.askLoading()) return;
+
+    this.appendAiMessage('user', question);
+    this.aiQuestion = '';
+    this.askLoading.set(true);
+
+    this.aiService.askAdmin(question).subscribe({
+      next: (response) => {
+        const text = response?.response?.trim() || 'JE NE SAIS PAS';
+        this.appendAiMessage('assistant', text);
+      },
+      error: () => {
+        this.appendAiMessage(
+          'assistant',
+          "Une erreur est survenue. Merci de réessayer dans quelques instants.",
+        );
+        this.messageService.showError("Impossible d'obtenir une réponse IA.");
+        this.askLoading.set(false);
+      },
+      complete: () => this.askLoading.set(false),
+    });
+  }
+
+  private appendAiMessage(role: 'user' | 'assistant', text: string): void {
+    const time = this.formatTime(new Date());
+    this.aiMessages.update((items) => [...items, { role, text, time }]);
+  }
+
+  private formatTime(date: Date): string {
+    return date.toLocaleTimeString('fr-BE', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  formatFileSize(bytes: number): string {
+    const mb = bytes / (1024 * 1024);
+    return `${mb.toFixed(2)} MB`;
+  }
+
+  formatDate(isoDate: string): string {
+    const date = new Date(isoDate);
+    if (Number.isNaN(date.getTime())) return '';
+    return date.toLocaleDateString('fr-BE', { day: '2-digit', month: '2-digit', year: 'numeric' });
   }
 }
