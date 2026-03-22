@@ -1,5 +1,6 @@
 import { DemandeConfirmationComponent } from './features/User/demandes/demande-public/demande-confirmation/demande-confirmation';
 import { CreateLamdaUserComponent } from './features/User/demandes/demande-public/create-public-user/create-public-user';
+import { QuestionnaireGuideComponent } from './features/User/questionnaire-guide/questionnaire-guide';
 import { CompagnieDetailComponent } from './features/Admin/compagnies/compagnie-detail/compagnie-detail';
 import { FaireDemandeComponent } from './features/User/demandes/demande-public/pasDeCompte/pasDeCompte';
 import { AdminCompagniesComponent } from './features/Admin/compagnies/compagnies-list/compagnies-list';
@@ -44,7 +45,7 @@ export const routes: Routes = [
   { path: 'faire-demande',       component: FaireDemandeComponent },
   { path: 'demande-formulaire',  component: DemandeCatalogueComponent },
   { path: 'choix-parcours',      component: ChoixParcoursUtilisateurComponent },
-  { path: 'questionnaire-guide', component: CreateLamdaUserComponent },
+  { path: 'questionnaire-guide', component: QuestionnaireGuideComponent },
   { path: 'create-lamda-user',   component: CreateLamdaUserComponent },
   { path: 'catalogue-velos',     component: DemandeCatalogueComponent },
   { path: 'demande-confirmation', component: DemandeConfirmationComponent },

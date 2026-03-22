@@ -1,0 +1,110 @@
+<div class="questionnaire-shell">
+  <div class="questionnaire-card section-card">
+    <div class="questionnaire-header">
+      <div>
+        <h1 class="questionnaire-title">Questionnaire guide velo</h1>
+        @if (firstName || lastName) {
+          <p class="questionnaire-subtitle">
+            Bonjour {{ firstName }} {{ lastName }}, repondez a ces questions pour lancer l'IA.
+          </p>
+        } @else {
+          <p class="questionnaire-subtitle">
+            Repondez a ces questions pour lancer l'IA.
+          </p>
+        }
+      </div>
+      <div class="questionnaire-logo">
+        @if (organisationLogoUrl) {
+          <img [src]="organisationLogoUrl" alt="Logo" />
+        } @else {
+          <div class="logo-placeholder"><i class="pi pi-building"></i></div>
+        }
+      </div>
+    </div>
+
+    <div class="questionnaire-progress">
+      <div class="progress-label">Progression</div>
+      <div class="progress-track">
+        <div class="progress-fill" [style.width.%]="progressPercent()"></div>
+      </div>
+      <div class="progress-count">{{ answeredCount() }}/{{ questions.length }}</div>
+    </div>
+
+    <div class="questionnaire-grid">
+      @for (question of questions; track question.key) {
+        <div class="question-card" [class.is-complete]="answers()[question.key]">
+          <div class="question-head">
+            <div class="question-index">{{ $index + 1 }}</div>
+            <div>
+              <h3>{{ question.title }}</h3>
+              <p>{{ question.subtitle }}</p>
+            </div>
+          </div>
+          <div class="question-options">
+            @for (option of question.options; track option.value) {
+              <button
+                type="button"
+                class="option-chip"
+                [class.is-active]="isOptionActive(question.key, option.value)"
+                (click)="selectAnswer(question.key, option.value)"
+              >
+                <span class="option-label">{{ option.label }}</span>
+                <span class="option-desc">{{ option.hint }}</span>
+              </button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="questionnaire-notes">
+      <label class="notes-label" for="notes">Precisions (optionnel)</label>
+      <textarea
+        id="notes"
+        pInputTextarea
+        rows="3"
+        class="w-full"
+        placeholder="Ex: usage mixte, besoin d'un porte-bagages, preference marque..."
+        [(ngModel)]="notes"
+      ></textarea>
+    </div>
+
+    <div class="questionnaire-actions">
+      <p-button
+        label="Demander a l'IA"
+        icon="pi pi-send"
+        (click)="askAi()"
+        [loading]="askLoading()"
+        [disabled]="!isComplete() || askLoading()"
+      ></p-button>
+      <p-button
+        label="Reinitialiser"
+        icon="pi pi-refresh"
+        class="p-button-outlined"
+        (click)="reset()"
+        [disabled]="askLoading()"
+      ></p-button>
+      <p-button
+        label="Retour"
+        icon="pi pi-arrow-left"
+        class="p-button-text"
+        (click)="goBack()"
+        [disabled]="askLoading()"
+      ></p-button>
+    </div>
+
+    @if (askLoading()) {
+      <div class="ai-response-loading">IA en cours de reponse...</div>
+    }
+
+    @if (aiResponse()) {
+      <div class="ai-response-card">
+        <div class="ai-response-header">
+          <span>Reponse IA</span>
+          <span class="ai-response-tag">Ok</span>
+        </div>
+        <div class="ai-response-text">{{ aiResponse() }}</div>
+      </div>
+    }
+  </div>
+</div>

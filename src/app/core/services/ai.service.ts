@@ -33,6 +33,10 @@ export class AiService {
     return this.http.post<AiAskResponse>(`${this.apiUrl}/admin/ask`, { question });
   }
 
+  askClient(question: string): Observable<AiAskResponse> {
+    return this.http.post<AiAskResponse>(`${this.apiUrl}/client/ask`, { question });
+  }
+
   uploadAdminSingle(file: File): Observable<AiUploadSingleResponse> {
     const formData = new FormData();
     formData.append('file', file, file.name);
