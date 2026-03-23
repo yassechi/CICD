@@ -28,6 +28,13 @@
   }
 }
 
+@media (max-width: 768px) {
+  :host ::ng-deep .navbar-custom {
+    padding-top: calc(0.65rem + env(safe-area-inset-top)) !important;
+    padding-top: calc(0.65rem + constant(safe-area-inset-top)) !important;
+  }
+}
+
 .brand {
   display: flex;
   align-items: baseline;

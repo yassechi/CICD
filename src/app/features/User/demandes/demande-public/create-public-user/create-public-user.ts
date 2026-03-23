@@ -84,7 +84,7 @@ export class CreateLamdaUserComponent {
       isActif: true,
       organisationId: Number(values.organisationId),
     }).subscribe({
-      next: () => this.authService.login({ email, password }).subscribe({
+      next: () => this.authService.login({ email, password }, { redirectToDashboard: false }).subscribe({
         next: (response) => this.ensureUserActive(response.id, values),
         error: () => { this.loading = false; this.messageService.showError('Compte cree, mais connexion impossible'); },
       }),

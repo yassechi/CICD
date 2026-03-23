@@ -22,14 +22,17 @@ export class AuthService {
     return this.currentUserSignal();
   }
 
-  login(identifiants: LoginRequest): Observable<AuthResponse> {
+  login(identifiants: LoginRequest, options?: { redirectToDashboard?: boolean }): Observable<AuthResponse> {
+    const shouldRedirect = options?.redirectToDashboard !== false;
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, identifiants).pipe(
       tap((reponse) => {
         if (reponse && reponse.token) {
           localStorage.setItem('token', reponse.token);
           this.getUserInfo(reponse.id).subscribe((utilisateur) => {
             this.setCurrentUser(utilisateur);
-            this.redirectToRoleDashboard(utilisateur.role);
+            if (shouldRedirect) {
+              this.redirectToRoleDashboard(utilisateur.role);
+            }
           });
         }
       }),

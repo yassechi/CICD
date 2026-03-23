@@ -43,10 +43,12 @@ export class SidebarComponent {
     const badge = this.unreadCount() > 0 ? { badge: String(this.unreadCount()), badgeStyleClass: 'sidebar-badge' } : {};
     const role = user?.role ?? 3;
     const aiQueryParams = this.buildAiQueryParams(user);
+    const aiRoute =
+      role === 2 ? ['/manager/questionnaire-guide'] : role === 3 ? ['/user/questionnaire-guide'] : ['/questionnaire-guide'];
     const aiMenuItem = {
       label: 'Assistant IA - choix velo',
       icon: 'pi pi-sparkles',
-      routerLink: ['/questionnaire-guide'],
+      routerLink: aiRoute,
       queryParams: aiQueryParams,
     };
     this.menuItems.set(

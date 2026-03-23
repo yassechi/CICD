@@ -106,6 +106,7 @@ export const routes: Routes = [
       { path: 'demandes/:id/edit',  component: DemandeFormDialogComponent },
       { path: 'demandes/:id',       component: DemandeDetailComponent },
       { path: 'contrats',           component: ManagerContratsComponent },
+      { path: 'questionnaire-guide', component: QuestionnaireGuideComponent },
       {
         path: 'contrats/:id',
         component: ContratDetailComponent,
@@ -132,6 +133,7 @@ export const routes: Routes = [
       { path: 'demandes/new',      component: DemandeCatalogueComponent },
       { path: 'demandes/:id/edit', component: DemandeCatalogueComponent },
       { path: 'demandes/:id',      component: DemandeDetailComponent },
+      { path: 'questionnaire-guide', component: QuestionnaireGuideComponent },
       { path: 'parametres',        component: ParametresComponent }],
   },
 
