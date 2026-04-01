@@ -62,3 +62,4 @@ Le repo contient un `Dockerfile` et `nginx.conf` pour servir l'app en SPA. Pour 
 docker build --target dev -t mojovelo-frontend:dev .
 docker run --rm -p 4200:4200 mojovelo-frontend:dev
 ```
+  
