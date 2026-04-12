@@ -1,0 +1,22 @@
+name: yassine echiguer
+
+family:
+  pere: mohammed
+  mere: fatiha
+  childrens:
+    boys: Taha
+    girls: Lina
+
+family:
+  pere: mohammed
+  mere: fatiha
+  childrens:
+    boys:
+      - Taha
+      - Youssef
+    girls:
+      - Lina
+      - Youssra
+
+
+

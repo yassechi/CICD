@@ -1,1 +1,15 @@
-name: 01 basics first workflow 
+name: 01 basics first workflow
+
+on:
+    workflow_dispatch
+
+jobs:
+  print-hello-word:
+    run-on: ubuntu-latest
+
+    steps:
+      - name: Print Hello World
+        run: echo "Hello World"
+
+      - name: Print Hello World 2
+        run : echo "Hello world 2"
