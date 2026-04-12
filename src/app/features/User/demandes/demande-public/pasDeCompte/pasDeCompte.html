@@ -1,0 +1,93 @@
+﻿<div class="demande-landing page-shell">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">{{ i18n.t().publicDemande.title }}</h1>
+      <p class="page-subtitle">{{ i18n.t().publicDemande.subtitle }}</p>
+    </div>
+  </div>
+
+  <div class="section-card precheck-card">
+    <div class="precheck-header">
+      <div class="precheck-icon"><i class="pi pi-building"></i></div>
+      <div class="precheck-text">
+        <h2 class="precheck-title">{{ i18n.t().publicDemande.companyTitle }}</h2>
+        <p class="precheck-subtitle">{{ i18n.t().publicDemande.companySubtitle }}</p>
+      </div>
+    </div>
+    <div class="precheck-body">
+      <label class="block mb-2 font-semibold">{{ i18n.t().publicDemande.companyLabel }}</label>
+      <p-select
+        class="w-full precheck-select"
+        [options]="organisationOptions"
+        optionLabel="name"
+        [filter]="true"
+        filterBy="name,code,emailAutorise"
+        [showClear]="true"
+        [placeholder]="i18n.t().publicDemande.companySearchPlaceholder"
+        [(ngModel)]="organisation"
+      >
+        <ng-template pTemplate="item" let-org>
+          <div class="organisation-option">
+            <div class="organisation-name">{{ org.name }}</div>
+            <small class="text-600">{{ org.emailAutorise }}</small>
+          </div>
+        </ng-template>
+      </p-select>
+      <div class="precheck-help">
+        {{ i18n.t().publicDemande.companyMissing }}
+        <a class="precheck-email" [href]="supportMailto">{{ i18n.t().publicDemande.companyContactEmail }}</a>
+      </div>
+      @if (loading()) {
+        <div class="text-600 text-sm">{{ i18n.t().publicDemande.companyLoading }}</div>
+      }
+      @if (!loading() && organisationOptions.length === 0) {
+        <div class="precheck-warning">
+          <i class="pi pi-exclamation-triangle"></i>
+          <span>{{ i18n.t().publicDemande.companyNone }}</span>
+        </div>
+      }
+      @if (!organisation && !loading() && organisationOptions.length > 0) {
+        <div class="precheck-warning">
+          <i class="pi pi-exclamation-triangle"></i>
+          <span>{{ i18n.t().publicDemande.companySelectHint }}</span>
+        </div>
+      }
+    </div>
+  </div>
+
+  @if (organisation; as org) {
+    <div class="section-card hero-card">
+      <div class="hero-grid">
+        <div class="hero-brand">
+          <div class="logo-shell">
+            @if (org.logoUrl) {
+              <img [src]="org.logoUrl" alt="Logo" />
+            } @else {
+              <div class="logo-fallback"><i class="pi pi-building"></i></div>
+            }
+          </div>
+          <div class="company-info">
+            <div class="company-name">{{ org.name }}</div>
+            <div class="company-domain"><span>{{ i18n.t().publicDemande.domainLabel }} : {{ org.emailAutorise }}</span></div>
+          </div>
+        </div>
+
+        <div class="hero-content">
+          <h2 class="brand-title hero-title">{{ i18n.format('publicDemande.heroTitle', { company: org.name }) }}</h2>
+          <p class="hero-subtitle">{{ i18n.t().publicDemande.heroSubtitle }}</p>
+          <div class="hero-actions">
+            <p-button
+              [label]="i18n.t().publicDemande.heroAction"
+              icon="pi pi-arrow-right"
+              (click)="onPrimaryAction()"
+              [disabled]="!isAuthenticated && !organisation"
+            ></p-button>
+          </div>
+          @if (loading()) {
+            <p class="hero-loading">{{ i18n.t().publicDemande.heroDetecting }}</p>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>

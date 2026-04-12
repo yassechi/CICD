@@ -1,0 +1,148 @@
+﻿<div class="register-shell">
+  <div class="register-card section-card">
+    <div class="register-header">
+      <div>
+        <h1 class="register-title">{{ i18n.t().auth.registerTitle }}</h1>
+        <p class="register-subtitle">
+          {{ i18n.t().auth.registerSubtitle }}
+        </p>
+      </div>
+      <div class="register-badge">
+        <i class="pi pi-user-plus"></i>
+      </div>
+    </div>
+
+    <p class="register-note">{{ i18n.t().auth.requiredFieldsNote }}</p>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="register-form" autocomplete="off">
+      <div class="register-grid">
+        <div class="register-field">
+          <label>{{ i18n.t().auth.userName }} *</label>
+          <input pInputText formControlName="userName" class="w-full" autocomplete="off" />
+          @if (form.get('userName')?.invalid && form.get('userName')?.touched) {
+            <small class="field-error">{{ i18n.t().auth.userNameRequired }}</small>
+          }
+        </div>
+
+        <div class="register-field">
+          <label>{{ i18n.t().auth.email }} *</label>
+          <input pInputText type="email" formControlName="email" class="w-full" autocomplete="off" />
+          @if (form.get('email')?.invalid && form.get('email')?.touched) {
+            <small class="field-error">
+              @if (form.get('email')?.errors?.['required']) {
+                <span>{{ i18n.t().auth.emailRequired }}</span>
+              }
+              @if (form.get('email')?.errors?.['email']) {
+                <span>{{ i18n.t().auth.emailInvalid }}</span>
+              }
+            </small>
+          }
+        </div>
+
+        <div class="register-field">
+          <label>{{ i18n.t().auth.firstName }} *</label>
+          <input pInputText formControlName="firstName" class="w-full" autocomplete="off" />
+          @if (form.get('firstName')?.invalid && form.get('firstName')?.touched) {
+            <small class="field-error">{{ i18n.t().auth.firstNameRequired }}</small>
+          }
+        </div>
+
+        <div class="register-field">
+          <label>{{ i18n.t().auth.lastName }} *</label>
+          <input pInputText formControlName="lastName" class="w-full" autocomplete="off" />
+          @if (form.get('lastName')?.invalid && form.get('lastName')?.touched) {
+            <small class="field-error">{{ i18n.t().auth.lastNameRequired }}</small>
+          }
+        </div>
+
+        <div class="register-field">
+          <label>{{ i18n.t().auth.phone }} *</label>
+          <input pInputText formControlName="phoneNumber" class="w-full" autocomplete="off" />
+          @if (form.get('phoneNumber')?.invalid && form.get('phoneNumber')?.touched) {
+            <small class="field-error">{{ i18n.t().auth.phoneRequired }}</small>
+          }
+        </div>
+
+        <div class="register-field">
+          <label>{{ i18n.t().auth.organisation }} *</label>
+          @if (organisationLocked) {
+            <div class="organisation-lock">
+              <i class="pi pi-building"></i>
+              <span>{{ organisationName || i18n.t().auth.organisationSelected }}</span>
+            </div>
+          } @else {
+            <p-select
+              formControlName="organisationId"
+              [options]="organisations"
+              optionLabel="name"
+              optionValue="id"
+              class="w-full"
+              [placeholder]="i18n.t().auth.organisationPlaceholder"
+            ></p-select>
+          }
+          @if (form.get('organisationId')?.invalid && form.get('organisationId')?.touched) {
+            <small class="field-error">{{ i18n.t().auth.organisationRequired }}</small>
+          }
+          @if (!loadingOrganisations && organisations.length === 0) {
+            <small class="field-error">{{ i18n.t().auth.organisationEmpty }}</small>
+          }
+        </div>
+
+        <div class="register-field">
+          <label>{{ i18n.t().auth.password }} *</label>
+          <p-password
+            formControlName="password"
+            [toggleMask]="true"
+            [feedback]="false"
+            class="w-full"
+            inputclass="w-full"
+            autocomplete="new-password"
+          ></p-password>
+          @if (form.get('password')?.invalid && form.get('password')?.touched) {
+            <small class="field-error">
+              @if (form.get('password')?.errors?.['required']) {
+                <span>{{ i18n.t().auth.passwordRequired }}</span>
+              }
+              @if (form.get('password')?.errors?.['minlength']) {
+                <span>{{ i18n.t().auth.passwordMin }}</span>
+              }
+            </small>
+          }
+        </div>
+
+        <div class="register-field">
+          <label>{{ i18n.t().auth.confirmPassword }} *</label>
+          <p-password
+            formControlName="confirmPassword"
+            [toggleMask]="true"
+            [feedback]="false"
+            class="w-full"
+            inputclass="w-full"
+            autocomplete="new-password"
+          ></p-password>
+          @if (form.get('confirmPassword')?.invalid && form.get('confirmPassword')?.touched) {
+            <small class="field-error">
+              @if (form.get('confirmPassword')?.errors?.['required']) {
+                <span>{{ i18n.t().auth.confirmRequired }}</span>
+              }
+              @if (form.get('confirmPassword')?.errors?.['passwordMismatch']) {
+                <span>{{ i18n.t().auth.passwordMismatch }}</span>
+              }
+            </small>
+          }
+        </div>
+      </div>
+
+      <div class="register-actions">
+        <p-button
+          [label]="i18n.t().common.enregistrer"
+          type="submit"
+          [loading]="loading"
+          [disabled]="form.invalid || loading"
+        ></p-button>
+      </div>
+    </form>
+  </div>
+
+ 
+</div>

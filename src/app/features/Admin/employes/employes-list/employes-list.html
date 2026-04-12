@@ -1,0 +1,113 @@
+<div class="employes-container page-shell">
+  <div class="employes-header page-header">
+    <div>
+      <h1 class="page-title">{{ i18n.t().employes.title }}</h1>
+      <p class="page-subtitle">{{ i18n.t().employes.subtitle }}</p>
+    </div>
+    <p-button [label]="i18n.t().employes.create" icon="pi pi-plus" (click)="onCreate()"></p-button>
+  </div>
+
+  <p-card class="section-card mb-3">
+    <div class="grid">
+      <div class="col-12 md:col-4">
+        <label class="block mb-2 font-semibold">{{ i18n.t().employes.role }}</label>
+        <p-select
+          [options]="roleOptions()"
+          optionLabel="label"
+          optionValue="value"
+          [(ngModel)]="roleFilter"
+          (onChange)="load()"
+          [placeholder]="i18n.t().common.tous"
+        ></p-select>
+      </div>
+      <div class="col-12 md:col-4">
+        <label class="block mb-2 font-semibold">{{ i18n.t().employes.statut }}</label>
+        <p-select
+          [options]="statusOptions()"
+          optionLabel="label"
+          optionValue="value"
+          [(ngModel)]="statusFilter"
+          (onChange)="load()"
+          [placeholder]="i18n.t().common.tous"
+        ></p-select>
+      </div>
+      <div class="col-12 md:col-4">
+        <label class="block mb-2 font-semibold">{{ i18n.t().common.recherche }}</label>
+        <span class="p-input-icon-left w-full">
+          <i class="pi pi-search"></i>
+          <input
+            pInputText
+            type="text"
+            class="w-full"
+            [placeholder]="i18n.t().employes.searchPlaceholder"
+            [(ngModel)]="searchTerm"
+            (input)="load()"
+          />
+        </span>
+      </div>
+    </div>
+  </p-card>
+
+  <div class="grid">
+    <div class="col-12">
+      <p-card>
+        <p-table
+          [value]="users()"
+          [loading]="loading()"
+          [paginator]="true"
+          [rows]="10"
+          [showCurrentPageReport]="true"
+          [currentPageReportTemplate]="i18n.t().employes.reportTemplate"
+          [rowsPerPageOptions]="[10, 25, 50]"
+          class="p-datatable-striped"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="userName">
+                {{ i18n.t().employes.username }}
+                <p-sortIcon field="userName"></p-sortIcon>
+              </th>
+              <th>{{ i18n.t().employes.prenom }}</th>
+              <th>{{ i18n.t().employes.nom }}</th>
+              <th>{{ i18n.t().employes.email }}</th>
+              <th>{{ i18n.t().employes.telephone }}</th>
+              <th>{{ i18n.t().employes.role }}</th>
+              <th>{{ i18n.t().employes.statut }}</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-user>
+            <tr class="clickable-row" (click)="onView(user)">
+              <td>{{ user.userName }}</td>
+              <td>{{ user.firstName }}</td>
+              <td>{{ user.lastName }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.phoneNumber }}</td>
+              <td>
+                <p-tag
+                  [value]="getRoleLabel(user.role)"
+                  [severity]="user.role === 1 ? 'danger' : user.role === 2 ? 'info' : 'success'"
+                ></p-tag>
+              </td>
+              <td>
+                <p-tag
+                  [value]="getStatusLabel(user.isActif)"
+                  [severity]="getSeverity(user.isActif)"
+                ></p-tag>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="7" class="text-center py-5">
+                <i class="pi pi-inbox" style="font-size: 3rem; color: #ccc"></i>
+                <p class="mt-3 text-600">{{ i18n.t().employes.aucun }}</p>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+  </div>
+</div>

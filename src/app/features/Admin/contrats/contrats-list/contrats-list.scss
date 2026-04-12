@@ -1,0 +1,25 @@
+.contrats-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.end-soon {
+  color: var(--mojo-danger);
+  font-weight: 700;
+}
+
+:host ::ng-deep {
+  .maintenance-bar {
+    height: 0.5rem;
+    border-radius: 999px;
+  }
+
+  .maintenance-bar .p-progressbar-value {
+    background: linear-gradient(135deg, #0f766e, #22c55e);
+  }
+
+  .p-select,
+  .p-inputtext {
+    width: 100%;
+  }
+}

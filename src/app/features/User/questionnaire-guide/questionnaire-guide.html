@@ -1,0 +1,110 @@
+<div class="questionnaire-shell">
+  <div class="questionnaire-card section-card">
+    <div class="questionnaire-header">
+      <div>
+        <h1 class="questionnaire-title">{{ i18n.t().questionnaire.title }}</h1>
+        @if (firstName || lastName) {
+          <p class="questionnaire-subtitle">
+            {{ i18n.format('questionnaire.subtitleWithName', { firstName, lastName }) }}
+          </p>
+        } @else {
+          <p class="questionnaire-subtitle">
+            {{ i18n.t().questionnaire.subtitle }}
+          </p>
+        }
+      </div>
+      <div class="questionnaire-logo">
+        @if (organisationLogoUrl) {
+          <img [src]="organisationLogoUrl" alt="Logo" />
+        } @else {
+          <div class="logo-placeholder"><i class="pi pi-building"></i></div>
+        }
+      </div>
+    </div>
+
+    <div class="questionnaire-progress">
+      <div class="progress-label">{{ i18n.t().questionnaire.progress }}</div>
+      <div class="progress-track">
+        <div class="progress-fill" [style.width.%]="progressPercent()"></div>
+      </div>
+      <div class="progress-count">{{ answeredCount() }}/{{ questions().length }}</div>
+    </div>
+
+    <div class="questionnaire-grid">
+      @for (question of questions(); track question.key) {
+        <div class="question-card" [class.is-complete]="answers()[question.key]">
+          <div class="question-head">
+            <div class="question-index">{{ $index + 1 }}</div>
+            <div>
+              <h3>{{ question.title }}</h3>
+              <p>{{ question.subtitle }}</p>
+            </div>
+          </div>
+          <div class="question-options">
+            @for (option of question.options; track option.value) {
+              <button
+                type="button"
+                class="option-chip"
+                [class.is-active]="isOptionActive(question.key, option.value)"
+                (click)="selectAnswer(question.key, option.value)"
+              >
+                <span class="option-label">{{ option.label }}</span>
+                <span class="option-desc">{{ option.hint }}</span>
+              </button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="questionnaire-notes">
+      <label class="notes-label" for="notes">{{ i18n.t().questionnaire.notesLabel }}</label>
+      <textarea
+        id="notes"
+        pInputTextarea
+        rows="3"
+        class="w-full"
+        [placeholder]="i18n.t().questionnaire.notesPlaceholder"
+        [(ngModel)]="notes"
+      ></textarea>
+    </div>
+
+    <div class="questionnaire-actions">
+      <p-button
+        [label]="i18n.t().questionnaire.askAi"
+        icon="pi pi-send"
+        (click)="askAi()"
+        [loading]="askLoading()"
+        [disabled]="!isComplete() || askLoading()"
+      ></p-button>
+      <p-button
+        [label]="i18n.t().questionnaire.reset"
+        icon="pi pi-refresh"
+        class="p-button-outlined"
+        (click)="reset()"
+        [disabled]="askLoading()"
+      ></p-button>
+      <p-button
+        [label]="i18n.t().questionnaire.back"
+        icon="pi pi-arrow-left"
+        class="p-button-text"
+        (click)="goBack()"
+        [disabled]="askLoading()"
+      ></p-button>
+    </div>
+
+    @if (askLoading()) {
+      <div class="ai-response-loading">{{ i18n.t().questionnaire.loading }}</div>
+    }
+
+    @if (aiResponse()) {
+      <div class="ai-response-card">
+        <div class="ai-response-header">
+          <span>{{ i18n.t().questionnaire.responseTitle }}</span>
+          <span class="ai-response-tag">{{ i18n.t().questionnaire.responseOk }}</span>
+        </div>
+        <div class="ai-response-text">{{ aiResponse() }}</div>
+      </div>
+    }
+  </div>
+</div>

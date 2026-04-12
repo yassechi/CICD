@@ -1,0 +1,115 @@
+:host ::ng-deep {
+  .navbar-custom {
+    background: rgba(255, 255, 255, 0.86) !important;
+    border: none !important;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+    padding: 0.65rem 1.25rem !important;
+    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(14px);
+
+    .p-toolbar-group-start,
+    .p-toolbar-group-end {
+      display: flex;
+      align-items: center;
+    }
+
+    .p-button-text {
+      color: var(--mojo-ink) !important;
+
+      &:hover {
+        background-color: rgba(15, 118, 110, 0.08) !important;
+      }
+    }
+  }
+
+  .p-menu-overlay,
+  .p-menu.p-menu-overlay {
+    z-index: 3000 !important;
+  }
+}
+
+@media (max-width: 768px) {
+  :host ::ng-deep .navbar-custom {
+    padding-top: calc(0.65rem + env(safe-area-inset-top)) !important;
+    padding-top: calc(0.65rem + constant(safe-area-inset-top)) !important;
+  }
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.brand-mark {
+  color: var(--mojo-ink);
+}
+
+.brand-dot {
+  color: var(--mojo-accent);
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.brand-tag {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--mojo-primary);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.user-pill {
+  background: rgba(15, 118, 110, 0.12);
+  color: var(--mojo-primary-700);
+  font-weight: 600;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+}
+
+.nav-avatar {
+  box-shadow: 0 0 0 2px rgba(15, 118, 110, 0.2);
+}
+
+.lang-switch {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(15, 118, 110, 0.08);
+  border: 1px solid rgba(15, 118, 110, 0.2);
+  transition: background 0.2s;
+
+  &:hover {
+    background: rgba(15, 118, 110, 0.14);
+  }
+
+  span {
+    color: var(--mojo-ink);
+    transition: color 0.2s;
+
+    &.lang-active {
+      color: var(--mojo-primary);
+    }
+  }
+
+  .lang-sep {
+    color: rgba(15, 23, 42, 0.35);
+  }
+}

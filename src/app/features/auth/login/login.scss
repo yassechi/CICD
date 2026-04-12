@@ -1,0 +1,78 @@
+:host ::ng-deep {
+  .p-button {
+    background: linear-gradient(
+      135deg,
+      var(--mojo-button-start) 0%,
+      var(--mojo-button-end) 100%
+    ) !important;
+    border: none !important;
+    min-width: 300px;
+
+    &:hover {
+      background: linear-gradient(
+        135deg,
+        var(--mojo-button-hover-start) 0%,
+        var(--mojo-button-hover-end) 100%
+      ) !important;
+    }
+
+    &:disabled {
+      opacity: 0.6 !important;
+    }
+  }
+
+  .no-account-btn.p-button {
+    color: #ffffff !important;
+  }
+
+  .no-account-btn .p-button-label {
+    color: #ffffff !important;
+  }
+}
+
+.login-shell {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  --login-bike-bg: url('/images/bike-hero.png');
+  background: linear-gradient(160deg, #065f46 0%, #0f766e 45%, #0b3b2e 100%);
+}
+
+.login-shell::before {
+  content: '';
+  position: absolute;
+  inset: -6%;
+  background-image: var(--login-bike-bg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1;
+  transform: scale(1.02);
+  will-change: transform, background-position;
+  animation: bike-pan 6s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+.login-shell > div {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes bike-pan {
+  0% {
+    transform: scale(1.02) translate3d(-40px, -24px, 0);
+    background-position: 40% 35%;
+  }
+  100% {
+    transform: scale(1.12) translate3d(40px, 24px, 0);
+    background-position: 60% 65%;
+  }
+}
+
+.text-blue {
+  color: #1e3a8a;
+}
+
+.cb {
+ text-align: center;
+}

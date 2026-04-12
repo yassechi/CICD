@@ -1,0 +1,187 @@
+.register-shell {
+  min-height: 100vh;
+  padding: 2.5rem 1.5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background:
+    radial-gradient(900px 600px at 10% -10%, rgba(59, 130, 246, 0.12), transparent 55%),
+    radial-gradient(800px 600px at 90% -20%, rgba(14, 116, 144, 0.12), transparent 55%),
+    var(--mojo-surface-2);
+}
+
+.register-card {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 2.2rem 2.4rem;
+  border-radius: 22px;
+  background: #ffffff;
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.08);
+}
+
+.register-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.register-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 1.4rem + 1vw, 2rem);
+  color: var(--mojo-ink);
+}
+
+.register-subtitle {
+  margin: 0.35rem 0 0;
+  color: var(--mojo-muted);
+}
+
+.register-badge {
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  background: rgba(34, 197, 94, 0.12);
+  color: var(--mojo-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+}
+
+.register-note {
+  margin: 0 0 1rem;
+  color: var(--mojo-muted);
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.register-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 1.5rem;
+}
+
+.register-field label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+  color: var(--mojo-ink);
+}
+
+.field-error {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--mojo-danger);
+  font-size: 0.85rem;
+}
+
+.register-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.organisation-lock {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 12px;
+  background: rgba(15, 118, 110, 0.08);
+  color: var(--mojo-primary);
+  font-weight: 600;
+}
+
+.organisation-lock i {
+  font-size: 1.1rem;
+}
+
+.register-footer {
+  max-width: 980px;
+  margin: 0 auto;
+  background: #1f2937;
+  color: #e2e8f0;
+  border-radius: 22px;
+  padding: 1.5rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.footer-brand {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+}
+
+.footer-links {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  color: #cbd5f5;
+}
+
+:host ::ng-deep .p-button {
+  border-radius: 10px !important;
+  background: linear-gradient(
+    135deg,
+    var(--mojo-button-start),
+    var(--mojo-button-end)
+  ) !important;
+  border: none !important;
+  font-weight: 600;
+  box-shadow: none !important;
+}
+
+:host ::ng-deep .p-button:hover {
+  background: linear-gradient(
+    135deg,
+    var(--mojo-button-hover-start),
+    var(--mojo-button-hover-end)
+  ) !important;
+}
+
+:host ::ng-deep .p-button.p-button-outlined {
+  background: transparent !important;
+  border: 1px solid var(--mojo-button-outline-border) !important;
+  color: var(--mojo-button-outline) !important;
+  box-shadow: none !important;
+}
+
+:host ::ng-deep .p-button.p-button-outlined:hover {
+  border-color: var(--mojo-button-outline) !important;
+  color: var(--mojo-button-outline) !important;
+}
+
+@media (max-width: 900px) {
+  .register-card {
+    padding: 2rem;
+  }
+
+  .register-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .register-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .register-shell {
+    padding: 1.5rem 1rem 2.5rem;
+  }
+
+  .register-card {
+    padding: 1.5rem;
+  }
+}

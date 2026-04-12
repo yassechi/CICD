@@ -1,0 +1,202 @@
+<div class="compagnie-form-page page-shell">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">{{ isEdit ? i18n.t().compagnies.formTitleEdit : i18n.t().compagnies.formTitleCreate }}</h1>
+      <p class="page-subtitle">{{ i18n.t().compagnies.formSubtitle }}</p>
+    </div>
+    <p-button
+      [label]="i18n.t().common.retour"
+      icon="pi pi-arrow-left"
+      class="p-button-text"
+      (click)="goBack()"
+    ></p-button>
+  </div>
+
+  <p-card>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <!-- Logo Upload -->
+      <div class="field mb-4">
+        <label class="block mb-2 font-semibold">{{ i18n.t().compagnies.logo }}</label>
+        <div class="flex align-items-center gap-3">
+          @if (uploadedLogo()) {
+            <img
+              [src]="uploadedLogo()"
+              [alt]="i18n.t().compagnies.logo"
+              style="
+                width: 100px;
+                height: 100px;
+                object-fit: contain;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+              "
+            />
+          }
+          <p-fileUpload
+            mode="basic"
+            [chooseLabel]="i18n.t().compagnies.logoChoose"
+            accept="image/*"
+            [maxFileSize]="1000000"
+            (onSelect)="onUpload($event)"
+            [auto]="true"
+            chooseIcon="pi pi-upload"
+          ></p-fileUpload>
+        </div>
+        <small class="text-600">{{ i18n.t().compagnies.logoHint }}</small>
+      </div>
+
+      <!-- Nom -->
+      <div class="field mb-4">
+        <label for="name" class="block mb-2 font-semibold">{{ i18n.t().compagnies.nameLabel }} *</label>
+        <input
+          pInputText
+          id="name"
+          formControlName="name"
+          [placeholder]="i18n.t().compagnies.namePlaceholder"
+          class="w-full"
+          [class.ng-invalid]="name?.invalid && name?.touched"
+        />
+        @if (name?.invalid && name?.touched) {
+          <small class="text-red-500">{{ i18n.t().compagnies.nameRequired }}</small>
+        }
+      </div>
+
+      <!-- Code -->
+      <div class="field mb-4">
+        <label for="code" class="block mb-2 font-semibold">{{ i18n.t().compagnies.code }} *</label>
+        <input
+          pInputText
+          id="code"
+          formControlName="code"
+          [placeholder]="i18n.t().compagnies.codePlaceholder"
+          class="w-full"
+          [class.ng-invalid]="code?.invalid && code?.touched"
+        />
+        @if (code?.invalid && code?.touched) {
+          <small class="text-red-500">{{ i18n.t().compagnies.codeRequired }}</small>
+        }
+      </div>
+
+      <!-- Adresse -->
+      <div class="field mb-4">
+        <label for="address" class="block mb-2 font-semibold">{{ i18n.t().compagnies.addressLabel }} *</label>
+        <input
+          pInputText
+          id="address"
+          formControlName="address"
+          [placeholder]="i18n.t().compagnies.addressPlaceholder"
+          class="w-full"
+          [class.ng-invalid]="address?.invalid && address?.touched"
+        />
+        @if (address?.invalid && address?.touched) {
+          <small class="text-red-500">{{ i18n.t().compagnies.addressRequired }}</small>
+        }
+      </div>
+
+      <!-- Email Contact -->
+      <div class="field mb-4">
+        <label for="contactEmail" class="block mb-2 font-semibold">{{ i18n.t().compagnies.contactEmailLabel }} *</label>
+        <input
+          pInputText
+          id="contactEmail"
+          type="email"
+          formControlName="contactEmail"
+          [placeholder]="i18n.t().compagnies.contactEmailPlaceholder"
+          class="w-full"
+          [class.ng-invalid]="contactEmail?.invalid && contactEmail?.touched"
+        />
+        @if (contactEmail?.invalid && contactEmail?.touched) {
+          <small class="text-red-500">
+            @if (contactEmail?.errors?.['required']) {
+              <span>{{ i18n.t().compagnies.contactEmailRequired }}</span>
+            }
+            @if (contactEmail?.errors?.['email']) {
+              <span>{{ i18n.t().compagnies.contactEmailInvalid }}</span>
+            }
+          </small>
+        }
+      </div>
+
+      <!-- Contact (Utilisateur responsable) -->
+      <div class="field mb-4">
+        <label for="idContact" class="block mb-2 font-semibold">{{ i18n.t().compagnies.contactLabel }} *</label>
+        <p-select
+          id="idContact"
+          formControlName="idContact"
+          [options]="users()"
+          optionLabel="userName"
+          optionValue="id"
+          [placeholder]="i18n.t().compagnies.contactPlaceholder"
+          [filter]="true"
+          filterBy="userName,email"
+          [showClear]="true"
+          class="w-full"
+          [loading]="loadingUsers()"
+        >
+          <ng-template let-user pTemplate="item">
+            <div class="flex align-items-center gap-2">
+              <div>
+                <div>{{ user.userName }}</div>
+                <small class="text-600">{{ user.email }}</small>
+              </div>
+            </div>
+          </ng-template>
+        </p-select>
+        @if (idContact?.invalid && idContact?.touched) {
+          <small class="text-red-500">{{ i18n.t().compagnies.contactRequired }}</small>
+        }
+      </div>
+
+      <!-- Email Autorise -->
+      <div class="field mb-4">
+        <label for="emailAutorise" class="block mb-2 font-semibold">{{ i18n.t().compagnies.emailDomainLabel }} *</label>
+        <input
+          pInputText
+          id="emailAutorise"
+          formControlName="emailAutorise"
+          [placeholder]="i18n.t().compagnies.emailDomainPlaceholder"
+          class="w-full"
+          [class.ng-invalid]="emailAutorise?.invalid && emailAutorise?.touched"
+        />
+        <small class="text-600 block mt-1">
+          {{ i18n.t().compagnies.emailDomainHint }}
+        </small>
+        @if (emailAutorise?.invalid && emailAutorise?.touched) {
+          <small class="text-red-500">
+            @if (emailAutorise?.errors?.['required']) {
+              <span>{{ i18n.t().compagnies.emailDomainRequired }}</span>
+            }
+            @if (emailAutorise?.errors?.['pattern']) {
+              <span>{{ i18n.t().compagnies.emailDomainPattern }}</span>
+            }
+          </small>
+        }
+      </div>
+
+      <!-- Actif -->
+      <div class="field mb-4">
+        <div class="flex align-items-center">
+          <p-checkbox formControlName="isActif" [binary]="true" inputId="isActif"></p-checkbox>
+          <label for="isActif" class="ml-2">{{ i18n.t().compagnies.activeLabel }}</label>
+        </div>
+      </div>
+
+      <!-- Boutons -->
+      <div class="flex justify-content-end gap-2 mt-4">
+        <p-button
+          [label]="i18n.t().common.annuler"
+          icon="pi pi-times"
+          class="p-button-text"
+          (click)="goBack()"
+          [disabled]="loading()"
+        ></p-button>
+        <p-button
+          [label]="isEdit ? i18n.t().common.modifier : i18n.t().common.creer"
+          icon="pi pi-check"
+          (onClick)="onSubmit()"
+          [loading]="loading()"
+          [disabled]="form.invalid || loading()"
+        />
+      </div>
+    </form>
+  </p-card>
+</div>

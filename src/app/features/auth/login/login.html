@@ -1,0 +1,92 @@
+<div class="login-shell flex align-items-center justify-content-center">
+  <div style="width: 450px">
+    <p-card class="shadow-8">
+      <ng-template pTemplate="header">
+        <div class="text-center pt-4">
+          <h1 class="brand-title">mojo</h1>
+          <p class="text-600 mt-2">{{ i18n.t().auth.loginSubtitle }}</p>
+        </div>
+      </ng-template>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="field mb-4">
+          <label for="email" class="block mb-2 font-semibold">{{ i18n.t().auth.email }}</label>
+          <input
+            pInputText
+            id="email"
+            type="email"
+            formControlName="email"
+            [placeholder]="i18n.t().auth.emailPlaceholder"
+            class="w-full"
+            [class.ng-invalid]="email?.invalid && email?.touched"
+          />
+          @if (email?.invalid && email?.touched) {
+            <small class="text-red-500">
+              @if (email?.errors?.['required']) {
+                <span>{{ i18n.t().auth.emailRequired }}</span>
+              }
+              @if (email?.errors?.['email']) {
+                <span>{{ i18n.t().auth.emailInvalid }}</span>
+              }
+            </small>
+          }
+        </div>
+
+        <div class="field mb-4">
+          <label for="password" class="block mb-2 font-semibold">{{ i18n.t().auth.password }}</label>
+          <p-password
+            id="password"
+            formControlName="password"
+            [placeholder]="i18n.t().auth.passwordPlaceholder"
+            [toggleMask]="true"
+            [feedback]="false"
+            class="w-full"
+            [inputStyleClass]="'w-full'"
+            [class.ng-invalid]="password?.invalid && password?.touched"
+          ></p-password>
+          @if (password?.invalid && password?.touched) {
+            <small class="text-red-500">
+              @if (password?.errors?.['required']) {
+                <span>{{ i18n.t().auth.passwordRequired }}</span>
+              }
+              @if (password?.errors?.['minlength']) {
+                <span>{{ i18n.t().auth.passwordMin }}</span>
+              }
+            </small>
+          }
+        </div>
+
+        <div class="flex justify-content-end mb-4">
+          <a
+            routerLink="/forgot-password"
+            class="text-blue font-semibold cursor-pointer hover:underline"
+          >
+            {{ i18n.t().auth.forgotPassword }}
+          </a>
+        </div>
+
+        <div class="cb">
+          <div>
+            <p-button
+              class="btnn"
+              [label]="i18n.t().auth.login"
+              type="submit"
+              [loading]="loading()"
+              class="w-full"
+              [disabled]="loginForm.invalid"
+            ></p-button>
+          </div>
+
+          <div class="mt-3">
+            <p-button
+              class="btnn b2"
+              [label]="i18n.t().auth.noAccount"
+              class="w-full no-account-btn"
+              [routerLink]="['/faire-demande']"
+            ></p-button>
+          </div>
+        </div>
+      </form>
+    </p-card>
+  </div>
+</div>

@@ -1,0 +1,77 @@
+<div class="employe-detail-page page-shell">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">{{ i18n.t().employes.detailTitle }}</h1>
+      <p class="page-subtitle">{{ i18n.t().employes.detailSubtitle }}</p>
+    </div>
+    <div class="flex gap-2 detail-action-group">
+      <p-button [label]="i18n.t().common.retour"   icon="pi pi-arrow-left" class="btn-action btn-action-1" (click)="goBack()"></p-button>
+      <p-button [label]="i18n.t().common.modifier" icon="pi pi-pencil"     class="btn-action btn-action-2" (click)="goEdit()" [disabled]="!userId()"></p-button>
+      <p-button [label]="i18n.t().common.supprimer" icon="pi pi-trash"     class="btn-action btn-action-3" (click)="onDelete()" [disabled]="!userId()"></p-button>
+    </div>
+  </div>
+
+  @if (user()) {
+    <p-card>
+      <div class="grid">
+        <div class="col-12 md:col-6">
+          <div class="field mb-3">
+            <div class="text-600 text-sm">{{ i18n.t().employes.username }}</div>
+            <div class="font-semibold">{{ user()!.userName }}</div>
+          </div>
+        </div>
+        <div class="col-12 md:col-6">
+          <div class="field mb-3">
+            <div class="text-600 text-sm">{{ i18n.t().employes.email }}</div>
+            <div class="font-semibold">{{ user()!.email }}</div>
+          </div>
+        </div>
+        <div class="col-12 md:col-6">
+          <div class="field mb-3">
+            <div class="text-600 text-sm">{{ i18n.t().employes.prenom }}</div>
+            <div class="font-semibold">{{ user()!.firstName }}</div>
+          </div>
+        </div>
+        <div class="col-12 md:col-6">
+          <div class="field mb-3">
+            <div class="text-600 text-sm">{{ i18n.t().employes.nom }}</div>
+            <div class="font-semibold">{{ user()!.lastName }}</div>
+          </div>
+        </div>
+        <div class="col-12 md:col-6">
+          <div class="field mb-3">
+            <div class="text-600 text-sm">{{ i18n.t().employes.telephone }}</div>
+            <div class="font-semibold">{{ user()!.phoneNumber }}</div>
+          </div>
+        </div>
+        <div class="col-12 md:col-6">
+          <div class="field mb-3">
+            <div class="text-600 text-sm">{{ i18n.t().employes.role }}</div>
+            <p-tag [value]="getRoleLabel(user()!.role)" [severity]="getRoleSeverity(user()!.role)"></p-tag>
+          </div>
+        </div>
+        <div class="col-12 md:col-6">
+          <div class="field mb-3">
+            <div class="text-600 text-sm">{{ i18n.t().employes.statut }}</div>
+            <p-tag
+              [value]="user()!.isActif ? i18n.t().common.actif : i18n.t().common.inactif"
+              [severity]="user()!.isActif ? 'success' : 'danger'"
+            ></p-tag>
+          </div>
+        </div>
+        <div class="col-12 md:col-6">
+          <div class="field mb-3">
+            <div class="text-600 text-sm">{{ i18n.t().employes.organisation }}</div>
+            <div class="font-semibold">{{ getOrganisationName(user()!) }}</div>
+          </div>
+        </div>
+      </div>
+    </p-card>
+  } @else {
+    <p-card>
+      <div class="text-600">{{ i18n.t().common.chargement }}</div>
+    </p-card>
+  }
+</div>
+
+<p-confirmDialog></p-confirmDialog>

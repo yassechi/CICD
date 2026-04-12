@@ -1,0 +1,65 @@
+// :host {
+//   display: block;
+//   padding: 1rem;
+// }
+
+// .card {
+//   background: white;
+//   border-radius: 8px;
+//   padding: 1.5rem;
+//   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+// }
+
+// h2 {
+//   color: #333;
+//   font-size: 1.75rem;
+//   font-weight: 600;
+//   margin: 0 0 1.5rem 0;
+// }
+
+// h3 {
+//   color: #444;
+//   font-size: 1.25rem;
+//   font-weight: 500;
+// }
+
+// h4 {
+//   color: #555;
+//   font-size: 1.1rem;
+//   font-weight: 500;
+//   margin-top: 1rem;
+// }
+
+// .field {
+//   label {
+//     color: #333;
+//     font-size: 0.95rem;
+//   }
+// }
+
+// p-button {
+//   ::ng-deep {
+//     .p-button {
+//       transition: all 0.3s ease;
+//     }
+//   }
+// }
+
+// // Responsive
+// @media (max-width: 768px) {
+//   .card {
+//     padding: 1rem;
+//   }
+
+//   h2 {
+//     font-size: 1.5rem;
+//   }
+
+//   .flex.gap-2 {
+//     flex-direction: column;
+
+//     p-button {
+//       width: 100%;
+//     }
+//   }
+// }

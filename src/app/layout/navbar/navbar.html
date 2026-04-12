@@ -1,0 +1,36 @@
+<!-- navbar.html -->
+<p-toolbar class="navbar-custom">
+  <ng-template pTemplate="start">
+    <button pButton icon="pi pi-bars"
+      class="p-button-text p-button-rounded nav-toggle"
+      (click)="onToggleSidebar()">
+    </button>
+    <div class="brand ml-3">
+      <span class="brand-mark">mojo</span>
+      <span class="brand-dot">.</span>
+      <span class="brand-tag">velo</span>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="end">
+    <div class="nav-actions">
+
+      <!-- ── Switch de langue ─────────────────────── -->
+      <div class="lang-switch" (click)="i18n.toggle()">
+        <span [class.lang-active]="i18n.lang() === 'fr'">FR</span>
+        <span class="lang-sep">|</span>
+        <span [class.lang-active]="i18n.lang() === 'nl'">NL</span>
+      </div>
+      <!-- ─────────────────────────────────────────── -->
+
+      @if (currentUser(); as user) {
+        <span class="user-pill">{{ user.userName }}</span>
+      }
+      <p-avatar icon="pi pi-user" class="cursor-pointer nav-avatar" shape="circle"
+        [style]="{'background-color':'#0f766e', 'color': '#ffffff'}"
+        (click)="menu.toggle($event)">
+      </p-avatar>
+      <p-menu #menu [model]="userMenuItems" [popup]="true" appendTo="body"></p-menu>
+    </div>
+  </ng-template>
+</p-toolbar>

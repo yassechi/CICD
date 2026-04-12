@@ -1,0 +1,52 @@
+10. PLATEFORME DE GESTION DES CONTRATS
+Mojo Vélo met à disposition du CNP Saint-Martin et du CSM Saint-Bernard une plateforme web
+complète et intuitive pour la gestion de bout en bout des contrats de leasing vélo. Cette solution
+digitale assure une expérience utilisateur optimale tant pour les employés que pour les services
+RH.
+Notre plateforme se distingue par sa double interface : Interface Employé (parcours guidé de
+sélection et configuration du vélo) et Interface Administration RH (gestion, validation et suivi des
+demandes et contrats).
+Interface Employé
+Page d'accueil : Présentation claire des conditions du leasing vélo spécifiques au CNP Saint-
+Martin (modalités de financement via prime de fin d'année, durée 36 mois, services inclus).
+
+Formulaire initial : Collecte des informations essentielles (prénom, nom, email professionnel
+avec validation du domaine, taille en cm pour recommandations).
+Choix du parcours : Deux parcours distincts selon le niveau de connaissance. Parcours A "Je ne
+sais pas ce que je veux" : Questionnaire guidé avec recommandations personnalisées, idéal
+pour les employés qui découvrent le vélo ou qui hésitent. Parcours B "Je sais ce que je veux" :
+Accès direct au catalogue complet pour les connaisseurs.
+
+Questionnaire guidé : Pour le parcours A, questionnaire permettant d'identifier le vélo idéal
+(usage principal, distance quotidienne, type de terrain, préférences d'assistance électrique,
+budget disponible, besoin de transport de charges) avec barre de progression.
+Catalogue de vélos : Présentation de l'ensemble des vélos disponibles avec filtres multicritères
+(marque, type, assistance, genre), photos des vélos, prix TVAC affichés, nom du marchand et
+localisation.
+
+Configuration de l'offre : Récapitulatif du vélo choisi (photo, caractéristiques, prix d'achat),
+accessoires obligatoires (cadenas certifié pré-coché, prix affiché), accessoires souhaités (zone
+de texte libre pour décrire les besoins, Mojo Vélo fera une offre personnalisée), panneau de
+synthèse (calcul en temps réel du prix total, information sur la durée 36 mois, valeur résiduelle,
+rappel des services inclus).
+
+Confirmation : Après envoi de la demande, confirmation immédiate avec numéro de demande,
+récapitulatif complet, prochaines étapes clairement expliquées. Email de confirmation
+automatiquement envoyé à l'adresse professionnelle.
+
+Interface Administration RH
+Dashboard : Vue d'ensemble instantanée avec indicateurs clés (nombre de demandes en
+attente, contrats actifs, budget total engagé, taux de satisfaction), graphique de répartition par
+type de vélo, fil d'activité avec les dernières actions.
+
+Gestion des demandes : Interface de gestion centralisée avec filtres (statut, type de vélo,
+recherche par nom), tableau récapitulatif avec informations essentielles, actions rapides (voir,
+valider, refuser), export Excel pour reporting.
+Détail d'une demande : Vue détaillée avec informations complètes de l'employé, détails du vélo
+sélectionné, liste des accessoires demandés, récapitulatif financier, formulaire de validation RH
+(choix de décision, zone de commentaire, boutons d'action clairs).
+Contrats actifs : Suivi de tous les contrats en cours avec liste complète et filtres (type vélo, fin de
+contrat, incidents), budget entretien avec barre de progression visuelle pour chaque contrat,
+date de fin de contrat avec alerte visuelle si inférieure à 3 mois, actions disponibles (consulter
+détails, résilier).
+
