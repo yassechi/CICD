@@ -61,6 +61,7 @@
               <th>{{ i18n.t().compagnies.emailAutorise }}</th>
               <th>{{ i18n.t().compagnies.contact }}</th>
               <th>{{ i18n.t().compagnies.statut }}</th>
+              <th style="width: 140px">{{ i18n.t().common.actions }}</th>
             </tr>
           </ng-template>
 
@@ -90,12 +91,22 @@
                   [severity]="org.isActif ? 'success' : 'danger'"
                 ></p-tag>
               </td>
+              <td>
+                @if (!org.isActif) {
+                  <p-button
+                    [label]="i18n.t().compagnies.reactivate"
+                    icon="pi pi-refresh"
+                    class="p-button-text"
+                    (click)="$event.stopPropagation(); onReactivate(org)"
+                  ></p-button>
+                }
+              </td>
             </tr>
           </ng-template>
 
           <ng-template pTemplate="emptymessage">
             <tr>
-              <td colspan="6" class="text-center py-5">
+              <td colspan="7" class="text-center py-5">
                 <i class="pi pi-inbox" style="font-size: 3rem; color: #ccc"></i>
                 <p class="mt-3 text-600">{{ i18n.t().compagnies.aucune }}</p>
               </td>
@@ -106,3 +117,5 @@
     </div>
   </div>
 </div>
+
+<p-confirmDialog></p-confirmDialog>

@@ -9,11 +9,14 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
+import { DialogModule } from 'primeng/dialog';
+import { PasswordModule } from 'primeng/password';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-employe-detail',
   standalone: true,
-  imports: [CommonModule, CardModule, ButtonModule, ConfirmDialogModule, TagModule],
+  imports: [CommonModule, FormsModule, CardModule, ButtonModule, ConfirmDialogModule, TagModule, DialogModule, PasswordModule],
   providers: [ConfirmationService],
   templateUrl: './employe-detail.html',
   styleUrls: ['./employe-detail.scss'],
@@ -21,6 +24,12 @@ import { TagModule } from 'primeng/tag';
 export class EmployeDetailComponent {
   user = signal<User | null>(null);
   userId = signal<string | null>(null);
+
+  reactivateDialogOpen = false;
+  reactivateSubmitting = false;
+  reactivateSubmitted = false;
+  reactivatePassword = '';
+  reactivateConfirm = '';
 
   private readonly userService = inject(UserService);
   private readonly messageService = inject(MessageService);
@@ -67,6 +76,69 @@ export class EmployeDetailComponent {
     });
   }
 
+  openReactivateDialog(): void {
+    this.reactivatePassword = '';
+    this.reactivateConfirm = '';
+    this.reactivateSubmitted = false;
+    this.reactivateDialogOpen = true;
+  }
+
+  closeReactivateDialog(): void {
+    this.reactivateDialogOpen = false;
+    this.reactivateSubmitting = false;
+  }
+
+  confirmReactivate(): void {
+    this.reactivateSubmitted = true;
+    const passwordError = this.getReactivatePasswordError();
+    const confirmError = this.getReactivateConfirmError();
+    if (passwordError || confirmError) return;
+    this.onReactivate();
+  }
+
+  private onReactivate(): void {
+    const u = this.user();
+    const id = this.userId();
+    if (!u || !id) return;
+    const organisationId = this.resolveOrganisationId(u.organisationId);
+    if (organisationId == null) {
+      this.messageService.showError(this.i18n.get('employes.reactivateError'));
+      return;
+    }
+    this.reactivateSubmitting = true;
+    this.userService.update({
+      id,
+      userName: u.userName,
+      firstName: u.firstName,
+      lastName: u.lastName,
+      email: u.email,
+      phoneNumber: u.phoneNumber,
+      role: u.role,
+      tailleCm: u.tailleCm ?? 177,
+      organisationId,
+      isActif: true,
+      password: this.reactivatePassword.trim(),
+      confirmPassword: this.reactivateConfirm.trim(),
+    }).subscribe({
+      next: () => {
+        this.messageService.showSuccess(
+          this.i18n.get('employes.reactivateSuccess'),
+          this.i18n.get('common.succes'),
+        );
+        this.user.set({ ...u, isActif: true });
+        this.reactivateDialogOpen = false;
+        this.reactivateSubmitting = false;
+      },
+      error: (error) => {
+        this.reactivateSubmitting = false;
+        this.messageService.showError(
+          this.getApiErrorMessage(error, this.i18n.get('employes.reactivateError')),
+          this.i18n.get('common.erreur'),
+        );
+      },
+    });
+  }
+
   getRoleLabel(role: UserRole): string {
     return role === UserRole.Admin
       ? this.i18n.t().employes.admin
@@ -82,5 +154,69 @@ export class EmployeDetailComponent {
   getOrganisationName(user: User): string {
     const org = user.organisationId;
     return org && typeof org === 'object' ? org.name || this.i18n.t().common.inconnu : typeof org === 'number' ? String(org) : this.i18n.t().common.inconnu;
+  }
+
+  isActive(user: User | null | undefined): boolean {
+    return this.isActiveValue(user?.isActif);
+  }
+  isInactive(user: User | null | undefined): boolean {
+    return !this.isActiveValue(user?.isActif);
+  }
+
+  private isActiveValue(value: unknown): boolean {
+    if (value === true || value === 1) return true;
+    if (value === false || value === 0 || value == null) return false;
+    if (typeof value === 'string') {
+      const normalized = value.trim().toLowerCase();
+      if (normalized === 'true' || normalized === '1' || normalized === 'actif') return true;
+      if (normalized === 'false' || normalized === '0' || normalized === 'inactif') return false;
+    }
+    return Boolean(value);
+  }
+
+  getReactivatePasswordError(): string | null {
+    if (!this.reactivateSubmitted) return null;
+    const pwd = this.reactivatePassword.trim();
+    if (!pwd) return this.i18n.t().employes.passwordRequired;
+    if (pwd.length < 8) return this.i18n.t().employes.passwordMin;
+    return null;
+  }
+
+  getReactivateConfirmError(): string | null {
+    if (!this.reactivateSubmitted) return null;
+    const pwd = this.reactivatePassword.trim();
+    const confirm = this.reactivateConfirm.trim();
+    if (!confirm) return this.i18n.t().employes.confirmRequired;
+    if (pwd !== confirm) return this.i18n.t().employes.passwordMismatch;
+    return null;
+  }
+
+  private resolveOrganisationId(value: unknown): number | null {
+    if (value == null) return null;
+    if (typeof value === 'number') return value;
+    if (typeof value === 'string' && value.trim()) {
+      const parsed = Number(value);
+      return Number.isNaN(parsed) ? null : parsed;
+    }
+    if (typeof value === 'object' && 'id' in (value as any)) {
+      const id = (value as any).id;
+      return typeof id === 'number' ? id : typeof id === 'string' ? Number(id) : null;
+    }
+    return null;
+  }
+
+  private getApiErrorMessage(error: any, fallback: string): string {
+    if (!error) return fallback;
+    const payload = error?.error ?? error;
+    if (typeof payload === 'string') return payload;
+    if (Array.isArray(payload)) return payload.filter(Boolean).join(' | ') || fallback;
+    if (payload?.errors && typeof payload.errors === 'object') {
+      const messages = Object.values(payload.errors)
+        .flatMap((val) => (Array.isArray(val) ? val : [val]))
+        .filter(Boolean);
+      if (messages.length) return messages.join(' | ');
+    }
+    if (payload?.message) return payload.message;
+    return fallback;
   }
 }

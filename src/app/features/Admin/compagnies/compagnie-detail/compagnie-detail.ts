@@ -88,4 +88,28 @@ export class CompagnieDetailComponent {
         }),
     });
   }
+
+  onReactivate(): void {
+    const org = this.organisation();
+    const id = this.organisationId;
+    if (!org || !id) return;
+    this.confirmationService.confirm({
+      message: this.i18n.get('compagnies.reactivateConfirm'),
+      header: this.i18n.get('common.confirmer'),
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: this.i18n.get('common.oui'),
+      rejectLabel: this.i18n.get('common.non'),
+      accept: () =>
+        this.organisationService.update({ ...org, isActif: true }).subscribe({
+          next: () => {
+            this.messageService.showSuccess(
+              this.i18n.get('compagnies.reactivateSuccess'),
+              this.i18n.get('common.succes'),
+            );
+            this.organisation.set({ ...org, isActif: true });
+          },
+          error: () => this.messageService.showError(this.i18n.get('compagnies.reactivateError')),
+        }),
+    });
+  }
 }

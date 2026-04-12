@@ -30,7 +30,7 @@
         [style]="{'background-color':'#0f766e', 'color': '#ffffff'}"
         (click)="menu.toggle($event)">
       </p-avatar>
-      <p-menu #menu [model]="userMenuItems" [popup]="true" appendTo="body"></p-menu>
+      <p-menu #menu [model]="userMenuItems()" [popup]="true" appendTo="body"></p-menu>
     </div>
   </ng-template>
 </p-toolbar>

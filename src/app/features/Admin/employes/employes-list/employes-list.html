@@ -73,6 +73,7 @@
               <th>{{ i18n.t().employes.telephone }}</th>
               <th>{{ i18n.t().employes.role }}</th>
               <th>{{ i18n.t().employes.statut }}</th>
+              <th style="width: 140px">{{ i18n.t().common.actions }}</th>
             </tr>
           </ng-template>
 
@@ -95,12 +96,22 @@
                   [severity]="getSeverity(user.isActif)"
                 ></p-tag>
               </td>
+              <td>
+                @if (isInactive(user)) {
+                  <p-button
+                    [label]="i18n.t().employes.reactivate"
+                    icon="pi pi-refresh"
+                    class="p-button-text"
+                    (click)="$event.stopPropagation(); openReactivate(user)"
+                  ></p-button>
+                }
+              </td>
             </tr>
           </ng-template>
 
           <ng-template pTemplate="emptymessage">
             <tr>
-              <td colspan="7" class="text-center py-5">
+              <td colspan="8" class="text-center py-5">
                 <i class="pi pi-inbox" style="font-size: 3rem; color: #ccc"></i>
                 <p class="mt-3 text-600">{{ i18n.t().employes.aucun }}</p>
               </td>
@@ -111,3 +122,58 @@
     </div>
   </div>
 </div>
+
+<p-dialog
+  [(visible)]="reactivateDialogOpen"
+  [modal]="true"
+  [closable]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '32rem' }"
+  [header]="i18n.t().employes.reactivateTitle"
+  (onHide)="closeReactivate()"
+>
+  <div class="text-600 mb-3">{{ i18n.t().employes.reactivateHint }}</div>
+
+  <div class="field mb-3">
+    <label class="block mb-2 font-semibold">{{ i18n.t().employes.reactivatePassword }}</label>
+    <p-password
+      [(ngModel)]="reactivatePassword"
+      [toggleMask]="true"
+      [feedback]="false"
+      class="w-full"
+      inputclass="w-full"
+    ></p-password>
+    @if (getReactivatePasswordError()) {
+      <small class="p-error">{{ getReactivatePasswordError() }}</small>
+    }
+  </div>
+
+  <div class="field mb-3">
+    <label class="block mb-2 font-semibold">{{ i18n.t().employes.reactivateConfirmPassword }}</label>
+    <p-password
+      [(ngModel)]="reactivateConfirm"
+      [toggleMask]="true"
+      [feedback]="false"
+      class="w-full"
+      inputclass="w-full"
+    ></p-password>
+    @if (getReactivateConfirmError()) {
+      <small class="p-error">{{ getReactivateConfirmError() }}</small>
+    }
+  </div>
+
+  <div class="flex justify-content-end gap-2">
+    <p-button
+      [label]="i18n.t().common.annuler"
+      class="p-button-text"
+      (click)="closeReactivate()"
+      [disabled]="reactivateSubmitting"
+    ></p-button>
+    <p-button
+      [label]="i18n.t().employes.reactivateAction"
+      icon="pi pi-refresh"
+      (click)="confirmReactivate()"
+      [loading]="reactivateSubmitting"
+    ></p-button>
+  </div>
+</p-dialog>

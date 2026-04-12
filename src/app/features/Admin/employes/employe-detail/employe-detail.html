@@ -7,7 +7,11 @@
     <div class="flex gap-2 detail-action-group">
       <p-button [label]="i18n.t().common.retour"   icon="pi pi-arrow-left" class="btn-action btn-action-1" (click)="goBack()"></p-button>
       <p-button [label]="i18n.t().common.modifier" icon="pi pi-pencil"     class="btn-action btn-action-2" (click)="goEdit()" [disabled]="!userId()"></p-button>
-      <p-button [label]="i18n.t().common.supprimer" icon="pi pi-trash"     class="btn-action btn-action-3" (click)="onDelete()" [disabled]="!userId()"></p-button>
+      @if (isActive(user())) {
+        <p-button [label]="i18n.t().common.supprimer" icon="pi pi-trash" class="btn-action btn-action-3" (click)="onDelete()" [disabled]="!userId()"></p-button>
+      } @else {
+        <p-button [label]="i18n.t().employes.reactivate" icon="pi pi-refresh" class="btn-action btn-action-3" (click)="openReactivateDialog()" [disabled]="!userId()"></p-button>
+      }
     </div>
   </div>
 
@@ -54,8 +58,8 @@
           <div class="field mb-3">
             <div class="text-600 text-sm">{{ i18n.t().employes.statut }}</div>
             <p-tag
-              [value]="user()!.isActif ? i18n.t().common.actif : i18n.t().common.inactif"
-              [severity]="user()!.isActif ? 'success' : 'danger'"
+              [value]="isActive(user()) ? i18n.t().common.actif : i18n.t().common.inactif"
+              [severity]="isActive(user()) ? 'success' : 'danger'"
             ></p-tag>
           </div>
         </div>
@@ -75,3 +79,58 @@
 </div>
 
 <p-confirmDialog></p-confirmDialog>
+
+<p-dialog
+  [(visible)]="reactivateDialogOpen"
+  [modal]="true"
+  [closable]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '32rem' }"
+  [header]="i18n.t().employes.reactivateTitle"
+  (onHide)="closeReactivateDialog()"
+>
+  <div class="text-600 mb-3">{{ i18n.t().employes.reactivateHint }}</div>
+
+  <div class="field mb-3">
+    <label class="block mb-2 font-semibold">{{ i18n.t().employes.reactivatePassword }}</label>
+    <p-password
+      [(ngModel)]="reactivatePassword"
+      [toggleMask]="true"
+      [feedback]="false"
+      class="w-full"
+      inputclass="w-full"
+    ></p-password>
+    @if (getReactivatePasswordError()) {
+      <small class="p-error">{{ getReactivatePasswordError() }}</small>
+    }
+  </div>
+
+  <div class="field mb-3">
+    <label class="block mb-2 font-semibold">{{ i18n.t().employes.reactivateConfirmPassword }}</label>
+    <p-password
+      [(ngModel)]="reactivateConfirm"
+      [toggleMask]="true"
+      [feedback]="false"
+      class="w-full"
+      inputclass="w-full"
+    ></p-password>
+    @if (getReactivateConfirmError()) {
+      <small class="p-error">{{ getReactivateConfirmError() }}</small>
+    }
+  </div>
+
+  <div class="flex justify-content-end gap-2">
+    <p-button
+      [label]="i18n.t().common.annuler"
+      class="p-button-text"
+      (click)="closeReactivateDialog()"
+      [disabled]="reactivateSubmitting"
+    ></p-button>
+    <p-button
+      [label]="i18n.t().employes.reactivateAction"
+      icon="pi pi-refresh"
+      (click)="confirmReactivate()"
+      [loading]="reactivateSubmitting"
+    ></p-button>
+  </div>
+</p-dialog>

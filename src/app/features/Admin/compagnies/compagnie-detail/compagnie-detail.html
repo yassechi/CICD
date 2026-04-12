@@ -18,13 +18,23 @@
         (click)="goEdit()"
         [disabled]="!organisationId"
       ></p-button>
-      <p-button
-        [label]="i18n.t().common.supprimer"
-        icon="pi pi-trash"
-        class="btn-action btn-action-3"
-        (click)="onDelete()"
-        [disabled]="!organisationId"
-      ></p-button>
+      @if (organisation()?.isActif) {
+        <p-button
+          [label]="i18n.t().common.supprimer"
+          icon="pi pi-trash"
+          class="btn-action btn-action-3"
+          (click)="onDelete()"
+          [disabled]="!organisationId"
+        ></p-button>
+      } @else {
+        <p-button
+          [label]="i18n.t().compagnies.reactivate"
+          icon="pi pi-refresh"
+          class="btn-action btn-action-3"
+          (click)="onReactivate()"
+          [disabled]="!organisationId"
+        ></p-button>
+      }
     </div>
   </div>
 

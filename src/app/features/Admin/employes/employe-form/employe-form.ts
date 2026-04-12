@@ -90,10 +90,19 @@ export class EmployeFormDialogComponent {
   }
 
   onSubmit(): void {
+    const v = this.form.getRawValue();
+    const pwd = (v.password ?? '').toString().trim();
+    const confirm = (v.confirmPassword ?? '').toString().trim();
+    if (!this.isEdit && pwd && confirm && pwd !== confirm) {
+      const confirmCtrl = this.form.get('confirmPassword');
+      confirmCtrl?.setErrors({ ...(confirmCtrl.errors ?? {}), passwordMismatch: true });
+      confirmCtrl?.markAsTouched();
+      this.messageService.showError(this.i18n.get('employes.passwordMismatch'));
+      return;
+    }
     if (this.form.invalid) { this.form.markAllAsTouched(); return; }
 
     this.loading.set(true);
-    const v = this.form.getRawValue();
     const payload: any = {
       id: this.userId ?? v.id,
       userName: v.userName,
@@ -107,9 +116,9 @@ export class EmployeFormDialogComponent {
       organisationId: Number(v.organisationId),
     };
 
-    if (v.password?.trim()) {
-      payload.password = v.password;
-      payload.confirmPassword = v.confirmPassword ?? v.password;
+    if (pwd) {
+      payload.password = pwd;
+      payload.confirmPassword = confirm || pwd;
     }
 
     (this.isEdit ? this.userService.update(payload) : this.userService.create(payload)).subscribe({
@@ -121,22 +130,45 @@ export class EmployeFormDialogComponent {
         this.loading.set(false);
         this.goBack();
       },
-      error: () => this.loading.set(false),
+      error: (error) => {
+        const fallback = this.isEdit
+          ? this.i18n.get('employes.updateError')
+          : this.i18n.get('employes.createError');
+        const message = this.getApiErrorMessage(error, fallback);
+        this.messageService.showError(message, this.i18n.get('common.erreur'));
+        this.loading.set(false);
+      },
     });
   }
 
   goBack(): void { this.router.navigate([this.router.url.startsWith('/manager/') ? '/manager/employes' : '/admin/employes']); }
 
   private passwordMatchValidator(form: FormGroup) {
-    const pwd = form.get('password')?.value;
+    const pwd = (form.get('password')?.value ?? '').toString().trim();
     const confirm = form.get('confirmPassword');
-    if (!pwd && !confirm?.value) return null;
-    if (pwd !== confirm?.value) {
+    const confirmValue = (confirm?.value ?? '').toString().trim();
+    if (!pwd && !confirmValue) return null;
+    if (pwd !== confirmValue) {
       confirm?.setErrors({ ...(confirm.errors ?? {}), passwordMismatch: true });
       return { passwordMismatch: true };
     }
     const { passwordMismatch, ...rest } = confirm?.errors ?? {};
     confirm?.setErrors(Object.keys(rest).length ? rest : null);
     return null;
+  }
+
+  private getApiErrorMessage(error: any, fallback: string): string {
+    if (!error) return fallback;
+    const payload = error?.error ?? error;
+    if (typeof payload === 'string') return payload;
+    if (Array.isArray(payload)) return payload.filter(Boolean).join(' | ') || fallback;
+    if (payload?.errors && typeof payload.errors === 'object') {
+      const messages = Object.values(payload.errors)
+        .flatMap((val) => (Array.isArray(val) ? val : [val]))
+        .filter(Boolean);
+      if (messages.length) return messages.join(' | ');
+    }
+    if (payload?.message) return payload.message;
+    return fallback;
   }
 }
