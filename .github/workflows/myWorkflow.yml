@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - main
+    # types:
+    #   - closed
+    # tags:
+    #   -v2
+    # paths:
+    #   /**.ts
 
 jobs:
   my_first_job:

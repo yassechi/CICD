@@ -1,0 +1,14 @@
+name: external trigger
+
+on:
+  repository_dispatch:
+    types:
+      - myTrigger
+
+jobs:
+  test_external_trigger:
+  runs-on: ubuntu-latest
+  steps:
+    - name: "show external trigger working"
+      run: echo " => show external trigger working ..."
+
