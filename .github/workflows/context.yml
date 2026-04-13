@@ -7,5 +7,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "show context 'github'"
-        run: echo " => show context 'github' ${{github}}"
+        run: echo " => show context 'github' ${{github.actor}}"
 
