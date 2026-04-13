@@ -1,4 +1,5 @@
 name: basic context
+run-name: yass
 
 on: [workflow_dispatch]
 
