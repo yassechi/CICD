@@ -1,0 +1,13 @@
+name: scheduled trigger
+
+on:
+ schedule:
+  cron: "*/5 * * * *"
+
+jobs:
+  test_external_trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "show external trigger working"
+        run: echo " => show external trigger working ..."
+
