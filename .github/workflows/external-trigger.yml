@@ -6,8 +6,8 @@ on:
 
 jobs:
   test_external_trigger:
-  runs-on: ubuntu-latest
-  steps:
-    - name: "show external trigger working"
-      run: echo " => show external trigger working ..."
+    runs-on: ubuntu-latest
+    steps:
+      - name: "show external trigger working"
+        run: echo " => show external trigger working ..."
 
