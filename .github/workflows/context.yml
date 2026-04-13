@@ -6,6 +6,6 @@ jobs:
   test_external_trigger:
     runs-on: ubuntu-latest
     steps:
-      - name: "show context working"
-        run: echo " => show context working ..."
+      - name: "show context 'github'"
+        run: echo " => show context 'github' ${{github}}"
 
