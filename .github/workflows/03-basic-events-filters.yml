@@ -1,24 +1,24 @@
-name: 03 basics events
+# name: 03 basics events
 
-on:
-  # pull_request:
-  #   types:
-  #     closed
+# on:
+#   # pull_request:
+#   #   types:
+#   #     closed
 
-  # push:
-  #   branches:
-  #     - main
-  #     - events
+#   # push:
+#   #   branches:
+#   #     - main
+#   #     - events
 
-jobs:
-  print-hello-word:
-    runs-on: ubuntu-latest
+# jobs:
+#   print-hello-word:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Print Hello World
-        run: echo "Hello World"
+#     steps:
+#       - name: Print Hello World
+#         run: echo "Hello World"
 
-      - name: Print Hello World 2
-        run : echo "Hello world 2"
+#       - name: Print Hello World 2
+#         run : echo "Hello world 2"
 
-        # aaa
+#         # aaa

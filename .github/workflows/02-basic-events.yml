@@ -1,15 +1,15 @@
-name: 02 basics events
+# name: 02 basics events
 
-on:
-    # push
+# on:
+#     # push
 
-jobs:
-  print-hello-word:
-    runs-on: ubuntu-latest
+# jobs:
+#   print-hello-word:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Print Hello World
-        run: echo "Hello World"
+#     steps:
+#       - name: Print Hello World
+#         run: echo "Hello World"
 
-      - name: Print Hello World 2
-        run : echo "Hello world 2"
+#       - name: Print Hello World 2
+#         run : echo "Hello world 2"

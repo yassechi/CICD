@@ -1,22 +1,22 @@
-name: my workflow
+# name: my workflow
 
-on:
-  push:
-    branches:
-      - main
-    # types:
-    #   - closed
-    # tags:
-    #   -v2
-    # paths:
-    #   /**.ts
+# on:
+#   push:
+#     branches:
+#       - main
+#     # types:
+#     #   - closed
+#     # tags:
+#     #   -v2
+#     # paths:
+#     #   /**.ts
 
-jobs:
-  my_first_job:
-    runs-on: ubuntu-latest
-    steps:
-      - name: first job
-        run: echo " --> first job"
+# jobs:
+#   my_first_job:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: first job
+#         run: echo " --> first job"
 
-      - name: second job
-        run: echo " --> second job"
+#       - name: second job
+#         run: echo " --> second job"

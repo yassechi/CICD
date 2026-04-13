@@ -2,8 +2,7 @@ name: external trigger
 
 on:
   repository_dispatch:
-    types:
-      - myTrigger
+    types: [myTrigger]
 
 jobs:
   test_external_trigger:
