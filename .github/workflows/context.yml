@@ -8,5 +8,6 @@ jobs:
     steps:
       - name: "show context 'github'"
         #run: echo " => show context 'github' ${{github.actor}}"
-        run: echo " => show context 'github' ${{github.event_name}}"
+        #run: echo " => show context 'github' ${{github.event_name}}"
+        run: echo " => show context 'github' ${{job.status}}"
 
