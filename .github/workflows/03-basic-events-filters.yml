@@ -1,4 +1,4 @@
-name: 02 basics events
+name: 03 basics events
 
 on:
   # pull_request:
@@ -8,7 +8,7 @@ on:
   push:
     branches:
       - main
-      
+
 jobs:
   print-hello-word:
     runs-on: ubuntu-latest
