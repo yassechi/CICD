@@ -1,7 +1,7 @@
 name: 01 basics first workflow
 
 on:
-    workflow_dispatch
+    # workflow_dispatch
 
 jobs:
   print-hello-word:

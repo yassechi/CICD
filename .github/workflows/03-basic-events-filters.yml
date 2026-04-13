@@ -5,10 +5,10 @@ on:
   #   types:
   #     closed
 
-  push:
-    branches:
-      - main
-      - events
+  # push:
+  #   branches:
+  #     - main
+  #     - events
 
 jobs:
   print-hello-word:

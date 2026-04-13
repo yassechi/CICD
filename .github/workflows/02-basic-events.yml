@@ -1,7 +1,7 @@
 name: 02 basics events
 
 on:
-    push
+    # push
 
 jobs:
   print-hello-word:
