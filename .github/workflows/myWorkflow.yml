@@ -6,7 +6,7 @@ on:
       main
 
 jobs:
-  my first job:
+  my_first_job:
     runs-on: ubuntu-latest
     steps:
       - name: first job
