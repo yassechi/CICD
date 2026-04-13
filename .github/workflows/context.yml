@@ -1,5 +1,5 @@
 name: basic context
-run-name: context running by ${{github.actor}}
+run-name: context running by ${{github.actor}} \#${{github.run_number}}
 
 on: [workflow_dispatch]
 
