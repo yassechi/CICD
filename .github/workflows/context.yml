@@ -1,5 +1,5 @@
 name: basic context
-run-name: yass
+run-name: context running by ${{github.actor}}
 
 on: [workflow_dispatch]
 
