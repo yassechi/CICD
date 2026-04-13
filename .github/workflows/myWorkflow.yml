@@ -3,14 +3,14 @@ name: my workflow
 on:
   push:
     branches:
-      main
+      - main
 
 jobs:
   my_first_job:
     runs-on: ubuntu-latest
     steps:
       - name: first job
-        run: echo "first job"
+        run: echo " --> first job"
 
       - name: second job
-        run: echo "second job"
+        run: echo " --> second job"
