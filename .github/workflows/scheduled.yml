@@ -2,7 +2,7 @@ name: scheduled trigger
 
 on:
  schedule:
-  cron: "*/5 * * * *"
+  - cron: "*/1 * * * *"
 
 jobs:
   test_external_trigger:
