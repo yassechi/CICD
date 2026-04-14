@@ -3,6 +3,7 @@ run-name: "${{github.actor}} #${{github.run_number}}"
 
 env:
   RUN_NUMBER: ${{ github.run_number == 1 && 'run 1er fois' ||'run plus qu une fois'}}
+  TESTING_VALUE: "Bonjour je m appelle Yassine..."
 
 on:
   workflow_dispatch:
@@ -13,4 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "get status run number"
+        run: echo ${{env.RUN_NUMBER}}
+      - name: "testing value"
+        env:
+          result: ""
+        if: {result: contains(TESTING_VALUE, "Yass" && "contient bien Yass .." || "Ne contient pas !!") }
         run: echo ${{env.RUN_NUMBER}}
