@@ -7,7 +7,6 @@ on:
 jobs:
   test_external_trigger:
     runs-on: ubuntu-latest
-    if: ${{github.event.pull_request.merged == true}}
     steps:
       - name: "Print Hello World "
         run: echo "Hell world"
