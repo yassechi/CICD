@@ -3,23 +3,29 @@ run-name: "${{github.actor}} #${{github.run_number}}"
 on:
   workflow_dispatch:
 
+env:
+  RUN_NUMBER: ${{ env.run_number > 1 && 'run 1er fois' ||'run plus qu une fois'}}
+
 jobs:
   learn_expression:
     runs-on: ubuntu-latest
     steps:
-      - name: "step 1"
-        run: exit 1
-      # - name: "get context"
-      #   run: echo ${{toJson(github)}}
+      # - name: "step 1"
+      #   run: exit 1
+      # # - name: "get context"
+      # #   run: echo ${{toJson(github)}}
 
 
-      - name: "create issue"
-        if: failure()
-        run: |
-          curl -L \
-            -X POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{secrets.TOKEN_GITHUB}}" \
-            -H "X-GitHub-Api-Version: 2026-03-10" \
-            ${{vars.API_YASS}} \
-            -d '{"title":"Problemme !!","body":"il faut regler le problemme !!"}'
+      # - name: "create issue"
+      #   if: failure()
+      #   run: |
+      #     curl -L \
+      #       -X POST \
+      #       -H "Accept: application/vnd.github+json" \
+      #       -H "Authorization: Bearer ${{secrets.TOKEN_GITHUB}}" \
+      #       -H "X-GitHub-Api-Version: 2026-03-10" \
+      #       ${{vars.API_YASS}} \
+      #       -d '{"title":"Problemme !!","body":"il faut regler le problemme !!"}'
+
+      - name: 'get status run number'
+        run: echo ${{env.RUN_NUMBER}}
