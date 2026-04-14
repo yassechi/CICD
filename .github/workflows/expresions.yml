@@ -27,5 +27,5 @@ jobs:
       #       ${{vars.API_YASS}} \
       #       -d '{"title":"Problemme !!","body":"il faut regler le problemme !!"}'
 
-      - name: 'get status run number'
+      - name: "get status run number"
         run: echo ${{env.RUN_NUMBER}}
