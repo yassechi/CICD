@@ -25,4 +25,7 @@ jobs:
 
       - name: "Get Tocken Git"
         run: echo ${{secrets.GITHUB_TOKEN}}
+        
+      - name: "Get default variables"
+        run: env
 
