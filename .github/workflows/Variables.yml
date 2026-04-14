@@ -23,3 +23,6 @@ jobs:
         #run: echo $MY_CONFIG_VA
         run: echo ${{vars.MY_CONFIG_VALUE}}
 
+      - name: "Get Tocken Git"
+        run: echo ${{secrets.GITHUB_TOKEN}}
+
