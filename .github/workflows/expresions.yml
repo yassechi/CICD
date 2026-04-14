@@ -17,5 +17,5 @@ jobs:
         run: echo ${{env.RUN_NUMBER}}
       - name: "testing value"
         env:
-          RESULT: ${{ contains(TESTING_VALUE, "Yass") && "contient bien Yass .." || "Ne contient pas !!" }}
+          RESULT: ${{ contains(env.TESTING_VALUE, "Yass") && "contient bien Yass .." || "Ne contient pas !!" }}
         run: echo ${{env.RESULT}}
