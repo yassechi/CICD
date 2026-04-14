@@ -23,7 +23,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build, test
+    needs: [build, test]
     steps:
       - name: "first deploy"
         run: echo "first deploy"
