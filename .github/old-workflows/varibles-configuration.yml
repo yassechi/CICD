@@ -1,0 +1,13 @@
+name: varibles-configuration
+run-name: context running by ${{github.actor}} \#${{github.run_number}}
+
+on:
+  workflow_dispatch:
+
+jobs:
+  see_hello:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Print Hello World "
+        run: echo "Hell world"
+
