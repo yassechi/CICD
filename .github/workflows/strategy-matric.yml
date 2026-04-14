@@ -15,4 +15,4 @@ jobs:
 
     steps:
       - name: "see Hello"
-        run: echo "Hello with (${{matrix.os}})"
+        run: echo "Hello on OS:(${{matrix.os}}) and (${{matrix.build}}) with (${{matrix.node}}) "
