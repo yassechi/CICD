@@ -13,4 +13,7 @@ jobs:
     steps:
       - name: "Print Hello World "
         run: echo "Hell world"
+      - name: "Get number files changed "
+        if: ${{github.event.pull_request.changed_files > 1}}
+        run: echo "number files changed = ${{github.event.pull_request.changed_files}}"
 
