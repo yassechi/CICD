@@ -1,7 +1,7 @@
 name: expressions workflow
 run-name: ${{github.actor}}
 on:
-  worflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   learn_expression:
