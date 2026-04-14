@@ -17,4 +17,8 @@ jobs:
       - name: "Print MyName "
         #run: echo $MY_NAME
         run: echo ${{env.MY_NAME}}
+        
+      - name: "Print from secret & variables"
+        #run: echo $MY_NAME
+        run: echo $MY_CONFIG_VALUE
 
