@@ -27,6 +27,7 @@ jobs:
         run: exit 1
 
       - name: "create issue"
+        if: faiure()
         run: |
           curl -L \
           -X POST \
