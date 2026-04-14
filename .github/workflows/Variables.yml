@@ -16,5 +16,5 @@ jobs:
   
       - name: "Print MyName "
         #run: echo $MY_NAME
-        run: echo ${{github.env.MY_NAME}}
+        run: echo ${{env.MY_NAME}}
 
