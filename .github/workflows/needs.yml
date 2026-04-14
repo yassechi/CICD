@@ -1,0 +1,28 @@
+name: needs workflow
+run-name: "${{github.actor}} #${{github.run_number}}"
+
+env:
+  MAMA: "maman"
+
+on:
+  workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "first build"
+        run: exit 1
+
+  test:
+      runs-on: ubuntu-latest
+      steps:
+        - name: "first build"
+          run: echo ${{env.MAMA}}
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "first deploy"
+        run: echo "first deploy"
+
