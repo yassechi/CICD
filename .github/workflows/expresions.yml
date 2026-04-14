@@ -5,7 +5,7 @@ on:
 
 jobs:
   learn_expression:
-  runs-on: ubuntu-latest
-  steps:
-    - name: "step 1"
-      run: echo "first job "
+    runs-on: ubuntu-latest
+    steps:
+      - name: "step 1"
+        run: echo "first job "
