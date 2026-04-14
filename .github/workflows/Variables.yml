@@ -20,5 +20,6 @@ jobs:
         
       - name: "Print from secret & variables"
         #run: echo $MY_NAME
-        run: echo $MY_CONFIG_VALUE
+        #run: echo $MY_CONFIG_VA
+        run: echo ${{vars.MY_CONFIG_VA}}
 
