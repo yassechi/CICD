@@ -8,6 +8,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "step 1"
-        run: echo "first job "
+        run: exit 1
       # - name: "get context"
       #   run: echo ${{toJson(github)}}
+
+
+      - name: "create issue"
+        run: |
+          curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{secrets.TOKEN_GITHUB}}" \
+            -H "X-GitHub-Api-Version: 2026-03-10" \
+            ${{vars.API_YASS}} \
+            -d '{"title":"Problemme !!","body":"il faut regler le problemme !!"}'
