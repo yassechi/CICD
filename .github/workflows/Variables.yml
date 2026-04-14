@@ -2,10 +2,10 @@ name: Variables
 run-name: context running by ${{github.actor}} \#${{github.run_number}}
 
 on:
-  workflow_dispach
+  workflow_dispatch:
 
 jobs:
-  test_external_trigger:
+  see_hello:
     runs-on: ubuntu-latest
     steps:
       - name: "Print Hello World "
