@@ -19,4 +19,4 @@ jobs:
         env:
           result: ""
         if: {result: contains(TESTING_VALUE, "Yass" && "contient bien Yass .." || "Ne contient pas !!") }
-        run: echo ${{env.RUN_NUMBER}}
+        run: echo ${{env.result}}
