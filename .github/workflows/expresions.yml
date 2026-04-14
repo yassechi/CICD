@@ -1,5 +1,5 @@
 name: expressions workflow
-run-name: ${{github.actor}}
+run-name: "${{github.actor}} #${{github.run_number}}"
 on:
   workflow_dispatch:
 
