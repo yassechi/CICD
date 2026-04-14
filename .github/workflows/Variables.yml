@@ -2,7 +2,7 @@ name: Variables
 run-name: context running by ${{github.actor}} \#${{github.run_number}}
 
 on:
-  workflow_dispach:
+  workflow_dispach
 
 jobs:
   test_external_trigger:
