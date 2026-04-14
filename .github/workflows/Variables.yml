@@ -15,5 +15,6 @@ jobs:
         run: echo "Hell world"
   
       - name: "Print MyName "
-        run: echo $MY_NAME
+        #run: echo $MY_NAME
+        run: echo ${{github.env.MY_NAME}}
 
