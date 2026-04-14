@@ -12,5 +12,5 @@ jobs:
     if: ${{github.event.pull_request.merged == true}}
     steps:
       - name: "Print Hello World "
-        run: echo ${{toJson(github)}}
+        run: echo "Hell world"
 
