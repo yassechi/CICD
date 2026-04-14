@@ -45,3 +45,6 @@ export class AmortissementService {
     return this.http.delete(`${this.apiUrl}/delete/${id}`);
   }
 }
+
+// New line ...
+
