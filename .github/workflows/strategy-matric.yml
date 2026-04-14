@@ -7,10 +7,11 @@ jobs:
   build:
     runs-on: ${{matrix.os}}
 
-    matrix:
-      os: [ubuntu-latest, windows-latest]
-      node: [20, 22]
-      build: [development, production]
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node: [20, 22]
+        build: [development, production]
 
     steps:
       - name: "see Hello"
