@@ -1,9 +1,12 @@
 name: expressions workflow
 run-name: "${{github.actor}} #${{github.run_number}}"
+
+env:
+  RUN_NUMBER: ${{ env.run_number > 1 && 'run 1er fois' ||'run plus qu une fois'}}
+
 on:
   workflow_dispatch:
 
-RUN_NUMBER: ${{ env.run_number > 1 && 'run 1er fois' ||'run plus qu une fois'}}
 
 jobs:
   learn_expression:
