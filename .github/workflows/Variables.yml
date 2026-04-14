@@ -1,0 +1,13 @@
+name: Variables
+run-name: context running by ${{github.actor}} \#${{github.run_number}}
+
+on: workflow_dispach
+
+jobs:
+  test_external_trigger:
+    runs-on: ubuntu-latest
+    if: ${{github.event.pull_request.merged == true}}
+    steps:
+      - name: "Print Hello World "
+        run: echo "Hell world"
+
