@@ -27,7 +27,7 @@ jobs:
         run: exit 1
 
       - name: "create issue"
-        if: faiure()
+        if: ${{ failure() }}
         run: |
           curl -L \
           -X POST \
