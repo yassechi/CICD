@@ -16,12 +16,14 @@ jobs:
 
   test:
       runs-on: ubuntu-latest
+      needs: build
       steps:
         - name: "first build"
           run: echo ${{env.MAMA}}
 
   deploy:
     runs-on: ubuntu-latest
+    needs: build, test
     steps:
       - name: "first deploy"
         run: echo "first deploy"
