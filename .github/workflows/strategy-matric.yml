@@ -13,4 +13,4 @@ jobs:
 
     steps:
       - name: "see Hello"
-        run: echo "Hello"
+        run: echo "Hello" with (${{matrix.os}})
