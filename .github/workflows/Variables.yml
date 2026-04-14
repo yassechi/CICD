@@ -15,5 +15,5 @@ jobs:
         run: echo "Hell world"
   
       - name: "Print MyName "
-        run: echo $My_NAME
+        run: echo $MY_NAME
 
