@@ -9,5 +9,5 @@ jobs:
     steps:
       - name: "step 1"
         run: echo "first job "
-      - name: "get context"
-        run: echo ${{toJson(github)}}
+      # - name: "get context"
+      #   run: echo ${{toJson(github)}}
