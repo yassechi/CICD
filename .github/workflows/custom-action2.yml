@@ -5,8 +5,8 @@ on:
 
 jobs:
   custom_1:
-  runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
-  steps:
-    - name: "see hello world"
-      run: echo "hello world custom 2 "
+    steps:
+      - name: "see hello world"
+        run: echo "hello world custom 2 "
