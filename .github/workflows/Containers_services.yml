@@ -27,17 +27,41 @@ jobs:
   create_container_service:
     runs-on: ubuntu-latest
 
+    # steps:
+    #   - name: Checkout code
+    #     uses: actions/checkout@v4
+
+    #   - name: Setup Node.js
+    #     uses: actions/setup-node@v4
+    #     with:
+    #       node-version: 17
+
+    #   - name: Install dependencies
+    #     run: npm ci
+
+    #   - name: Check node version
+    #     run: node -v
+
+name: Node CI
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create_container_service:
+    runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 17
+          node-version: 20
+          cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci
+      - run: npm ci
+
+      - run: node -v
 
       - name: Check node version
         run: node -v
