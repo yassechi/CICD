@@ -14,11 +14,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6.0.2
 
+      - name: get pull_request context
+        run: echo ${{toJson(github)}}
+
       - name: run github cli
         run: gh pr comment $NUM_REQUEST --body "Votre PR ne sera pas mergé, veuillez modifier votre code et ouvrir une nouvelle PR"
         env:
           GH_TOKEN: ${{secrets.TOKEN_GITHUB}}
           NUM_REQUEST: ${{github.event.pull_request.number}}
+
+          # NUM_REQUEST: 18
+          # NUM_REQUEST: ${{github.event.number}}
+          # NUM_REQUEST: 18
 
           # NUM_REQUEST: 18
       - name: as succeful
