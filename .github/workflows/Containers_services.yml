@@ -18,14 +18,14 @@
 #       - name: "check node version"
 #         run: node -v
 
-name: Containers & services
+# name: Containers & services
 
-on:
-  workflow_dispatch:
+# on:
+#   workflow_dispatch:
 
-jobs:
-  create_container_service:
-    runs-on: ubuntu-latest
+# jobs:
+#   create_container_service:
+#     runs-on: ubuntu-latest
 
     # steps:
     #   - name: Checkout code
