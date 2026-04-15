@@ -1,0 +1,19 @@
+name: github cli
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+  create_issue_by_runner_github_cli:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: create issue
+        run: gh issue create --title "Issue by runner" --body "lalala"
+        env:
+          GH_TOKEN: ${{secrets.TOKEN_GITHUB}}
+

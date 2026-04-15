@@ -1,16 +1,13 @@
-name: conditions
+name: varibles-configuration
 run-name: context running by ${{github.actor}} \#${{github.run_number}}
 
 on:
-  pull_request:
-    types:
-      - closed
+  workflow_dispatch:
 
 jobs:
-  test_external_trigger:
+  see_hello:
     runs-on: ubuntu-latest
     steps:
       - name: "Print Hello World "
-        run: echo "Hello World"
-
+        run: echo "Hell world"
 

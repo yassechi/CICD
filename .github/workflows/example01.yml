@@ -1,0 +1,14 @@
+name: example 01
+
+on:
+  pull_request:
+      types:
+        - closed
+
+jobs:
+  example01:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: job1
+        run: echo "hello"

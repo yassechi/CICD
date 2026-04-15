@@ -1,0 +1,12 @@
+name: hosted run_number
+
+on:
+  workflow_dispatch:
+
+jobs:
+  try_my_hosted_runner:
+    runs-on: [self-hosted, Windows, X64, runner1]
+
+    steps:
+      - name: "first job"
+        run: echo "hosted runner OK !"

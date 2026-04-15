@@ -1,0 +1,31 @@
+name: Variables
+run-name: context running by ${{github.actor}} \#${{github.run_number}}
+
+on:
+  workflow_dispatch:
+
+env:
+  MY_NAME: 'yass'
+
+jobs:
+  see_hello:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Print Hello World "
+        run: echo "Hell world"
+  
+      - name: "Print MyName "
+        #run: echo $MY_NAME
+        run: echo ${{env.MY_NAME}}
+        
+      - name: "Print from secret & variables"
+        #run: echo $MY_NAME
+        #run: echo $MY_CONFIG_VA
+        run: echo ${{vars.MY_CONFIG_VALUE}}
+
+      - name: "Get Tocken Git"
+        run: echo ${{secrets.GITHUB_TOKEN}}
+        
+      - name: "Get default variables"
+        run: env
+
