@@ -2,8 +2,9 @@ name: example 01
 
 on:
   pull_request:
-        types: [closed]
-        
+      types:
+        - closed
+
 jobs:
   example01:
     runs-on: ubuntu-latest
