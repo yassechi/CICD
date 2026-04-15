@@ -11,11 +11,15 @@ jobs:
 
     steps:
 
-      # - name: run github cli
-      #   run: gh pr comemnt ${{}} --body "Votre PR ne sera pas mergé, veuillez modifier votre code et ouvrir une nouvelle PR"
-      #   env:
-      #     GH_TOKEN: ${{secrets.TOKEN_GITHUB}}
-      #     NUM_REQUEST: ${{github.event}}
+      - name: run github cli
+        run: gh pr comemnt ${{}} --body "Votre PR ne sera pas mergé, veuillez modifier votre code et ouvrir une nouvelle PR"
+        env:
+          GH_TOKEN: ${{secrets.TOKEN_GITHUB}}
+          NUM_REQUEST: ${{github.event.number}}
 
-      - name: job1
-        run: echo ${{toJson(github)}}
+      - name: as succeful
+        run: echo "succeful !"
+
+      # - name: job1
+      #   run: echo ${{toJson(github)}}
+      #   run: echo ${{toJson(github)}}
