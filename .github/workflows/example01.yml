@@ -7,6 +7,10 @@ on:
 
 jobs:
   example01:
+    env:
+        GH_TOKEN: ${{secrets.TOKEN_GITHUB}}
+        NUM_REQUEST: ${{github.event.pull_request.number}}
+
     runs-on: ubuntu-latest
 
     steps:
@@ -14,23 +18,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6.0.2
 
-      - name: get pull_request context
-        run: echo ${{toJson(github)}}
+      - name: PR merged
+        if: github.event.pull_request.merged == true
+        run: gh pr comment $NUM_REQUEST --body "Votre PR est mérgé Beau travail bonne continuation.."
 
-      - name: run github cli
+      - name: PR NOT merged
+        if: github.event.pull_request.merged == false
         run: gh pr comment $NUM_REQUEST --body "Votre PR ne sera pas mergé, veuillez modifier votre code et ouvrir une nouvelle PR"
-        env:
-          GH_TOKEN: ${{secrets.TOKEN_GITHUB}}
-          NUM_REQUEST: ${{github.event.pull_request.number}}
-
-          # NUM_REQUEST: 18
-          # NUM_REQUEST: ${{github.event.number}}
-          # NUM_REQUEST: 18
 
           # NUM_REQUEST: 18
       - name: as succeful
         run: echo "succeful"
-
-      # - name: job1
-      #   run: echo ${{toJson(github)}}
-      #   run: echo ${{toJson(github)}}
