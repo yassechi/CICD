@@ -12,7 +12,7 @@ jobs:
     steps:
 
       - name: run github cli
-        run: gh pr comemnt ${{}} --body "Votre PR ne sera pas mergé, veuillez modifier votre code et ouvrir une nouvelle PR"
+        run: gh pr comemnt ${{NUM_REQUEST}} --body "Votre PR ne sera pas mergé, veuillez modifier votre code et ouvrir une nouvelle PR"
         env:
           GH_TOKEN: ${{secrets.TOKEN_GITHUB}}
           NUM_REQUEST: ${{github.event.number}}
