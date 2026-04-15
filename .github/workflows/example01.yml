@@ -18,7 +18,7 @@ jobs:
           NUM_REQUEST: ${{github.event.number}}
 
       - name: as succeful
-        run: echo "succeful !"
+        run: echo "succeful"
 
       # - name: job1
       #   run: echo ${{toJson(github)}}
