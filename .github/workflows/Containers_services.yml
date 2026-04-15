@@ -1,4 +1,24 @@
-name: Containers && servives
+# name: Containers && servives
+
+# on:
+#   workflow_dispatch:
+
+# jobs:
+#   create_container_service:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: "setup node v19"
+#         uses: actions/checkout@v6
+#         # - uses: actions/setup-node@v6
+#         with:
+#             node-version: 20
+#             run: npm ci
+#             # run: npm test
+
+#       - name: "check node version"
+#         run: node -v
+
+name: Containers & services
 
 on:
   workflow_dispatch:
@@ -6,14 +26,21 @@ on:
 jobs:
   create_container_service:
     runs-on: ubuntu-latest
-    steps:
-      - name: "setup node v19"
-        uses: actions/checkout@v6
-        # - uses: actions/setup-node@v6
-        with:
-            node-version: 20
-            run: npm ci
-            # run: npm test
 
-      - name: "check node version"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      # - name: Run tests
+      #   run: npm test
+
+      - name: Check node version
         run: node -v
