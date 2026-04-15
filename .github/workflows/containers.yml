@@ -7,8 +7,10 @@ jobs:
   setup_container:
     runs-on: ubuntu-latest
     steps:
-      - name: "setup container"
-        run: echo "try setup container !!"
+      container:
+        # image: dhi.io/node:25-debian13-sfw-ent-dev
+        image: php:7.2
+
       - name: "check node version"
-        run: node -v
+        run: php -v
 
