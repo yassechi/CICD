@@ -18,8 +18,8 @@ jobs:
         run: gh pr comment $NUM_REQUEST --body "Votre PR ne sera pas mergé, veuillez modifier votre code et ouvrir une nouvelle PR"
         env:
           GH_TOKEN: ${{secrets.TOKEN_GITHUB}}
-          # NUM_REQUEST: ${{github.event.number}}
-          NUM_REQUEST: 18
+          NUM_REQUEST: ${{github.event.number}}
+          # NUM_REQUEST: 18
 
       - name: as succeful
         run: echo "succeful"
