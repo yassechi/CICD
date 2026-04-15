@@ -9,6 +9,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
       - name: create issue
         run: gh issue create --title "Issue by runner" --body "lalala"
         env:
