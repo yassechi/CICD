@@ -5,7 +5,8 @@ on:
       types:
         - closed
 
-NUM_REQUEST: ${{github.event.number}}
+env:
+  NUM_REQUEST: ${{github.event.number}}
 
 
 jobs:
