@@ -7,6 +7,6 @@ jobs:
   setup_container:
     runs-on: ubuntu-latest
     steps:
-      - nama: "setup container"
+      - name: "setup container"
         run: echo "try setup container !!"
 
