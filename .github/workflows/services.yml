@@ -1,0 +1,19 @@
+name: Services
+
+on:
+  workflow_dispatch
+
+
+jobs:
+  init_depencies:
+    runs-on: ubuntu-latest
+
+    services:
+      redis:
+        image: redis:latest
+
+    steps:
+    - name: "install redis-cli"
+      run: sudo apt-get install -y redis-cli
+    - name: "check ping"
+      run: redis-cli ping
