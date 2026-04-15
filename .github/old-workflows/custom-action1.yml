@@ -1,0 +1,15 @@
+name: custom action 1
+
+on:
+  workflow_dispatch:
+
+jobs:
+  custom_1:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+        
+      - name: "see hello world"
+        uses: ./.github/actions/print-hello-world

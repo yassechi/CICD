@@ -1,0 +1,19 @@
+name: conditions
+run-name: context running by ${{github.actor}} \#${{github.run_number}}
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  test_external_trigger:
+    runs-on: ubuntu-latest
+    if: ${{github.event.pull_request.merged == true}}
+    steps:
+      - name: "Print Hello World "
+        run: echo "Hell world"
+      - name: "Get number files changed "
+        if: ${{github.event.pull_request.changed_files > 1}}
+        run: echo "number files changed = ${{github.event.pull_request.changed_files}}"
+

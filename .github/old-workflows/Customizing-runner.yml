@@ -1,0 +1,20 @@
+name: Customizing runner
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create_container_service:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 17
+          cache: 'npm'
+
+      - run: npm ci
+
+      - run: node -v
+

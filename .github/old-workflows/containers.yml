@@ -1,0 +1,16 @@
+name: create_container
+
+on:
+  workflow_dispatch:
+
+jobs:
+  setup_container:
+    runs-on: ubuntu-latest
+
+    container:
+        image: php:7.2
+        # image: dhi.io/node:25-debian13-sfw-ent-dev
+    steps:
+      - name: "check node version"
+        run: php -v
+
