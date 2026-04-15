@@ -1,4 +1,4 @@
-name: create_container_service
+name: create_container
 
 on:
   workflow_dispatch:
@@ -9,6 +9,6 @@ jobs:
     steps:
       - name: "setup container"
         run: echo "try setup container !!"
-      - name: "check php version"
-        run: php -v
+      - name: "check node version"
+        run: node -v
 
