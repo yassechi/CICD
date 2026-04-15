@@ -8,4 +8,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "see hello world"
-        run: echo "hello world custom 1"
+        uses: ./.github/actions/print-hello-world

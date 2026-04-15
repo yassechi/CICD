@@ -9,4 +9,5 @@ jobs:
 
     steps:
       - name: "see hello world"
-        run: echo "hello world custom 2 "
+        uses: ./.github/actions/print-hello-world
+
