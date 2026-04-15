@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v6.0.2
 
       - name: get pull_request context
-        run: echo ${{tiJson(github)}}
+        run: echo ${{toJson(github)}}
 
       # - name: run github cli
       #   run: gh pr comment $NUM_REQUEST --body "Votre PR ne sera pas mergé, veuillez modifier votre code et ouvrir une nouvelle PR"
