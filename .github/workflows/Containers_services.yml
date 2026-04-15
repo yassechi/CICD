@@ -7,5 +7,13 @@ jobs:
   create_container_service:
     runs-on: ubuntu-latest
     steps:
+      - name: "setup node v19"
+        uses: actions/checkout@v6
+        # - uses: actions/setup-node@v6
+        with:
+            node-version: 20
+            run: npm ci
+            run: npm test
+
       - name: "check node version"
-        run: node -v 
+        run: node -v
