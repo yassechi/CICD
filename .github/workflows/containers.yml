@@ -1,0 +1,12 @@
+name: create_container_service
+
+on:
+  workflow_dispatch:
+
+jobs:
+  setup_container:
+    runs-on: ubuntu-latest
+    steps:
+      - nama: "setup container"
+        run: echo "try setup container !!"
+
