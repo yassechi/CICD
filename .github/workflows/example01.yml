@@ -10,5 +10,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      # - name: run github cli
+      #   run: gh pr comemnt ${{}} --body "Votre PR ne sera pas mergé, veuillez modifier votre code et ouvrir une nouvelle PR"
+      #   env:
+      #     GH_TOKEN: ${{secrets.TOKEN_GITHUB}}
+      #     NUM_REQUEST: ${{github.event}}
+
       - name: job1
-        run: echo "hello"
+        run: echo ${{toJson(github)}}
