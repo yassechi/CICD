@@ -20,6 +20,8 @@ jobs:
           GH_TOKEN: ${{secrets.TOKEN_GITHUB}}
           NUM_REQUEST: ${{github.event.pull_request.number}}
           # NUM_REQUEST: 18
+          # NUM_REQUEST: ${{github.event.number}}
+          # NUM_REQUEST: 18
 
       - name: as succeful
         run: echo "succeful"
