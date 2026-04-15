@@ -14,6 +14,6 @@ jobs:
 
     steps:
     - name: "install redis-cli"
-      run: sudo apt-get install -y redis-cli
+      run: sudo apt-get install -y redis
     - name: "check ping"
       run: redis-cli ping
