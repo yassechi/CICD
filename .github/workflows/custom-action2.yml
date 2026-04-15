@@ -1,7 +1,7 @@
 name: custom action 2
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
 
 jobs:
   custom_1:
