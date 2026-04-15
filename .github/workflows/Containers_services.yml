@@ -63,5 +63,3 @@ jobs:
 
       - run: node -v
 
-      - name: Check node version
-        run: node -v
