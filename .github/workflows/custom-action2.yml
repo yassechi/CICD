@@ -8,6 +8,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
       - name: "see hello world"
         uses: ./.github/actions/print-hello-world
 
