@@ -10,7 +10,7 @@ jobs:
 
     steps:
       - name: create issue
-        run: gh issue create --title "Issue by runner"
+        run: gh issue create --title "Issue by runner" --body "lalala"
         env:
           GH_TOKEN: ${{secrets.TOKEN_GITHUB}}
 
