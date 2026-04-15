@@ -9,4 +9,6 @@ jobs:
     steps:
       - name: "setup container"
         run: echo "try setup container !!"
+      - name: "check php version"
+        run: php -v
 
