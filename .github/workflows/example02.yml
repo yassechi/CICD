@@ -65,8 +65,8 @@ jobs:
           git add .
 
           if git diff --cached --quiet; then
-            echo "✅ No changes to commit"
+            echo "actions[bot]: ✅ No changes to commit"
           else
-            git commit -m "chore: auto format & lint"
+            git commit -m "actions[bot]: auto format & lint"
             git push
           fi
