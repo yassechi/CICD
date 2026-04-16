@@ -1,7 +1,9 @@
 name: Auto Format & Lint on PR
 
 on:
-  pull_request:
+  push:
+    branches:
+      - main
 
 permissions:
   contents: write
@@ -39,4 +41,5 @@ jobs:
           git diff --cached --quiet || git commit -m "chore: auto format & lint"
           git push
 
+#
 #
