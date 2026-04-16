@@ -13,47 +13,50 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Checkout repo
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
+      # 2. Setup Node.js
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: 'npm'
 
+      # 3. Install dependencies
       - name: Install dependencies
         run: npm ci
 
-      # 🔧 FORMAT
-      - name: Show changed files (clean output)
+      # 4. Prettier format
+      - name: Format code (Prettier)
         run: |
-          echo "📂 Changed files:"
-          CHANGED=$(git diff --name-only)
+          echo "🔧 Running Prettier..."
+          npx prettier --write "src/**/*.{ts,html,scss,json}"
 
-          if [ -z "$CHANGED" ]; then
-            echo "✅ No files changed"
-          else
-            for file in $CHANGED; do
-              echo "$file (changed)"
-            done
-          fi
-
-      # 🔍 LINT
+      # 5. ESLint fix
       - name: Lint fix (ESLint)
         run: |
           echo "🔍 Running ESLint..."
           npx eslint . --ext .ts,.html --fix
 
-      # 👀 VOIR LES MODIFS
-      - name: Show changes
+      # 6. Show changed files
+      - name: Show changed files
         run: |
-          echo "📂 Modified files:"
-          git diff --name-only
+          echo "📂 Changed files:"
 
-      # 📤 COMMIT SI NECESSAIRE
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "✅ No changes detected"
+          else
+            git status --porcelain | while read line; do
+              file=$(echo "$line" | awk '{print $2}')
+              echo "$file (changed)"
+            done
+          fi
+
+      # 7. Commit & push if needed
       - name: Commit changes if needed
         run: |
           git config user.name "github-actions"
@@ -64,7 +67,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "✅ No changes to commit"
           else
-            echo "🚀 Committing changes..."
             git commit -m "chore: auto format & lint"
             git push
           fi
