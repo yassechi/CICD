@@ -28,10 +28,18 @@ jobs:
         run: npm ci
 
       # 🔧 FORMAT
-      - name: Format code (Prettier)
+      - name: Show changed files (clean output)
         run: |
-          echo "🔧 Running Prettier..."
-          npx prettier --write "src/**/*.{ts,html,scss,json}"
+          echo "📂 Changed files:"
+          CHANGED=$(git diff --name-only)
+
+          if [ -z "$CHANGED" ]; then
+            echo "✅ No files changed"
+          else
+            for file in $CHANGED; do
+              echo "$file (changed)"
+            done
+          fi
 
       # 🔍 LINT
       - name: Lint fix (ESLint)
