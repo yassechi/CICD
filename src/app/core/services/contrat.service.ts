@@ -100,9 +100,7 @@ export class ContratService {
 
   getList(params?: ContratListParams): Observable<Contrat[]> {
     const suffix = this.buildQueryParams(params);
-    return this.http.get<Contrat[]>(
-      `${this.apiUrl}/list${suffix ? `?${suffix}` : ''}`,
-    );
+    return this.http.get<Contrat[]>(`${this.apiUrl}/list${suffix ? `?${suffix}` : ''}`);
   }
 
   exportCsv(params?: ContratListParams): Observable<Blob> {

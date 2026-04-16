@@ -35,7 +35,9 @@
       </p-select>
       <div class="precheck-help">
         {{ i18n.t().publicDemande.companyMissing }}
-        <a class="precheck-email" [href]="supportMailto">{{ i18n.t().publicDemande.companyContactEmail }}</a>
+        <a class="precheck-email" [href]="supportMailto">{{
+          i18n.t().publicDemande.companyContactEmail
+        }}</a>
       </div>
       @if (loading()) {
         <div class="text-600 text-sm">{{ i18n.t().publicDemande.companyLoading }}</div>
@@ -68,12 +70,16 @@
           </div>
           <div class="company-info">
             <div class="company-name">{{ org.name }}</div>
-            <div class="company-domain"><span>{{ i18n.t().publicDemande.domainLabel }} : {{ org.emailAutorise }}</span></div>
+            <div class="company-domain">
+              <span>{{ i18n.t().publicDemande.domainLabel }} : {{ org.emailAutorise }}</span>
+            </div>
           </div>
         </div>
 
         <div class="hero-content">
-          <h2 class="brand-title hero-title">{{ i18n.format('publicDemande.heroTitle', { company: org.name }) }}</h2>
+          <h2 class="brand-title hero-title">
+            {{ i18n.format('publicDemande.heroTitle', { company: org.name }) }}
+          </h2>
           <p class="hero-subtitle">{{ i18n.t().publicDemande.heroSubtitle }}</p>
           <div class="hero-actions">
             <p-button

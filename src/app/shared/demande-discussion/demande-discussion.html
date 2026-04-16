@@ -1,7 +1,6 @@
 <div class="detail-section">
   <h3>{{ i18n.t().discussion.title }}</h3>
   <div class="message-card">
-
     @if (messages.length === 0) {
       <div class="text-600">{{ i18n.t().discussion.aucunMessage }}</div>
     } @else {
@@ -12,7 +11,7 @@
               <div class="message-author">{{ message.roleLabel }}</div>
               <div class="message-content">{{ message.contenu }}</div>
               <div class="message-date">
-                {{ (message.dateEnvoi || message.createdDate) | date: 'dd/MM/yyyy HH:mm' }}
+                {{ message.dateEnvoi || message.createdDate | date: 'dd/MM/yyyy HH:mm' }}
               </div>
             </div>
           </div>
@@ -37,6 +36,5 @@
         ></p-button>
       </div>
     </div>
-
   </div>
 </div>

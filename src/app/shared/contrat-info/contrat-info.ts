@@ -26,22 +26,38 @@ export class ContratDetailInfoComponent {
   private readonly confirmationService = inject(ConfirmationService);
   readonly i18n = inject(I18nService);
 
-  readonly contratId = toSignal((this.route.parent ?? this.route).paramMap.pipe(map((p) => Number(p.get('id')) || null)), { initialValue: null });
+  readonly contratId = toSignal(
+    (this.route.parent ?? this.route).paramMap.pipe(map((p) => Number(p.get('id')) || null)),
+    { initialValue: null },
+  );
   readonly contrat = signal<Contrat | null>(null);
   readonly loading = signal(false);
 
   private readonly loadEffect = effect((onCleanup) => {
     const id = this.contratId();
-    if (!id) { this.contrat.set(null); this.loading.set(false); return; }
+    if (!id) {
+      this.contrat.set(null);
+      this.loading.set(false);
+      return;
+    }
     this.loading.set(true);
     const sub = this.contratService.getDetail(id).subscribe({
-      next: (data) => { this.contrat.set(data); this.loading.set(false); },
-      error: () => { this.loading.set(false); this.messageService.showError(this.i18n.get('contrats.loadOneError')); },
+      next: (data) => {
+        this.contrat.set(data);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.loading.set(false);
+        this.messageService.showError(this.i18n.get('contrats.loadOneError'));
+      },
     });
     onCleanup(() => sub.unsubscribe());
   });
 
-  onEditContrat(): void { const id = this.contrat()?.id; if (id) this.router.navigate(['/admin/contrats/edit', id]); }
+  onEditContrat(): void {
+    const id = this.contrat()?.id;
+    if (id) this.router.navigate(['/admin/contrats/edit', id]);
+  }
   onDeleteContrat(): void {
     const id = this.contrat()?.id;
     if (!id) return;

@@ -5,12 +5,35 @@
       <p class="page-subtitle">{{ i18n.t().employes.detailSubtitle }}</p>
     </div>
     <div class="flex gap-2 detail-action-group">
-      <p-button [label]="i18n.t().common.retour"   icon="pi pi-arrow-left" class="btn-action btn-action-1" (click)="goBack()"></p-button>
-      <p-button [label]="i18n.t().common.modifier" icon="pi pi-pencil"     class="btn-action btn-action-2" (click)="goEdit()" [disabled]="!userId()"></p-button>
+      <p-button
+        [label]="i18n.t().common.retour"
+        icon="pi pi-arrow-left"
+        class="btn-action btn-action-1"
+        (click)="goBack()"
+      ></p-button>
+      <p-button
+        [label]="i18n.t().common.modifier"
+        icon="pi pi-pencil"
+        class="btn-action btn-action-2"
+        (click)="goEdit()"
+        [disabled]="!userId()"
+      ></p-button>
       @if (isActive(user())) {
-        <p-button [label]="i18n.t().common.supprimer" icon="pi pi-trash" class="btn-action btn-action-3" (click)="onDelete()" [disabled]="!userId()"></p-button>
+        <p-button
+          [label]="i18n.t().common.supprimer"
+          icon="pi pi-trash"
+          class="btn-action btn-action-3"
+          (click)="onDelete()"
+          [disabled]="!userId()"
+        ></p-button>
       } @else {
-        <p-button [label]="i18n.t().employes.reactivate" icon="pi pi-refresh" class="btn-action btn-action-3" (click)="openReactivateDialog()" [disabled]="!userId()"></p-button>
+        <p-button
+          [label]="i18n.t().employes.reactivate"
+          icon="pi pi-refresh"
+          class="btn-action btn-action-3"
+          (click)="openReactivateDialog()"
+          [disabled]="!userId()"
+        ></p-button>
       }
     </div>
   </div>
@@ -51,7 +74,10 @@
         <div class="col-12 md:col-6">
           <div class="field mb-3">
             <div class="text-600 text-sm">{{ i18n.t().employes.role }}</div>
-            <p-tag [value]="getRoleLabel(user()!.role)" [severity]="getRoleSeverity(user()!.role)"></p-tag>
+            <p-tag
+              [value]="getRoleLabel(user()!.role)"
+              [severity]="getRoleSeverity(user()!.role)"
+            ></p-tag>
           </div>
         </div>
         <div class="col-12 md:col-6">
@@ -106,7 +132,9 @@
   </div>
 
   <div class="field mb-3">
-    <label class="block mb-2 font-semibold">{{ i18n.t().employes.reactivateConfirmPassword }}</label>
+    <label class="block mb-2 font-semibold">{{
+      i18n.t().employes.reactivateConfirmPassword
+    }}</label>
     <p-password
       [(ngModel)]="reactivateConfirm"
       [toggleMask]="true"

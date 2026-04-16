@@ -2,24 +2,51 @@
   <ng-template pTemplate="header">
     <div class="p-3 flex justify-content-between align-items-center">
       <h3 class="m-0">{{ i18n.t().contrats.documentsTitle }}</h3>
-      <p-button icon="pi pi-plus" [label]="i18n.t().contrats.addDocument" size="small" (onClick)="fileInput.click()"></p-button>
-      <input #fileInput type="file" accept="application/pdf,.pdf" (change)="onFileSelected($event)" style="display: none;" />
+      <p-button
+        icon="pi pi-plus"
+        [label]="i18n.t().contrats.addDocument"
+        size="small"
+        (onClick)="fileInput.click()"
+      ></p-button>
+      <input
+        #fileInput
+        type="file"
+        accept="application/pdf,.pdf"
+        (change)="onFileSelected($event)"
+        style="display: none"
+      />
     </div>
   </ng-template>
 
   @if (documents().length > 0) {
     @for (doc of documents(); track doc.id) {
-      <div class="flex align-items-center justify-content-between p-2 border-bottom-1 surface-border">
+      <div
+        class="flex align-items-center justify-content-between p-2 border-bottom-1 surface-border"
+      >
         <div class="flex align-items-center gap-2">
-          <i class="pi pi-file-pdf text-red-500" style="font-size: 1.5rem;"></i>
+          <i class="pi pi-file-pdf text-red-500" style="font-size: 1.5rem"></i>
           <div>
             <p class="m-0 font-semibold">{{ doc.nomFichier }}</p>
             <small class="text-600">{{ doc.typeFichier.toUpperCase() }}</small>
           </div>
         </div>
         <div class="flex gap-2">
-          <p-button icon="pi pi-download" [text]="true" [rounded]="true" severity="secondary" (onClick)="downloadDocument(doc)" [pTooltip]="i18n.t().contrats.downloadDocument"></p-button>
-          <p-button icon="pi pi-trash"    [text]="true" [rounded]="true" severity="danger"    (onClick)="deleteDocument(doc)"    [pTooltip]="i18n.t().common.supprimer"></p-button>
+          <p-button
+            icon="pi pi-download"
+            [text]="true"
+            [rounded]="true"
+            severity="secondary"
+            (onClick)="downloadDocument(doc)"
+            [pTooltip]="i18n.t().contrats.downloadDocument"
+          ></p-button>
+          <p-button
+            icon="pi pi-trash"
+            [text]="true"
+            [rounded]="true"
+            severity="danger"
+            (onClick)="deleteDocument(doc)"
+            [pTooltip]="i18n.t().common.supprimer"
+          ></p-button>
         </div>
       </div>
     }

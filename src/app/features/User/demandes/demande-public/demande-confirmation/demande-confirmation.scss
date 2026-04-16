@@ -84,11 +84,7 @@
 }
 
 :host ::ng-deep .p-button {
-  background: linear-gradient(
-    135deg,
-    var(--mojo-button-start),
-    var(--mojo-button-end)
-  ) !important;
+  background: linear-gradient(135deg, var(--mojo-button-start), var(--mojo-button-end)) !important;
   border: none !important;
   font-weight: 600;
 }

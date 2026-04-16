@@ -37,7 +37,7 @@ export interface UpdateUserPayload {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
   private authUrl = `${environment.urls.coreApi}/Auth`;
@@ -92,7 +92,6 @@ export class UserService {
   create(user: CreateUserPayload): Observable<any> {
     return this.http.post(`${this.authUrl}/register`, user);
   }
-
 
   update(user: UpdateUserPayload): Observable<any> {
     return this.http.put(`${this.apiUrl}/update`, user);

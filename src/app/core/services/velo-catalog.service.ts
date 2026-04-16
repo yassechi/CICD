@@ -16,7 +16,7 @@ export interface VeloItem {
   title: { rendered: string };
   velos_brand?: number[];
   acf?: VeloAcf;
-  yoast_head_json: any,
+  yoast_head_json: any;
   _embedded?: {
     'wp:featuredmedia'?: Array<{
       source_url?: string;
@@ -46,16 +46,16 @@ export class VeloCatalogService {
 
   getVelos(): Observable<VeloItem[]> {
     const params = new HttpParams().set('_embed', '1');
-    return this.http.get<VeloItemApi[]>(`${this.baseUrl}/bikes`, { params }).pipe(
-      map((items) => items.map((item) => this.mapVelo(item))),
-    );
+    return this.http
+      .get<VeloItemApi[]>(`${this.baseUrl}/bikes`, { params })
+      .pipe(map((items) => items.map((item) => this.mapVelo(item))));
   }
 
   getVeloById(id: number): Observable<VeloItem> {
     const params = new HttpParams().set('_embed', '1');
-    return this.http.get<VeloItemApi>(`${this.baseUrl}/bikes/${id}`, { params }).pipe(
-      map((item) => this.mapVelo(item)),
-    );
+    return this.http
+      .get<VeloItemApi>(`${this.baseUrl}/bikes/${id}`, { params })
+      .pipe(map((item) => this.mapVelo(item)));
   }
 
   getBrands(): Observable<VeloBrand[]> {

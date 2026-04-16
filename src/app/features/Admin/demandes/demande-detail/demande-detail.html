@@ -5,9 +5,26 @@
       <p class="page-subtitle">{{ i18n.t().demandes.detailSubtitleAdmin }}</p>
     </div>
     <div class="flex gap-2 detail-action-group">
-      <p-button [label]="i18n.t().common.retour" icon="pi pi-arrow-left" class="btn-action btn-action-1" (click)="goBack()"></p-button>
-      <p-button [label]="i18n.t().common.modifier" icon="pi pi-pencil" class="btn-action btn-action-2" (click)="goEdit()" [disabled]="!demandeId()"></p-button>
-      <p-button [label]="i18n.t().common.supprimer" icon="pi pi-trash" class="btn-action btn-action-3" (click)="onDelete()" [disabled]="!demandeId()"></p-button>
+      <p-button
+        [label]="i18n.t().common.retour"
+        icon="pi pi-arrow-left"
+        class="btn-action btn-action-1"
+        (click)="goBack()"
+      ></p-button>
+      <p-button
+        [label]="i18n.t().common.modifier"
+        icon="pi pi-pencil"
+        class="btn-action btn-action-2"
+        (click)="goEdit()"
+        [disabled]="!demandeId()"
+      ></p-button>
+      <p-button
+        [label]="i18n.t().common.supprimer"
+        icon="pi pi-trash"
+        class="btn-action btn-action-3"
+        (click)="onDelete()"
+        [disabled]="!demandeId()"
+      ></p-button>
     </div>
   </div>
 
@@ -15,7 +32,6 @@
     <p-card class="section-card">
       <div class="grid">
         <div class="col-12 lg:col-8">
-
           <div class="detail-section">
             <h3>{{ i18n.t().demandes.employeeInfoTitle }}</h3>
             <div class="info-grid">
@@ -33,7 +49,11 @@
               </div>
               <div>
                 <div class="text-600 text-sm">{{ i18n.t().demandes.statut }}</div>
-                <p-tag [value]="getStatusLabel(d.status)" [severity]="getStatusSeverity(d.status)" [ngClass]="getStatusClass(d.status)"></p-tag>
+                <p-tag
+                  [value]="getStatusLabel(d.status)"
+                  [severity]="getStatusSeverity(d.status)"
+                  [ngClass]="getStatusClass(d.status)"
+                ></p-tag>
               </div>
             </div>
           </div>
@@ -43,7 +63,9 @@
             <div class="info-grid">
               <div>
                 <div class="text-600 text-sm">{{ i18n.t().demandes.modelLabel }}</div>
-                <div class="font-semibold">{{ velo()?.title?.rendered || d.veloModele || '-' }}</div>
+                <div class="font-semibold">
+                  {{ velo()?.title?.rendered || d.veloModele || '-' }}
+                </div>
               </div>
               <div>
                 <div class="text-600 text-sm">{{ i18n.t().demandes.brandLabel }}</div>
@@ -63,13 +85,17 @@
           <div class="detail-section">
             <h3>{{ i18n.t().demandes.accessoriesTitle }}</h3>
             <div class="text-600">{{ i18n.t().demandes.lockRequired }}</div>
-            <div class="text-600">{{ i18n.format('demandes.accessoriesWanted', { items: d.accessoiresSouhaites || i18n.t().demandes.notProvided }) }}</div>
+            <div class="text-600">
+              {{
+                i18n.format('demandes.accessoriesWanted', {
+                  items: d.accessoiresSouhaites || i18n.t().demandes.notProvided,
+                })
+              }}
+            </div>
           </div>
-
         </div>
 
         <div class="col-12 lg:col-4">
-
           <div class="summary-card">
             <h3>{{ i18n.t().demandes.summaryTitle }}</h3>
             <div class="summary-line">
@@ -84,14 +110,31 @@
               <span>{{ i18n.t().demandes.summaryTotal }}</span>
               <span>{{ formatCurrency(d.veloPrixAchat) }}</span>
             </div>
-            <div class="summary-hint">{{ i18n.format('demandes.summaryHint', { months: 36 }) }}</div>
+            <div class="summary-hint">
+              {{ i18n.format('demandes.summaryHint', { months: 36 }) }}
+            </div>
           </div>
 
           <div class="validation-card">
-            <h3>{{ isUserView ? i18n.t().demandes.validationClient : i18n.t().demandes.validationAdmin }}</h3>
+            <h3>
+              {{
+                isUserView ? i18n.t().demandes.validationClient : i18n.t().demandes.validationAdmin
+              }}
+            </h3>
             <div class="flex gap-2 mt-3">
-              <p-button [label]="i18n.t().demandes.validateAction" icon="pi pi-check" (click)="onValidate()" [disabled]="isValidateDisabled()"></p-button>
-              <p-button [label]="i18n.t().demandes.refuseAction" icon="pi pi-times" class="p-button-danger" (click)="onDecision(DemandeStatus.Refuse)" [disabled]="d.status === DemandeStatus.Refuse"></p-button>
+              <p-button
+                [label]="i18n.t().demandes.validateAction"
+                icon="pi pi-check"
+                (click)="onValidate()"
+                [disabled]="isValidateDisabled()"
+              ></p-button>
+              <p-button
+                [label]="i18n.t().demandes.refuseAction"
+                icon="pi pi-times"
+                class="p-button-danger"
+                (click)="onDecision(DemandeStatus.Refuse)"
+                [disabled]="d.status === DemandeStatus.Refuse"
+              ></p-button>
             </div>
           </div>
 
@@ -105,9 +148,10 @@
                 </div>
               }
             </div>
-            <div class="velo-preview-title">{{ velo()?.title?.rendered || d.veloModele || i18n.t().demandes.bikeAlt }}</div>
+            <div class="velo-preview-title">
+              {{ velo()?.title?.rendered || d.veloModele || i18n.t().demandes.bikeAlt }}
+            </div>
           </div>
-
         </div>
 
         <div class="col-12">

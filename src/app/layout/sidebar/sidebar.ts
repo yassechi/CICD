@@ -43,11 +43,18 @@ export class SidebarComponent {
   }
 
   private setMenu(user: User | null): void {
-    const badge = this.unreadCount() > 0 ? { badge: String(this.unreadCount()), badgeStyleClass: 'sidebar-badge' } : {};
+    const badge =
+      this.unreadCount() > 0
+        ? { badge: String(this.unreadCount()), badgeStyleClass: 'sidebar-badge' }
+        : {};
     const role = user?.role ?? 3;
     const aiQueryParams = this.buildAiQueryParams(user);
     const aiRoute =
-      role === 2 ? ['/manager/questionnaire-guide'] : role === 3 ? ['/user/questionnaire-guide'] : ['/questionnaire-guide'];
+      role === 2
+        ? ['/manager/questionnaire-guide']
+        : role === 3
+          ? ['/user/questionnaire-guide']
+          : ['/questionnaire-guide'];
     const t = this.i18n.t();
     const aiMenuItem = {
       label: t.nav.assistantIa,
@@ -62,22 +69,40 @@ export class SidebarComponent {
             { label: t.nav.compagnies, icon: 'pi pi-building', routerLink: ['/admin/compagnies'] },
             { label: t.nav.employes, icon: 'pi pi-users', routerLink: ['/admin/employes'] },
             { label: t.nav.contrats, icon: 'pi pi-file', routerLink: ['/admin/contrats'] },
-            { label: t.nav.demandes, icon: 'pi pi-inbox', routerLink: ['/admin/demandes'], ...badge },
-            { label: t.nav.parametres, icon: 'pi pi-cog', routerLink: ['/admin/parametres'] }]
+            {
+              label: t.nav.demandes,
+              icon: 'pi pi-inbox',
+              routerLink: ['/admin/demandes'],
+              ...badge,
+            },
+            { label: t.nav.parametres, icon: 'pi pi-cog', routerLink: ['/admin/parametres'] },
+          ]
         : role === 2
-        ? [
-            { label: t.nav.dashboard, icon: 'pi pi-home', routerLink: ['/manager/dashboard'] },
-            { label: t.nav.employes, icon: 'pi pi-users', routerLink: ['/manager/employes'] },
-            { label: t.nav.contrats, icon: 'pi pi-file', routerLink: ['/manager/contrats'] },
-            { label: t.nav.demandes, icon: 'pi pi-inbox', routerLink: ['/manager/demandes'], ...badge },
-            aiMenuItem,
-            { label: t.nav.parametres, icon: 'pi pi-cog', routerLink: ['/manager/parametres'] }]
-        : [
-            { label: t.nav.dashboard, icon: 'pi pi-home', routerLink: ['/user/dashboard'] },
-            { label: t.nav.mesContrats, icon: 'pi pi-file', routerLink: ['/user/contrats'] },
-            { label: t.nav.mesDemandes, icon: 'pi pi-inbox', routerLink: ['/user/demandes'], ...badge },
-            aiMenuItem,
-            { label: t.nav.parametres, icon: 'pi pi-cog', routerLink: ['/user/parametres'] }],
+          ? [
+              { label: t.nav.dashboard, icon: 'pi pi-home', routerLink: ['/manager/dashboard'] },
+              { label: t.nav.employes, icon: 'pi pi-users', routerLink: ['/manager/employes'] },
+              { label: t.nav.contrats, icon: 'pi pi-file', routerLink: ['/manager/contrats'] },
+              {
+                label: t.nav.demandes,
+                icon: 'pi pi-inbox',
+                routerLink: ['/manager/demandes'],
+                ...badge,
+              },
+              aiMenuItem,
+              { label: t.nav.parametres, icon: 'pi pi-cog', routerLink: ['/manager/parametres'] },
+            ]
+          : [
+              { label: t.nav.dashboard, icon: 'pi pi-home', routerLink: ['/user/dashboard'] },
+              { label: t.nav.mesContrats, icon: 'pi pi-file', routerLink: ['/user/contrats'] },
+              {
+                label: t.nav.mesDemandes,
+                icon: 'pi pi-inbox',
+                routerLink: ['/user/demandes'],
+                ...badge,
+              },
+              aiMenuItem,
+              { label: t.nav.parametres, icon: 'pi pi-cog', routerLink: ['/user/parametres'] },
+            ],
     );
   }
 
@@ -105,7 +130,7 @@ export class SidebarComponent {
     const organisationId =
       typeof user.organisationId === 'number'
         ? user.organisationId
-        : user.organisationId?.id ?? null;
+        : (user.organisationId?.id ?? null);
 
     this.messageApiService
       .getUnreadCount({ userId: user.id, role: user.role, organisationId })

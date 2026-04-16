@@ -2,35 +2,81 @@
   <ng-template pTemplate="header">
     <div class="p-3 flex justify-content-between align-items-center">
       <h3 class="m-0">{{ i18n.t().contrats.entretienTitle }}</h3>
-      <p-button icon="pi pi-plus" [label]="i18n.t().contrats.addIntervention" size="small" severity="success" (onClick)="onAddIntervention()"></p-button>
+      <p-button
+        icon="pi pi-plus"
+        [label]="i18n.t().contrats.addIntervention"
+        size="small"
+        severity="success"
+        (onClick)="onAddIntervention()"
+      ></p-button>
     </div>
   </ng-template>
 
   <!-- Formulaire inline ajout/édition -->
   @if (editingIntervention) {
     <div class="mb-3 p-3 surface-50 border-round">
-      <h4 class="mt-0">{{ interventionFormMode === 'create' ? i18n.t().contrats.newIntervention : i18n.t().contrats.editIntervention }}</h4>
+      <h4 class="mt-0">
+        {{
+          interventionFormMode === 'create'
+            ? i18n.t().contrats.newIntervention
+            : i18n.t().contrats.editIntervention
+        }}
+      </h4>
       <div class="grid">
         <div class="col-12 md:col-6">
           <label class="block text-600 mb-2">{{ i18n.t().contrats.interventionType }} *</label>
-          <input type="text" pInputText [(ngModel)]="currentIntervention.typeIntervention" class="w-full" [placeholder]="i18n.t().contrats.interventionTypePlaceholder" />
+          <input
+            type="text"
+            pInputText
+            [(ngModel)]="currentIntervention.typeIntervention"
+            class="w-full"
+            [placeholder]="i18n.t().contrats.interventionTypePlaceholder"
+          />
         </div>
         <div class="col-12 md:col-6">
           <label class="block text-600 mb-2">{{ i18n.t().contrats.interventionDate }} *</label>
-          <p-datepicker [(ngModel)]="interventionDate" dateFormat="dd/mm/yy" [showIcon]="true" class="w-full" [style]="{ 'width': '100%' }"></p-datepicker>
+          <p-datepicker
+            [(ngModel)]="interventionDate"
+            dateFormat="dd/mm/yy"
+            [showIcon]="true"
+            class="w-full"
+            [style]="{ width: '100%' }"
+          ></p-datepicker>
         </div>
         <div class="col-12">
-          <label class="block text-600 mb-2">{{ i18n.t().contrats.interventionDescription }} *</label>
-          <textarea pInputText [(ngModel)]="currentIntervention.description" class="w-full" rows="3" [placeholder]="i18n.t().contrats.interventionDescriptionPlaceholder"></textarea>
+          <label class="block text-600 mb-2"
+            >{{ i18n.t().contrats.interventionDescription }} *</label
+          >
+          <textarea
+            pInputText
+            [(ngModel)]="currentIntervention.description"
+            class="w-full"
+            rows="3"
+            [placeholder]="i18n.t().contrats.interventionDescriptionPlaceholder"
+          ></textarea>
         </div>
         <div class="col-12 md:col-6">
           <label class="block text-600 mb-2">{{ i18n.t().contrats.interventionCost }} *</label>
-          <p-inputnumber [(ngModel)]="currentIntervention.cout" mode="decimal" [minFractionDigits]="2" class="w-full" [style]="{ 'width': '100%' }"></p-inputnumber>
+          <p-inputnumber
+            [(ngModel)]="currentIntervention.cout"
+            mode="decimal"
+            [minFractionDigits]="2"
+            class="w-full"
+            [style]="{ width: '100%' }"
+          ></p-inputnumber>
         </div>
       </div>
       <div class="flex gap-2 justify-content-end mt-3">
-        <p-button [label]="i18n.t().common.annuler"      severity="secondary" (onClick)="onCancelInterventionEdit()"></p-button>
-        <p-button [label]="i18n.t().common.enregistrer"  icon="pi pi-check"   (onClick)="onSaveIntervention()"></p-button>
+        <p-button
+          [label]="i18n.t().common.annuler"
+          severity="secondary"
+          (onClick)="onCancelInterventionEdit()"
+        ></p-button>
+        <p-button
+          [label]="i18n.t().common.enregistrer"
+          icon="pi pi-check"
+          (onClick)="onSaveIntervention()"
+        ></p-button>
       </div>
     </div>
   }
@@ -55,8 +101,22 @@
           <td>{{ formatCurrency(intervention.cout) }}</td>
           <td>
             <div class="flex gap-1">
-              <p-button icon="pi pi-pencil" [text]="true" [rounded]="true" severity="secondary" (onClick)="onEditIntervention(intervention)" [pTooltip]="i18n.t().common.modifier"></p-button>
-              <p-button icon="pi pi-trash"  [text]="true" [rounded]="true" severity="danger"    (onClick)="onDeleteIntervention(intervention)" [pTooltip]="i18n.t().common.supprimer"></p-button>
+              <p-button
+                icon="pi pi-pencil"
+                [text]="true"
+                [rounded]="true"
+                severity="secondary"
+                (onClick)="onEditIntervention(intervention)"
+                [pTooltip]="i18n.t().common.modifier"
+              ></p-button>
+              <p-button
+                icon="pi pi-trash"
+                [text]="true"
+                [rounded]="true"
+                severity="danger"
+                (onClick)="onDeleteIntervention(intervention)"
+                [pTooltip]="i18n.t().common.supprimer"
+              ></p-button>
             </div>
           </td>
         </tr>

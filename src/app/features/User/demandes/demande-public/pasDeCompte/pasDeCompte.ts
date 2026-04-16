@@ -1,4 +1,7 @@
-import { Organisation, OrganisationService } from '../../../../../core/services/organisation.service';
+import {
+  Organisation,
+  OrganisationService,
+} from '../../../../../core/services/organisation.service';
 import { MessageService } from '../../../../../core/services/message.service';
 import { AuthService } from '../../../../../core/services/auth.service';
 import { I18nService } from '../../../../../core/services/I18n.service';
@@ -48,7 +51,9 @@ export class FaireDemandeComponent {
     });
   }
 
-  onPrimaryAction(): void { this.goToCreateLamdaUser(); }
+  onPrimaryAction(): void {
+    this.goToCreateLamdaUser();
+  }
 
   goToCreateLamdaUser(): void {
     const qp: Record<string, string> = {};
@@ -76,7 +81,9 @@ export class FaireDemandeComponent {
   }
 
   get organisationOptions(): Organisation[] {
-    return this.organisations().slice().sort((a, b) => a.name.localeCompare(b.name));
+    return this.organisations()
+      .slice()
+      .sort((a, b) => a.name.localeCompare(b.name));
   }
 
   get supportMailto(): string {

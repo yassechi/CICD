@@ -30,7 +30,7 @@ export const authGuard: CanActivateFn = (route, state) => {
       case 2:
         router.navigate(['/manager/dashboard']);
         break;
-      case 3: 
+      case 3:
         router.navigate(['/user/dashboard']);
         break;
       default:

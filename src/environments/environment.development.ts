@@ -1,5 +1,5 @@
 export const environment = {
-   urls: {
+  urls: {
     coreBase: 'https://localhost:7000',
     coreApi: 'https://localhost:7000/api',
     // coreBase: 'mojoapi-cqcdfzgsgebcc9d5.westeurope-01.azurewebsites.net',

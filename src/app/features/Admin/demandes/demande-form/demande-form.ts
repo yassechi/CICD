@@ -15,7 +15,15 @@ import { CardModule } from 'primeng/card';
 @Component({
   selector: 'app-demande-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CardModule, ButtonModule, SelectModule, CheckboxModule, InputNumberModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    CardModule,
+    ButtonModule,
+    SelectModule,
+    CheckboxModule,
+    InputNumberModule,
+  ],
   templateUrl: './demande-form.html',
   styleUrls: ['./demande-form.scss'],
 })
@@ -73,7 +81,10 @@ export class DemandeFormDialogComponent {
   }
 
   onSubmit(): void {
-    if (this.form.invalid) { this.form.markAllAsTouched(); return; }
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
     this.loading.set(true);
     const v = this.form.getRawValue();
@@ -85,21 +96,34 @@ export class DemandeFormDialogComponent {
       ...(this.isEdit && this.demandeId ? { id: this.demandeId } : {}),
     };
 
-    (this.isEdit ? this.demandeService.update(payload) : this.demandeService.create(payload)).subscribe({
+    (this.isEdit
+      ? this.demandeService.update(payload)
+      : this.demandeService.create(payload)
+    ).subscribe({
       next: () => {
         this.messageService.showSuccess(
-          this.isEdit ? this.i18n.get('demandes.demandeUpdated') : this.i18n.get('demandes.demandeCreated'),
+          this.isEdit
+            ? this.i18n.get('demandes.demandeUpdated')
+            : this.i18n.get('demandes.demandeCreated'),
           this.i18n.get('common.succes'),
         );
         this.loading.set(false);
         this.goBack();
       },
       error: () => {
-        this.messageService.showError(this.isEdit ? this.i18n.get('demandes.updateError') : this.i18n.get('demandes.createError'));
+        this.messageService.showError(
+          this.isEdit
+            ? this.i18n.get('demandes.updateError')
+            : this.i18n.get('demandes.createError'),
+        );
         this.loading.set(false);
       },
     });
   }
 
-  goBack(): void { this.router.navigate([this.router.url.startsWith('/manager/') ? '/manager/demandes' : '/admin/demandes']); }
+  goBack(): void {
+    this.router.navigate([
+      this.router.url.startsWith('/manager/') ? '/manager/demandes' : '/admin/demandes',
+    ]);
+  }
 }

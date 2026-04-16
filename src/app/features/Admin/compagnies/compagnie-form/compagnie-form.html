@@ -1,7 +1,9 @@
 <div class="compagnie-form-page page-shell">
   <div class="page-header">
     <div>
-      <h1 class="page-title">{{ isEdit ? i18n.t().compagnies.formTitleEdit : i18n.t().compagnies.formTitleCreate }}</h1>
+      <h1 class="page-title">
+        {{ isEdit ? i18n.t().compagnies.formTitleEdit : i18n.t().compagnies.formTitleCreate }}
+      </h1>
       <p class="page-subtitle">{{ i18n.t().compagnies.formSubtitle }}</p>
     </div>
     <p-button
@@ -46,7 +48,9 @@
 
       <!-- Nom -->
       <div class="field mb-4">
-        <label for="name" class="block mb-2 font-semibold">{{ i18n.t().compagnies.nameLabel }} *</label>
+        <label for="name" class="block mb-2 font-semibold"
+          >{{ i18n.t().compagnies.nameLabel }} *</label
+        >
         <input
           pInputText
           id="name"
@@ -78,7 +82,9 @@
 
       <!-- Adresse -->
       <div class="field mb-4">
-        <label for="address" class="block mb-2 font-semibold">{{ i18n.t().compagnies.addressLabel }} *</label>
+        <label for="address" class="block mb-2 font-semibold"
+          >{{ i18n.t().compagnies.addressLabel }} *</label
+        >
         <input
           pInputText
           id="address"
@@ -94,7 +100,9 @@
 
       <!-- Email Contact -->
       <div class="field mb-4">
-        <label for="contactEmail" class="block mb-2 font-semibold">{{ i18n.t().compagnies.contactEmailLabel }} *</label>
+        <label for="contactEmail" class="block mb-2 font-semibold"
+          >{{ i18n.t().compagnies.contactEmailLabel }} *</label
+        >
         <input
           pInputText
           id="contactEmail"
@@ -118,7 +126,9 @@
 
       <!-- Contact (Utilisateur responsable) -->
       <div class="field mb-4">
-        <label for="idContact" class="block mb-2 font-semibold">{{ i18n.t().compagnies.contactLabel }} *</label>
+        <label for="idContact" class="block mb-2 font-semibold"
+          >{{ i18n.t().compagnies.contactLabel }} *</label
+        >
         <p-select
           id="idContact"
           formControlName="idContact"
@@ -148,7 +158,9 @@
 
       <!-- Email Autorise -->
       <div class="field mb-4">
-        <label for="emailAutorise" class="block mb-2 font-semibold">{{ i18n.t().compagnies.emailDomainLabel }} *</label>
+        <label for="emailAutorise" class="block mb-2 font-semibold"
+          >{{ i18n.t().compagnies.emailDomainLabel }} *</label
+        >
         <input
           pInputText
           id="emailAutorise"

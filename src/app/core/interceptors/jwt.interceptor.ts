@@ -7,11 +7,10 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   if (token && !isCmsRequest) {
     req = req.clone({
       setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
   }
 
   return next(req);
 };
-

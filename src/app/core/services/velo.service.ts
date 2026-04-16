@@ -18,7 +18,7 @@ export interface Velo {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class VeloService {
   private apiUrl = `${environment.urls.coreApi}/Velo`;

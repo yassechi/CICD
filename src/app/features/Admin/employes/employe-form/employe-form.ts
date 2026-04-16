@@ -17,9 +17,15 @@ import { CardModule } from 'primeng/card';
   selector: 'app-employe-form',
   standalone: true,
   imports: [
-    CommonModule, ReactiveFormsModule,
-    CardModule, ButtonModule, InputTextModule,
-    CheckboxModule, SelectModule, PasswordModule],
+    CommonModule,
+    ReactiveFormsModule,
+    CardModule,
+    ButtonModule,
+    InputTextModule,
+    CheckboxModule,
+    SelectModule,
+    PasswordModule,
+  ],
   templateUrl: './employe-form.html',
   styleUrls: ['./employe-form.scss'],
 })
@@ -30,20 +36,23 @@ export class EmployeFormDialogComponent {
   userId: string | null = null;
 
   private readonly fb = inject(FormBuilder);
-  form: FormGroup = this.fb.group({
-    id: [null],
-    userName: ['', Validators.required],
-    firstName: ['', Validators.required],
-    lastName: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
-    phoneNumber: ['', Validators.required],
-    password: ['', [Validators.required, Validators.minLength(8)]],
-    confirmPassword: ['', Validators.required],
-    role: [UserRole.User, Validators.required],
-    isActif: [true],
-    organisationId: [null, Validators.required],
-    tailleCm: [177],
-  }, { validators: this.passwordMatchValidator });
+  form: FormGroup = this.fb.group(
+    {
+      id: [null],
+      userName: ['', Validators.required],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      phoneNumber: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      confirmPassword: ['', Validators.required],
+      role: [UserRole.User, Validators.required],
+      isActif: [true],
+      organisationId: [null, Validators.required],
+      tailleCm: [177],
+    },
+    { validators: this.passwordMatchValidator },
+  );
 
   private readonly userService = inject(UserService);
   private readonly organisationService = inject(OrganisationService);
@@ -59,7 +68,9 @@ export class EmployeFormDialogComponent {
   ]);
 
   constructor() {
-    this.organisationService.getAll().subscribe({ next: (data) => this.organisations.set(data ?? []) });
+    this.organisationService
+      .getAll()
+      .subscribe({ next: (data) => this.organisations.set(data ?? []) });
 
     const id = this.route.snapshot.paramMap.get('id');
     if (!id) return;
@@ -76,7 +87,8 @@ export class EmployeFormDialogComponent {
       next: (u: any) => {
         this.form.patchValue({
           ...u,
-          organisationId: typeof u.organisationId === 'object' ? u.organisationId.id : u.organisationId,
+          organisationId:
+            typeof u.organisationId === 'object' ? u.organisationId.id : u.organisationId,
           tailleCm: u.tailleCm || 177,
         });
         this.loading.set(false);
@@ -100,7 +112,10 @@ export class EmployeFormDialogComponent {
       this.messageService.showError(this.i18n.get('employes.passwordMismatch'));
       return;
     }
-    if (this.form.invalid) { this.form.markAllAsTouched(); return; }
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
     this.loading.set(true);
     const payload: any = {
@@ -124,7 +139,9 @@ export class EmployeFormDialogComponent {
     (this.isEdit ? this.userService.update(payload) : this.userService.create(payload)).subscribe({
       next: () => {
         this.messageService.showSuccess(
-          this.isEdit ? this.i18n.get('employes.updateSuccess') : this.i18n.get('employes.createSuccess'),
+          this.isEdit
+            ? this.i18n.get('employes.updateSuccess')
+            : this.i18n.get('employes.createSuccess'),
           this.i18n.get('common.succes'),
         );
         this.loading.set(false);
@@ -141,7 +158,11 @@ export class EmployeFormDialogComponent {
     });
   }
 
-  goBack(): void { this.router.navigate([this.router.url.startsWith('/manager/') ? '/manager/employes' : '/admin/employes']); }
+  goBack(): void {
+    this.router.navigate([
+      this.router.url.startsWith('/manager/') ? '/manager/employes' : '/admin/employes',
+    ]);
+  }
 
   private passwordMatchValidator(form: FormGroup) {
     const pwd = (form.get('password')?.value ?? '').toString().trim();

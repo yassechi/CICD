@@ -291,11 +291,7 @@ a {
 }
 
 .p-button:enabled:hover {
-  background: linear-gradient(
-    135deg,
-    var(--mojo-button-hover-start),
-    var(--mojo-button-hover-end)
-  );
+  background: linear-gradient(135deg, var(--mojo-button-hover-start), var(--mojo-button-hover-end));
 }
 
 .p-button.p-button-text {

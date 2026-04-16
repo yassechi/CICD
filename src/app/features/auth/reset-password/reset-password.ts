@@ -13,9 +13,16 @@ import { CardModule } from 'primeng/card';
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CardModule, InputTextModule, PasswordModule, ButtonModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    CardModule,
+    InputTextModule,
+    PasswordModule,
+    ButtonModule,
+  ],
   templateUrl: './reset-password.html',
-  styleUrls: ['./reset-password.scss']
+  styleUrls: ['./reset-password.scss'],
 })
 export class ResetPasswordComponent {
   private fb = inject(FormBuilder);
@@ -25,17 +32,20 @@ export class ResetPasswordComponent {
   private messageService = inject(MessageService);
   readonly i18n = inject(I18nService);
 
-  resetForm: FormGroup = this.fb.group({
-    newPassword: ['', [Validators.required, Validators.minLength(8)]],
-    confirmPassword: ['', [Validators.required]]
-  }, { validators: this.passwordMatchValidator });
+  resetForm: FormGroup = this.fb.group(
+    {
+      newPassword: ['', [Validators.required, Validators.minLength(8)]],
+      confirmPassword: ['', [Validators.required]],
+    },
+    { validators: this.passwordMatchValidator },
+  );
 
   loading = signal(false);
   token = '';
   email = '';
 
   constructor() {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       this.token = params['token'] || '';
       this.email = params['email'] || '';
       if (!this.token || !this.email) {
@@ -56,25 +66,34 @@ export class ResetPasswordComponent {
   }
 
   onSubmit(): void {
-    if (this.resetForm.invalid) { this.resetForm.markAllAsTouched(); return; }
+    if (this.resetForm.invalid) {
+      this.resetForm.markAllAsTouched();
+      return;
+    }
     this.loading.set(true);
-    this.authService.resetPassword({
-      email: this.email,
-      token: this.token,
-      newPassword: this.resetForm.value.newPassword
-    }).subscribe({
-      next: () => {
-        this.messageService.showSuccess(this.i18n.get('auth.resetSuccess'));
-        setTimeout(() => this.router.navigate(['/login']), 2000);
-        this.loading.set(false);
-      },
-      error: (error) => {
-        this.loading.set(false);
-        this.messageService.showError(error.error?.message || this.i18n.get('auth.resetError'));
-      }
-    });
+    this.authService
+      .resetPassword({
+        email: this.email,
+        token: this.token,
+        newPassword: this.resetForm.value.newPassword,
+      })
+      .subscribe({
+        next: () => {
+          this.messageService.showSuccess(this.i18n.get('auth.resetSuccess'));
+          setTimeout(() => this.router.navigate(['/login']), 2000);
+          this.loading.set(false);
+        },
+        error: (error) => {
+          this.loading.set(false);
+          this.messageService.showError(error.error?.message || this.i18n.get('auth.resetError'));
+        },
+      });
   }
 
-  get newPassword() { return this.resetForm.get('newPassword'); }
-  get confirmPassword() { return this.resetForm.get('confirmPassword'); }
+  get newPassword() {
+    return this.resetForm.get('newPassword');
+  }
+  get confirmPassword() {
+    return this.resetForm.get('confirmPassword');
+  }
 }

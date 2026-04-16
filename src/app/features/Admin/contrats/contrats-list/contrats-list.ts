@@ -28,7 +28,8 @@ import { finalize } from 'rxjs';
     TooltipModule,
     ConfirmDialogModule,
     SelectModule,
-    InputTextModule],
+    InputTextModule,
+  ],
   providers: [ConfirmationService],
   templateUrl: './contrats-list.html',
   styleUrls: ['./contrats-list.scss'],
@@ -71,14 +72,17 @@ export class AdminContratsComponent {
       next: (types) => this.rawTypes.set(types ?? []),
       error: () => this.messageService.showError(this.i18n.get('contrats.loadTypesError')),
     });
-    effect(() => {
-      this.i18n.lang();
-      const t = this.i18n.t();
-      this.typeOptions.set([
-        { label: t.common.tous, value: 'all' },
-        ...this.rawTypes().map((v) => ({ label: v, value: v })),
-      ]);
-    }, { allowSignalWrites: true });
+    effect(
+      () => {
+        this.i18n.lang();
+        const t = this.i18n.t();
+        this.typeOptions.set([
+          { label: t.common.tous, value: 'all' },
+          ...this.rawTypes().map((v) => ({ label: v, value: v })),
+        ]);
+      },
+      { allowSignalWrites: true },
+    );
     this.load();
   }
 
@@ -130,7 +134,8 @@ export class AdminContratsComponent {
                   this.messageService.showSuccess(this.i18n.get('contrats.terminateSuccess'));
                   this.load();
                 },
-                error: () => this.messageService.showError(this.i18n.get('contrats.terminateError')),
+                error: () =>
+                  this.messageService.showError(this.i18n.get('contrats.terminateError')),
               }),
           error: () => this.messageService.showError(this.i18n.get('contrats.loadOneError')),
         }),

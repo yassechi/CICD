@@ -1,4 +1,8 @@
-import { AdminDemandeListItem, DemandeService, DemandeStatus } from '../../../../core/services/demande.service';
+import {
+  AdminDemandeListItem,
+  DemandeService,
+  DemandeStatus,
+} from '../../../../core/services/demande.service';
 import { MessageApiService } from '../../../../core/services/message-api.service';
 import { MessageService } from '../../../../core/services/message.service';
 import { I18nService } from '../../../../core/services/I18n.service';
@@ -44,11 +48,18 @@ export class DemandesUtilisateurComponent {
 
   load(): void {
     const userId = this.currentUser?.id;
-    if (!userId) { this.demandes.set([]); return; }
+    if (!userId) {
+      this.demandes.set([]);
+      return;
+    }
 
     this.loading.set(true);
     this.demandeService.getList({ userId }).subscribe({
-      next: (data) => { this.demandes.set(data ?? []); this.loadUnreadDiscussions(); this.loading.set(false); },
+      next: (data) => {
+        this.demandes.set(data ?? []);
+        this.loadUnreadDiscussions();
+        this.loading.set(false);
+      },
       error: () => {
         this.messageService.showError(this.i18n.get('demandes.loadDemandeError'));
         this.loading.set(false);
@@ -58,17 +69,32 @@ export class DemandesUtilisateurComponent {
 
   private loadUnreadDiscussions(): void {
     const user = this.currentUser;
-    if (!user?.id) { this.unreadDiscussionIds.set(new Set()); return; }
+    if (!user?.id) {
+      this.unreadDiscussionIds.set(new Set());
+      return;
+    }
     this.messageApiService.getUnreadDiscussions({ userId: user.id, role: user.role }).subscribe({
       next: (ids) => this.unreadDiscussionIds.set(new Set(ids ?? [])),
     });
   }
 
-  onCreate(): void { this.router.navigate(['/user/demandes/new']); }
-  onView(d: AdminDemandeListItem): void { this.router.navigate(['/user/demandes', d.id]); }
+  onCreate(): void {
+    this.router.navigate(['/user/demandes/new']);
+  }
+  onView(d: AdminDemandeListItem): void {
+    this.router.navigate(['/user/demandes', d.id]);
+  }
 
-  hasUnreadMessages(d: AdminDemandeListItem): boolean { return !!d.discussionId && this.unreadDiscussionIds().has(d.discussionId); }
-  getStatusLabel(s: DemandeStatus): string { return this.demandeService.getStatusLabel(s); }
-  getStatusSeverity(s: DemandeStatus): 'success' | 'secondary' | 'info' | 'warn' | 'danger' { return this.demandeService.getStatusSeverity(s); }
-  getStatusClass(s: DemandeStatus): string { return this.demandeService.getStatusClass(s); }
+  hasUnreadMessages(d: AdminDemandeListItem): boolean {
+    return !!d.discussionId && this.unreadDiscussionIds().has(d.discussionId);
+  }
+  getStatusLabel(s: DemandeStatus): string {
+    return this.demandeService.getStatusLabel(s);
+  }
+  getStatusSeverity(s: DemandeStatus): 'success' | 'secondary' | 'info' | 'warn' | 'danger' {
+    return this.demandeService.getStatusSeverity(s);
+  }
+  getStatusClass(s: DemandeStatus): string {
+    return this.demandeService.getStatusClass(s);
+  }
 }

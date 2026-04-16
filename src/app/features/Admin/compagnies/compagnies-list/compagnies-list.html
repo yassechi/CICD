@@ -4,7 +4,11 @@
       <h1 class="page-title">{{ i18n.t().compagnies.title }}</h1>
       <p class="page-subtitle">{{ i18n.t().compagnies.subtitle }}</p>
     </div>
-    <p-button [label]="i18n.t().compagnies.create" icon="pi pi-plus" (click)="onCreate()"></p-button>
+    <p-button
+      [label]="i18n.t().compagnies.create"
+      icon="pi pi-plus"
+      (click)="onCreate()"
+    ></p-button>
   </div>
 
   <p-card class="section-card mb-3">
@@ -75,10 +79,7 @@
                     style="width: 50px; height: 50px; object-fit: contain"
                   />
                 } @else {
-                  <i
-                    class="pi pi-building"
-                    style="font-size: 2rem; color: #ccc"
-                  ></i>
+                  <i class="pi pi-building" style="font-size: 2rem; color: #ccc"></i>
                 }
               </td>
               <td>{{ org.name }}</td>

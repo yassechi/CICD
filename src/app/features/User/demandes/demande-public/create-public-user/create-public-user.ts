@@ -1,4 +1,7 @@
-import { Organisation, OrganisationService } from '../../../../../core/services/organisation.service';
+import {
+  Organisation,
+  OrganisationService,
+} from '../../../../../core/services/organisation.service';
 import { FormBuilder, Validators, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { UserService, UserRole } from '../../../../../core/services/user.service';
 import { MessageService } from '../../../../../core/services/message.service';
@@ -14,7 +17,14 @@ import { SelectModule } from 'primeng/select';
 @Component({
   selector: 'app-create-lamda-user',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ButtonModule, InputTextModule, PasswordModule, SelectModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ButtonModule,
+    InputTextModule,
+    PasswordModule,
+    SelectModule,
+  ],
   templateUrl: './create-public-user.html',
   styleUrls: ['./create-public-user.scss'],
 })
@@ -35,21 +45,26 @@ export class CreateLamdaUserComponent {
   private preselectedOrganisationId: number | null = null;
   organisationLocked = false;
 
-  form = this.fb.group({
-    userName: ['', [Validators.required]],
-    firstName: ['', [Validators.required]],
-    lastName: ['', [Validators.required]],
-    email: ['', [Validators.required, Validators.email]],
-    phoneNumber: ['', [Validators.required]],
-    password: ['', [Validators.required, Validators.minLength(8)]],
-    confirmPassword: ['', [Validators.required]],
-    organisationId: [null, [Validators.required]],
-  }, { validators: this.passwordMatchValidator });
+  form = this.fb.group(
+    {
+      userName: ['', [Validators.required]],
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      phoneNumber: ['', [Validators.required]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      confirmPassword: ['', [Validators.required]],
+      organisationId: [null, [Validators.required]],
+    },
+    { validators: this.passwordMatchValidator },
+  );
 
   constructor() {
     localStorage.clear(); ////////////////////////////
     const params = this.route.snapshot.queryParams;
-    this.preselectedOrganisationId = params['organisationId'] ? Number(params['organisationId']) : null;
+    this.preselectedOrganisationId = params['organisationId']
+      ? Number(params['organisationId'])
+      : null;
     this.organisationName = params['organisationName'] || '';
     this.organisationLocked = !!this.preselectedOrganisationId || !!this.organisationName;
 
@@ -68,37 +83,47 @@ export class CreateLamdaUserComponent {
   }
 
   onSubmit(): void {
-    if (this.form.invalid) { this.markFormGroupTouched(this.form); return; }
+    if (this.form.invalid) {
+      this.markFormGroupTouched(this.form);
+      return;
+    }
     this.loading = true;
     const values = this.form.getRawValue();
     const email = String(values.email ?? '').trim();
     const password = String(values.password ?? '');
 
-    this.userService.create({
-      userName: String(values.userName ?? '').trim(),
-      firstName: String(values.firstName ?? '').trim(),
-      lastName: String(values.lastName ?? '').trim(),
-      email,
-      phoneNumber: String(values.phoneNumber ?? '').trim(),
-      password,
-      confirmPassword: values.confirmPassword,
-      role: UserRole.User,
-      isActif: true,
-      organisationId: Number(values.organisationId),
-    }).subscribe({
-      next: () => this.authService.login({ email, password }, { redirectToDashboard: false }).subscribe({
-        next: (response) => this.ensureUserActive(response.id, values),
-        error: () => {
+    this.userService
+      .create({
+        userName: String(values.userName ?? '').trim(),
+        firstName: String(values.firstName ?? '').trim(),
+        lastName: String(values.lastName ?? '').trim(),
+        email,
+        phoneNumber: String(values.phoneNumber ?? '').trim(),
+        password,
+        confirmPassword: values.confirmPassword,
+        role: UserRole.User,
+        isActif: true,
+        organisationId: Number(values.organisationId),
+      })
+      .subscribe({
+        next: () =>
+          this.authService.login({ email, password }, { redirectToDashboard: false }).subscribe({
+            next: (response) => this.ensureUserActive(response.id, values),
+            error: () => {
+              this.loading = false;
+              this.messageService.showError(this.i18n.get('auth.accountCreatedButLoginFailed'));
+            },
+          }),
+        error: (error) => {
           this.loading = false;
-          this.messageService.showError(this.i18n.get('auth.accountCreatedButLoginFailed'));
+          const message =
+            error?.error?.message ||
+            (error instanceof Error && error.message
+              ? error.message
+              : this.i18n.get('auth.registerError'));
+          this.messageService.showError(message);
         },
-      }),
-      error: (error) => {
-        this.loading = false;
-        const message = error?.error?.message || (error instanceof Error && error.message ? error.message : this.i18n.get('auth.registerError'));
-        this.messageService.showError(message);
-      },
-    });
+      });
   }
 
   private trySelectOrganisation(): void {
@@ -112,7 +137,9 @@ export class CreateLamdaUserComponent {
       return;
     }
     if (this.organisationName) {
-      const selected = this.organisations.find((org) => org.name.toLowerCase() === this.organisationName.toLowerCase());
+      const selected = this.organisations.find(
+        (org) => org.name.toLowerCase() === this.organisationName.toLowerCase(),
+      );
       if (selected) {
         this.form.patchValue({ organisationId: selected.id });
         this.preselectedOrganisationId = selected.id;
@@ -122,7 +149,7 @@ export class CreateLamdaUserComponent {
 
   private findSelectedOrganisation(): Organisation | null {
     const orgId = this.form.get('organisationId')?.value;
-    return orgId ? this.organisations.find((org) => org.id === Number(orgId)) ?? null : null;
+    return orgId ? (this.organisations.find((org) => org.id === Number(orgId)) ?? null) : null;
   }
 
   private markFormGroupTouched(formGroup: FormGroup): void {
@@ -158,25 +185,32 @@ export class CreateLamdaUserComponent {
   private ensureUserActive(userId: string, values: any): void {
     this.userService.getOne(userId).subscribe({
       next: (user) => {
-        if (user.isActif) { this.finishRegistration(values); return; }
-        this.userService.update({
-          id: user.id,
-          firstName: user.firstName || values.firstName,
-          lastName: user.lastName || values.lastName,
-          userName: user.userName || values.userName,
-          email: user.email || values.email,
-          phoneNumber: user.phoneNumber || values.phoneNumber,
-          role: UserRole.User,
-          tailleCm: user.tailleCm ?? 177,
-          isActif: true,
-          organisationId: Number(user.organisationId ?? values.organisationId),
-        }).subscribe({
-          next: () => this.finishRegistration(values),
-          error: () => {
-            this.loading = false;
-            this.messageService.showError(this.i18n.get('auth.accountCreatedButActivationFailed'));
-          },
-        });
+        if (user.isActif) {
+          this.finishRegistration(values);
+          return;
+        }
+        this.userService
+          .update({
+            id: user.id,
+            firstName: user.firstName || values.firstName,
+            lastName: user.lastName || values.lastName,
+            userName: user.userName || values.userName,
+            email: user.email || values.email,
+            phoneNumber: user.phoneNumber || values.phoneNumber,
+            role: UserRole.User,
+            tailleCm: user.tailleCm ?? 177,
+            isActif: true,
+            organisationId: Number(user.organisationId ?? values.organisationId),
+          })
+          .subscribe({
+            next: () => this.finishRegistration(values),
+            error: () => {
+              this.loading = false;
+              this.messageService.showError(
+                this.i18n.get('auth.accountCreatedButActivationFailed'),
+              );
+            },
+          });
       },
       error: () => this.finishRegistration(values),
     });
@@ -184,13 +218,19 @@ export class CreateLamdaUserComponent {
 
   private finishRegistration(values: any): void {
     this.loading = false;
-    this.messageService.showSuccess(this.i18n.get('auth.accountCreatedAndLogged'), this.i18n.get('common.succes'));
+    this.messageService.showSuccess(
+      this.i18n.get('auth.accountCreatedAndLogged'),
+      this.i18n.get('common.succes'),
+    );
     const organisation = this.findSelectedOrganisation();
     const queryParams: Record<string, string> = {};
     if (values.firstName) queryParams['firstName'] = String(values.firstName).trim();
     if (values.lastName) queryParams['lastName'] = String(values.lastName).trim();
-    if (organisation?.name || this.organisationName) queryParams['organisationName'] = organisation?.name ?? this.organisationName;
-    const organisationId = organisation?.id ?? (values.organisationId ? Number(values.organisationId) : this.preselectedOrganisationId);
+    if (organisation?.name || this.organisationName)
+      queryParams['organisationName'] = organisation?.name ?? this.organisationName;
+    const organisationId =
+      organisation?.id ??
+      (values.organisationId ? Number(values.organisationId) : this.preselectedOrganisationId);
     if (organisationId) queryParams['organisationId'] = String(organisationId);
     this.router.navigate(['/choix-parcours'], { queryParams });
   }

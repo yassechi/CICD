@@ -30,22 +30,39 @@ export class ManagerEmployesComponent {
   private readonly orgId: number | null = (() => {
     const user = this.authService.getCurrentUser();
     if (!user?.organisationId) return null;
-    return typeof user.organisationId === 'object' ? (user.organisationId as any).id : user.organisationId;
+    return typeof user.organisationId === 'object'
+      ? (user.organisationId as any).id
+      : user.organisationId;
   })();
 
-  constructor() { this.load(); }
+  constructor() {
+    this.load();
+  }
 
   load(): void {
-    if (!this.orgId) { this.employes.set([]); return; }
+    if (!this.orgId) {
+      this.employes.set([]);
+      return;
+    }
     this.loading.set(true);
     this.userService.getByOrganisation(this.orgId, UserRole.User).subscribe({
-      next: (data) => { this.employes.set(data ?? []); this.loading.set(false); },
-      error: () => { this.messageService.showError(this.i18n.get('employes.loadError')); this.loading.set(false); },
+      next: (data) => {
+        this.employes.set(data ?? []);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.messageService.showError(this.i18n.get('employes.loadError'));
+        this.loading.set(false);
+      },
     });
   }
 
-  onCreate(): void { this.router.navigate(['/manager/employes/new']); }
-  onView(u: User): void { this.router.navigate(['/manager/employes', u.id]); }
+  onCreate(): void {
+    this.router.navigate(['/manager/employes/new']);
+  }
+  onView(u: User): void {
+    this.router.navigate(['/manager/employes', u.id]);
+  }
 
   getRoleLabel(role: UserRole): string {
     return role === UserRole.Admin
@@ -57,9 +74,17 @@ export class ManagerEmployesComponent {
           : this.i18n.t().common.inconnu;
   }
   getRoleSeverity(role: UserRole): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
-    return role === UserRole.Admin ? 'danger' : role === UserRole.Manager ? 'warn' : role === UserRole.User ? 'info' : 'secondary';
+    return role === UserRole.Admin
+      ? 'danger'
+      : role === UserRole.Manager
+        ? 'warn'
+        : role === UserRole.User
+          ? 'info'
+          : 'secondary';
   }
   getOrganisationName(u: User): string {
-    return u.organisationId && typeof u.organisationId === 'object' ? (u.organisationId as any).name || this.i18n.t().common.inconnu : this.i18n.t().common.inconnu;
+    return u.organisationId && typeof u.organisationId === 'object'
+      ? (u.organisationId as any).name || this.i18n.t().common.inconnu
+      : this.i18n.t().common.inconnu;
   }
 }

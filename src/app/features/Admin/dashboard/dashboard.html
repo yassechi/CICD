@@ -87,266 +87,268 @@
     <div class="col-12">
       <div class="grid ai-docs-grid">
         <div class="col-12 lg:col-6">
-        <p-card class="section-card ai-card">
-          <ng-template pTemplate="header">
-            <div class="p-3">
-              <h3 class="m-0 chart-title">{{ i18n.t().ai.docsAdminTitle }}</h3>
-            </div>
-          </ng-template>
-          <div class="ai-upload">
-            <input
-              #aiFileInput
-              type="file"
-              class="ai-hidden-input"
-              accept="application/pdf,.pdf"
-              multiple
-              (change)="onAiFileInputChange($event)"
-            />
-            <div
-              class="ai-dropzone"
-              role="button"
-              tabindex="0"
-              [attr.aria-label]="i18n.t().ai.choosePdf"
-              [class.is-dragover]="isDragOver()"
-              (click)="aiFileInput.click()"
-              (keydown.enter)="aiFileInput.click()"
-              (keydown.space)="$event.preventDefault(); aiFileInput.click()"
-              (dragover)="onAiDragOver($event)"
-              (dragleave)="onAiDragLeave($event)"
-              (drop)="onAiDrop($event)"
-            >
-              <div class="ai-dropzone-icon">
-                <i class="pi pi-cloud-upload"></i>
+          <p-card class="section-card ai-card">
+            <ng-template pTemplate="header">
+              <div class="p-3">
+                <h3 class="m-0 chart-title">{{ i18n.t().ai.docsAdminTitle }}</h3>
               </div>
-              <div class="ai-dropzone-title">{{ i18n.t().ai.dropTitleAdmin }}</div>
-              <div class="ai-dropzone-sub">{{ i18n.t().ai.dropSub }}</div>
-              <div class="ai-dropzone-meta">{{ i18n.t().ai.dropMeta }}</div>
-            </div>
+            </ng-template>
+            <div class="ai-upload">
+              <input
+                #aiFileInput
+                type="file"
+                class="ai-hidden-input"
+                accept="application/pdf,.pdf"
+                multiple
+                (change)="onAiFileInputChange($event)"
+              />
+              <div
+                class="ai-dropzone"
+                role="button"
+                tabindex="0"
+                [attr.aria-label]="i18n.t().ai.choosePdf"
+                [class.is-dragover]="isDragOver()"
+                (click)="aiFileInput.click()"
+                (keydown.enter)="aiFileInput.click()"
+                (keydown.space)="$event.preventDefault(); aiFileInput.click()"
+                (dragover)="onAiDragOver($event)"
+                (dragleave)="onAiDragLeave($event)"
+                (drop)="onAiDrop($event)"
+              >
+                <div class="ai-dropzone-icon">
+                  <i class="pi pi-cloud-upload"></i>
+                </div>
+                <div class="ai-dropzone-title">{{ i18n.t().ai.dropTitleAdmin }}</div>
+                <div class="ai-dropzone-sub">{{ i18n.t().ai.dropSub }}</div>
+                <div class="ai-dropzone-meta">{{ i18n.t().ai.dropMeta }}</div>
+              </div>
 
-            <div class="ai-upload-list">
-              @if (selectedAiFiles().length === 0) {
-                <div class="text-600">{{ i18n.t().ai.noFileSelected }}</div>
-              } @else {
-                @for (file of selectedAiFiles(); track $index) {
-                  <div class="ai-file-item">
-                    <div>
-                      <div class="ai-file-name">{{ file.name }}</div>
-                      <div class="ai-file-meta">{{ formatFileSize(file.size) }}</div>
-                    </div>
-                    <div class="ai-file-actions">
-                      <i class="pi pi-file"></i>
-                      <p-button
-                        icon="pi pi-times"
-                        class="p-button-text p-button-sm ai-file-remove"
-                        (onClick)="removeSelectedAiFile($index)"
-                        [disabled]="uploadLoading()"
-                      ></p-button>
-                    </div>
-                  </div>
-                }
-              }
-            </div>
-
-            <div class="ai-upload-actions">
-              <div class="ai-upload-action">
-                <p-button
-                  [label]="i18n.t().ai.upload"
-                  icon="pi pi-cloud-upload"
-                  (click)="uploadAiFiles()"
-                  [loading]="uploadLoading()"
-                  [disabled]="selectedAiFiles().length === 0 || uploadLoading()"
-                ></p-button>
-              </div>
-              <div class="ai-upload-action">
-                <p-button
-                  [label]="i18n.t().ai.clear"
-                  icon="pi pi-times"
-                  class="p-button-text"
-                  (click)="clearAiFiles()"
-                  [disabled]="selectedAiFiles().length === 0 || uploadLoading()"
-                ></p-button>
-              </div>
-              <div class="ai-upload-action ai-upload-action--full">
-                <p-button
-                  [label]="i18n.t().ai.manageFiles"
-                  icon="pi pi-folder-open"
-                  class="p-button-outlined"
-                  (click)="toggleUploadedFiles()"
-                  [disabled]="uploadedListLoading()"
-                ></p-button>
-              </div>
-            </div>
-
-            @if (showUploadedFiles()) {
-              <div class="ai-uploaded">
-              <div class="ai-uploaded-title">{{ i18n.t().ai.uploadedDocs }}</div>
-              @if (uploadedListLoading()) {
-                <div class="text-600">{{ i18n.t().common.chargement }}</div>
-              } @else {
-                @if (uploadedAiFiles().length === 0) {
-                  <div class="text-600">{{ i18n.t().ai.noUploadedDocs }}</div>
+              <div class="ai-upload-list">
+                @if (selectedAiFiles().length === 0) {
+                  <div class="text-600">{{ i18n.t().ai.noFileSelected }}</div>
                 } @else {
-                  @for (file of uploadedAiFiles(); track file.fileName) {
-                    <div class="ai-file-item ai-file-item--uploaded">
+                  @for (file of selectedAiFiles(); track $index) {
+                    <div class="ai-file-item">
                       <div>
-                        <div class="ai-file-name">{{ file.fileName }}</div>
-                        <div class="ai-file-meta">
-                          {{ formatFileSize(file.sizeBytes) }} - {{ formatDate(file.lastModifiedUtc) }}
-                        </div>
+                        <div class="ai-file-name">{{ file.name }}</div>
+                        <div class="ai-file-meta">{{ formatFileSize(file.size) }}</div>
                       </div>
                       <div class="ai-file-actions">
+                        <i class="pi pi-file"></i>
                         <p-button
-                          icon="pi pi-trash"
+                          icon="pi pi-times"
                           class="p-button-text p-button-sm ai-file-remove"
-                          (onClick)="deleteUploadedAiFile(file)"
-                          [disabled]="uploadedListLoading()"
+                          (onClick)="removeSelectedAiFile($index)"
+                          [disabled]="uploadLoading()"
                         ></p-button>
                       </div>
                     </div>
                   }
                 }
-              }
               </div>
-            }
 
-            @if (lastUploadSummary()) {
-              <div class="text-600 text-sm">{{ lastUploadSummary() }}</div>
-            }
+              <div class="ai-upload-actions">
+                <div class="ai-upload-action">
+                  <p-button
+                    [label]="i18n.t().ai.upload"
+                    icon="pi pi-cloud-upload"
+                    (click)="uploadAiFiles()"
+                    [loading]="uploadLoading()"
+                    [disabled]="selectedAiFiles().length === 0 || uploadLoading()"
+                  ></p-button>
+                </div>
+                <div class="ai-upload-action">
+                  <p-button
+                    [label]="i18n.t().ai.clear"
+                    icon="pi pi-times"
+                    class="p-button-text"
+                    (click)="clearAiFiles()"
+                    [disabled]="selectedAiFiles().length === 0 || uploadLoading()"
+                  ></p-button>
+                </div>
+                <div class="ai-upload-action ai-upload-action--full">
+                  <p-button
+                    [label]="i18n.t().ai.manageFiles"
+                    icon="pi pi-folder-open"
+                    class="p-button-outlined"
+                    (click)="toggleUploadedFiles()"
+                    [disabled]="uploadedListLoading()"
+                  ></p-button>
+                </div>
+              </div>
 
-            <small class="text-600">{{ i18n.t().ai.pdfOnlyHint }}</small>
-          </div>
-        </p-card>
+              @if (showUploadedFiles()) {
+                <div class="ai-uploaded">
+                  <div class="ai-uploaded-title">{{ i18n.t().ai.uploadedDocs }}</div>
+                  @if (uploadedListLoading()) {
+                    <div class="text-600">{{ i18n.t().common.chargement }}</div>
+                  } @else {
+                    @if (uploadedAiFiles().length === 0) {
+                      <div class="text-600">{{ i18n.t().ai.noUploadedDocs }}</div>
+                    } @else {
+                      @for (file of uploadedAiFiles(); track file.fileName) {
+                        <div class="ai-file-item ai-file-item--uploaded">
+                          <div>
+                            <div class="ai-file-name">{{ file.fileName }}</div>
+                            <div class="ai-file-meta">
+                              {{ formatFileSize(file.sizeBytes) }} -
+                              {{ formatDate(file.lastModifiedUtc) }}
+                            </div>
+                          </div>
+                          <div class="ai-file-actions">
+                            <p-button
+                              icon="pi pi-trash"
+                              class="p-button-text p-button-sm ai-file-remove"
+                              (onClick)="deleteUploadedAiFile(file)"
+                              [disabled]="uploadedListLoading()"
+                            ></p-button>
+                          </div>
+                        </div>
+                      }
+                    }
+                  }
+                </div>
+              }
+
+              @if (lastUploadSummary()) {
+                <div class="text-600 text-sm">{{ lastUploadSummary() }}</div>
+              }
+
+              <small class="text-600">{{ i18n.t().ai.pdfOnlyHint }}</small>
+            </div>
+          </p-card>
         </div>
         <div class="col-12 lg:col-6">
-        <p-card class="section-card ai-card">
-          <ng-template pTemplate="header">
-            <div class="p-3">
-              <h3 class="m-0 chart-title">{{ i18n.t().ai.docsClientTitle }}</h3>
-            </div>
-          </ng-template>
-          <div class="ai-upload">
-            <input
-              #aiClientFileInput
-              type="file"
-              class="ai-hidden-input"
-              accept="application/pdf,.pdf"
-              multiple
-              (change)="onClientAiFileInputChange($event)"
-            />
-            <div
-              class="ai-dropzone"
-              role="button"
-              tabindex="0"
-              [attr.aria-label]="i18n.t().ai.choosePdfClient"
-              [class.is-dragover]="isClientDragOver()"
-              (click)="aiClientFileInput.click()"
-              (keydown.enter)="aiClientFileInput.click()"
-              (keydown.space)="$event.preventDefault(); aiClientFileInput.click()"
-              (dragover)="onClientAiDragOver($event)"
-              (dragleave)="onClientAiDragLeave($event)"
-              (drop)="onClientAiDrop($event)"
-            >
-              <div class="ai-dropzone-icon">
-                <i class="pi pi-cloud-upload"></i>
+          <p-card class="section-card ai-card">
+            <ng-template pTemplate="header">
+              <div class="p-3">
+                <h3 class="m-0 chart-title">{{ i18n.t().ai.docsClientTitle }}</h3>
               </div>
-              <div class="ai-dropzone-title">{{ i18n.t().ai.dropTitleClient }}</div>
-              <div class="ai-dropzone-sub">{{ i18n.t().ai.dropSub }}</div>
-              <div class="ai-dropzone-meta">{{ i18n.t().ai.dropMeta }}</div>
-            </div>
+            </ng-template>
+            <div class="ai-upload">
+              <input
+                #aiClientFileInput
+                type="file"
+                class="ai-hidden-input"
+                accept="application/pdf,.pdf"
+                multiple
+                (change)="onClientAiFileInputChange($event)"
+              />
+              <div
+                class="ai-dropzone"
+                role="button"
+                tabindex="0"
+                [attr.aria-label]="i18n.t().ai.choosePdfClient"
+                [class.is-dragover]="isClientDragOver()"
+                (click)="aiClientFileInput.click()"
+                (keydown.enter)="aiClientFileInput.click()"
+                (keydown.space)="$event.preventDefault(); aiClientFileInput.click()"
+                (dragover)="onClientAiDragOver($event)"
+                (dragleave)="onClientAiDragLeave($event)"
+                (drop)="onClientAiDrop($event)"
+              >
+                <div class="ai-dropzone-icon">
+                  <i class="pi pi-cloud-upload"></i>
+                </div>
+                <div class="ai-dropzone-title">{{ i18n.t().ai.dropTitleClient }}</div>
+                <div class="ai-dropzone-sub">{{ i18n.t().ai.dropSub }}</div>
+                <div class="ai-dropzone-meta">{{ i18n.t().ai.dropMeta }}</div>
+              </div>
 
-            <div class="ai-upload-list">
-              @if (selectedClientAiFiles().length === 0) {
-                <div class="text-600">{{ i18n.t().ai.noFileSelected }}</div>
-              } @else {
-                @for (file of selectedClientAiFiles(); track $index) {
-                  <div class="ai-file-item">
-                    <div>
-                      <div class="ai-file-name">{{ file.name }}</div>
-                      <div class="ai-file-meta">{{ formatFileSize(file.size) }}</div>
-                    </div>
-                    <div class="ai-file-actions">
-                      <i class="pi pi-file"></i>
-                      <p-button
-                        icon="pi pi-times"
-                        class="p-button-text p-button-sm ai-file-remove"
-                        (onClick)="removeSelectedClientAiFile($index)"
-                        [disabled]="uploadClientLoading()"
-                      ></p-button>
-                    </div>
-                  </div>
-                }
-              }
-            </div>
-
-            <div class="ai-upload-actions">
-              <div class="ai-upload-action">
-                <p-button
-                  [label]="i18n.t().ai.upload"
-                  icon="pi pi-cloud-upload"
-                  (click)="uploadClientAiFiles()"
-                  [loading]="uploadClientLoading()"
-                  [disabled]="selectedClientAiFiles().length === 0 || uploadClientLoading()"
-                ></p-button>
-              </div>
-              <div class="ai-upload-action">
-                <p-button
-                  [label]="i18n.t().ai.clear"
-                  icon="pi pi-times"
-                  class="p-button-text"
-                  (click)="clearClientAiFiles()"
-                  [disabled]="selectedClientAiFiles().length === 0 || uploadClientLoading()"
-                ></p-button>
-              </div>
-              <div class="ai-upload-action ai-upload-action--full">
-                <p-button
-                  [label]="i18n.t().ai.manageFiles"
-                  icon="pi pi-folder-open"
-                  class="p-button-outlined"
-                  (click)="toggleUploadedClientFiles()"
-                  [disabled]="uploadedClientListLoading()"
-                ></p-button>
-              </div>
-            </div>
-
-            @if (showUploadedClientFiles()) {
-              <div class="ai-uploaded">
-              <div class="ai-uploaded-title">{{ i18n.t().ai.uploadedDocs }}</div>
-              @if (uploadedClientListLoading()) {
-                <div class="text-600">{{ i18n.t().common.chargement }}</div>
-              } @else {
-                @if (uploadedClientAiFiles().length === 0) {
-                  <div class="text-600">{{ i18n.t().ai.noUploadedDocs }}</div>
+              <div class="ai-upload-list">
+                @if (selectedClientAiFiles().length === 0) {
+                  <div class="text-600">{{ i18n.t().ai.noFileSelected }}</div>
                 } @else {
-                  @for (file of uploadedClientAiFiles(); track file.fileName) {
-                    <div class="ai-file-item ai-file-item--uploaded">
+                  @for (file of selectedClientAiFiles(); track $index) {
+                    <div class="ai-file-item">
                       <div>
-                        <div class="ai-file-name">{{ file.fileName }}</div>
-                        <div class="ai-file-meta">
-                          {{ formatFileSize(file.sizeBytes) }} - {{ formatDate(file.lastModifiedUtc) }}
-                        </div>
+                        <div class="ai-file-name">{{ file.name }}</div>
+                        <div class="ai-file-meta">{{ formatFileSize(file.size) }}</div>
                       </div>
                       <div class="ai-file-actions">
+                        <i class="pi pi-file"></i>
                         <p-button
-                          icon="pi pi-trash"
+                          icon="pi pi-times"
                           class="p-button-text p-button-sm ai-file-remove"
-                          (onClick)="deleteUploadedClientAiFile(file)"
-                          [disabled]="uploadedClientListLoading()"
+                          (onClick)="removeSelectedClientAiFile($index)"
+                          [disabled]="uploadClientLoading()"
                         ></p-button>
                       </div>
                     </div>
                   }
                 }
-              }
               </div>
-            }
 
-            @if (lastClientUploadSummary()) {
-              <div class="text-600 text-sm">{{ lastClientUploadSummary() }}</div>
-            }
+              <div class="ai-upload-actions">
+                <div class="ai-upload-action">
+                  <p-button
+                    [label]="i18n.t().ai.upload"
+                    icon="pi pi-cloud-upload"
+                    (click)="uploadClientAiFiles()"
+                    [loading]="uploadClientLoading()"
+                    [disabled]="selectedClientAiFiles().length === 0 || uploadClientLoading()"
+                  ></p-button>
+                </div>
+                <div class="ai-upload-action">
+                  <p-button
+                    [label]="i18n.t().ai.clear"
+                    icon="pi pi-times"
+                    class="p-button-text"
+                    (click)="clearClientAiFiles()"
+                    [disabled]="selectedClientAiFiles().length === 0 || uploadClientLoading()"
+                  ></p-button>
+                </div>
+                <div class="ai-upload-action ai-upload-action--full">
+                  <p-button
+                    [label]="i18n.t().ai.manageFiles"
+                    icon="pi pi-folder-open"
+                    class="p-button-outlined"
+                    (click)="toggleUploadedClientFiles()"
+                    [disabled]="uploadedClientListLoading()"
+                  ></p-button>
+                </div>
+              </div>
 
-            <small class="text-600">{{ i18n.t().ai.pdfOnlyHint }}</small>
-          </div>
-        </p-card>
+              @if (showUploadedClientFiles()) {
+                <div class="ai-uploaded">
+                  <div class="ai-uploaded-title">{{ i18n.t().ai.uploadedDocs }}</div>
+                  @if (uploadedClientListLoading()) {
+                    <div class="text-600">{{ i18n.t().common.chargement }}</div>
+                  } @else {
+                    @if (uploadedClientAiFiles().length === 0) {
+                      <div class="text-600">{{ i18n.t().ai.noUploadedDocs }}</div>
+                    } @else {
+                      @for (file of uploadedClientAiFiles(); track file.fileName) {
+                        <div class="ai-file-item ai-file-item--uploaded">
+                          <div>
+                            <div class="ai-file-name">{{ file.fileName }}</div>
+                            <div class="ai-file-meta">
+                              {{ formatFileSize(file.sizeBytes) }} -
+                              {{ formatDate(file.lastModifiedUtc) }}
+                            </div>
+                          </div>
+                          <div class="ai-file-actions">
+                            <p-button
+                              icon="pi pi-trash"
+                              class="p-button-text p-button-sm ai-file-remove"
+                              (onClick)="deleteUploadedClientAiFile(file)"
+                              [disabled]="uploadedClientListLoading()"
+                            ></p-button>
+                          </div>
+                        </div>
+                      }
+                    }
+                  }
+                </div>
+              }
+
+              @if (lastClientUploadSummary()) {
+                <div class="text-600 text-sm">{{ lastClientUploadSummary() }}</div>
+              }
+
+              <small class="text-600">{{ i18n.t().ai.pdfOnlyHint }}</small>
+            </div>
+          </p-card>
         </div>
       </div>
     </div>
@@ -367,7 +369,8 @@
               @for (message of aiMessages(); track $index) {
                 <div class="ai-message" [class.user]="message.role === 'user'">
                   <div class="ai-message-meta">
-                    {{ message.role === 'user' ? i18n.t().ai.you : i18n.t().ai.ia }} • {{ message.time }}
+                    {{ message.role === 'user' ? i18n.t().ai.you : i18n.t().ai.ia }} •
+                    {{ message.time }}
                   </div>
                   <div class="ai-message-text">{{ message.text }}</div>
                 </div>
@@ -402,5 +405,4 @@
   </div>
 
   <p-confirmDialog></p-confirmDialog>
-
 </div>

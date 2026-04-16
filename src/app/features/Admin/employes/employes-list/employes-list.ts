@@ -19,8 +19,17 @@ import { finalize } from 'rxjs';
   selector: 'app-employes',
   standalone: true,
   imports: [
-    CommonModule, FormsModule, CardModule, ButtonModule, TableModule, TagModule,
-    DialogModule, PasswordModule, SelectModule, InputTextModule],
+    CommonModule,
+    FormsModule,
+    CardModule,
+    ButtonModule,
+    TableModule,
+    TagModule,
+    DialogModule,
+    PasswordModule,
+    SelectModule,
+    InputTextModule,
+  ],
   templateUrl: './employes-list.html',
   styleUrls: ['./employes-list.scss'],
 })
@@ -57,7 +66,9 @@ export class AdminEmployesComponent {
     { label: this.i18n.t().common.inactif, value: 'inactive' },
   ]);
 
-  constructor() { this.load(); }
+  constructor() {
+    this.load();
+  }
 
   load(): void {
     this.loading.set(true);
@@ -74,8 +85,12 @@ export class AdminEmployesComponent {
       });
   }
 
-  onCreate(): void { this.router.navigate(['/admin/employes/new']); }
-  onView(user: User): void { this.router.navigate(['/admin/employes', user.id]); }
+  onCreate(): void {
+    this.router.navigate(['/admin/employes/new']);
+  }
+  onView(user: User): void {
+    this.router.navigate(['/admin/employes', user.id]);
+  }
 
   openReactivate(user: User): void {
     this.reactivateUser = user;
@@ -105,43 +120,47 @@ export class AdminEmployesComponent {
     const confirm = this.reactivateConfirm.trim();
     this.userService.getOne(user.id).subscribe({
       next: (full) => {
-        const organisationId = this.resolveOrganisationId(full.organisationId ?? user.organisationId);
+        const organisationId = this.resolveOrganisationId(
+          full.organisationId ?? user.organisationId,
+        );
         if (organisationId == null) {
           this.messageService.showError(this.i18n.get('employes.reactivateError'));
           this.reactivateSubmitting = false;
           return;
         }
-        this.userService.update({
-          id: full.id ?? user.id,
-          userName: full.userName ?? user.userName,
-          firstName: full.firstName ?? user.firstName,
-          lastName: full.lastName ?? user.lastName,
-          email: full.email ?? user.email,
-          phoneNumber: full.phoneNumber ?? user.phoneNumber,
-          role: (full.role ?? user.role) as UserRole,
-          tailleCm: full.tailleCm ?? user.tailleCm ?? 177,
-          organisationId,
-          isActif: true,
-          password: pwd,
-          confirmPassword: confirm,
-        }).subscribe({
-          next: () => {
-            this.messageService.showSuccess(
-              this.i18n.get('employes.reactivateSuccess'),
-              this.i18n.get('common.succes'),
-            );
-            this.reactivateDialogOpen = false;
-            this.reactivateSubmitting = false;
-            this.load();
-          },
-          error: (error) => {
-            this.reactivateSubmitting = false;
-            this.messageService.showError(
-              this.getApiErrorMessage(error, this.i18n.get('employes.reactivateError')),
-              this.i18n.get('common.erreur'),
-            );
-          },
-        });
+        this.userService
+          .update({
+            id: full.id ?? user.id,
+            userName: full.userName ?? user.userName,
+            firstName: full.firstName ?? user.firstName,
+            lastName: full.lastName ?? user.lastName,
+            email: full.email ?? user.email,
+            phoneNumber: full.phoneNumber ?? user.phoneNumber,
+            role: (full.role ?? user.role) as UserRole,
+            tailleCm: full.tailleCm ?? user.tailleCm ?? 177,
+            organisationId,
+            isActif: true,
+            password: pwd,
+            confirmPassword: confirm,
+          })
+          .subscribe({
+            next: () => {
+              this.messageService.showSuccess(
+                this.i18n.get('employes.reactivateSuccess'),
+                this.i18n.get('common.succes'),
+              );
+              this.reactivateDialogOpen = false;
+              this.reactivateSubmitting = false;
+              this.load();
+            },
+            error: (error) => {
+              this.reactivateSubmitting = false;
+              this.messageService.showError(
+                this.getApiErrorMessage(error, this.i18n.get('employes.reactivateError')),
+                this.i18n.get('common.erreur'),
+              );
+            },
+          });
       },
       error: (error) => {
         this.reactivateSubmitting = false;
@@ -162,7 +181,9 @@ export class AdminEmployesComponent {
           ? this.i18n.t().employes.utilisateur
           : this.i18n.t().common.inconnu;
   }
-  isInactive(user: User): boolean { return !this.isActiveValue(user.isActif); }
+  isInactive(user: User): boolean {
+    return !this.isActiveValue(user.isActif);
+  }
   getSeverity(isActif: unknown): 'success' | 'danger' {
     return this.isActiveValue(isActif) ? 'success' : 'danger';
   }

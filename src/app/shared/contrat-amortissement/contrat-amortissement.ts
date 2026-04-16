@@ -68,7 +68,7 @@ export class ContratAmortissementComponent implements OnInit, OnDestroy {
             error: () => {
               this.veloId = null;
               this.amortissement = null;
-              
+
               //forcer Angular à rafraîchir l’écran
               this.cdr.markForCheck();
             },

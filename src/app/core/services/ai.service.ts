@@ -3,7 +3,9 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-export interface AiAskResponse{response: string;}
+export interface AiAskResponse {
+  response: string;
+}
 
 export interface AiUploadSingleResponse {
   message: string;
@@ -96,5 +98,3 @@ export class AiService {
 // Not accept this line in PR
 // Not accept this line in PR
 // Not accept this line in PR
-
-

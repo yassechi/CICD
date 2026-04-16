@@ -3,8 +3,22 @@
     <div class="p-3 flex justify-content-between align-items-center">
       <h3 class="m-0">{{ i18n.t().contrats.dataTitle }}</h3>
       <div class="detail-action-group detail-action-stack flex flex-column gap-2 align-items-end">
-        <p-button icon="pi pi-pencil" [label]="i18n.t().common.modifier" size="small" class="btn-action-2" (onClick)="onEditContrat()" [disabled]="!contrat()?.id"></p-button>
-        <p-button icon="pi pi-trash" [label]="i18n.t().common.supprimer" size="small" class="btn-action-3" (onClick)="onDeleteContrat()" [disabled]="!contrat()?.id"></p-button>
+        <p-button
+          icon="pi pi-pencil"
+          [label]="i18n.t().common.modifier"
+          size="small"
+          class="btn-action-2"
+          (onClick)="onEditContrat()"
+          [disabled]="!contrat()?.id"
+        ></p-button>
+        <p-button
+          icon="pi pi-trash"
+          [label]="i18n.t().common.supprimer"
+          size="small"
+          class="btn-action-3"
+          (onClick)="onDeleteContrat()"
+          [disabled]="!contrat()?.id"
+        ></p-button>
       </div>
     </div>
   </ng-template>

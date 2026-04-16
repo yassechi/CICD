@@ -2,16 +2,27 @@
   <h2 class="mb-4">{{ i18n.t().parametres.title }}</h2>
 
   <div class="flex gap-2 mb-4">
-    <p-button [label]="i18n.t().parametres.infoPerso" icon="pi pi-user"  [outlined]="activeTab !== 'profile'"  (onClick)="setActiveTab('profile')"></p-button>
-    <p-button [label]="i18n.t().parametres.motDePasse" icon="pi pi-lock"  [outlined]="activeTab !== 'password'" (onClick)="setActiveTab('password')"></p-button>
+    <p-button
+      [label]="i18n.t().parametres.infoPerso"
+      icon="pi pi-user"
+      [outlined]="activeTab !== 'profile'"
+      (onClick)="setActiveTab('profile')"
+    ></p-button>
+    <p-button
+      [label]="i18n.t().parametres.motDePasse"
+      icon="pi pi-lock"
+      [outlined]="activeTab !== 'password'"
+      (onClick)="setActiveTab('password')"
+    ></p-button>
   </div>
 
   <div class="mt-4">
-
     @if (activeTab === 'profile') {
       <p-card>
         <ng-template pTemplate="header">
-          <div class="p-3"><h3 class="m-0">{{ i18n.t().parametres.infoPerso }}</h3></div>
+          <div class="p-3">
+            <h3 class="m-0">{{ i18n.t().parametres.infoPerso }}</h3>
+          </div>
         </ng-template>
         <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
           <div class="grid">
@@ -59,7 +70,12 @@
             </div>
           </div>
           <div class="flex justify-content-end mt-4">
-            <p-button [label]="i18n.t().parametres.enregistrer" icon="pi pi-check" type="submit" [loading]="loading()"></p-button>
+            <p-button
+              [label]="i18n.t().parametres.enregistrer"
+              icon="pi pi-check"
+              type="submit"
+              [loading]="loading()"
+            ></p-button>
           </div>
         </form>
       </p-card>
@@ -68,38 +84,74 @@
     @if (activeTab === 'password') {
       <p-card>
         <ng-template pTemplate="header">
-          <div class="p-3"><h3 class="m-0">{{ i18n.t().parametres.modifierMdp }}</h3></div>
+          <div class="p-3">
+            <h3 class="m-0">{{ i18n.t().parametres.modifierMdp }}</h3>
+          </div>
         </ng-template>
         <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" autocomplete="off">
           <div class="grid">
             <div class="col-12">
               <div class="field mb-4">
-                <label class="block mb-2 font-semibold">{{ i18n.t().parametres.mdpActuel }} *</label>
-                <p-password formControlName="currentPassword" [toggleMask]="true" [feedback]="false" class="w-full" inputclass="w-full" autocomplete="new-password"></p-password>
+                <label class="block mb-2 font-semibold"
+                  >{{ i18n.t().parametres.mdpActuel }} *</label
+                >
+                <p-password
+                  formControlName="currentPassword"
+                  [toggleMask]="true"
+                  [feedback]="false"
+                  class="w-full"
+                  inputclass="w-full"
+                  autocomplete="new-password"
+                ></p-password>
               </div>
             </div>
             <div class="col-12 md:col-6">
               <div class="field mb-4">
-                <label class="block mb-2 font-semibold">{{ i18n.t().parametres.nouveauMdp }} *</label>
-                <p-password formControlName="newPassword" [toggleMask]="true" [feedback]="true" class="w-full" inputclass="w-full" autocomplete="new-password"></p-password>
+                <label class="block mb-2 font-semibold"
+                  >{{ i18n.t().parametres.nouveauMdp }} *</label
+                >
+                <p-password
+                  formControlName="newPassword"
+                  [toggleMask]="true"
+                  [feedback]="true"
+                  class="w-full"
+                  inputclass="w-full"
+                  autocomplete="new-password"
+                ></p-password>
               </div>
             </div>
             <div class="col-12 md:col-6">
               <div class="field mb-4">
-                <label class="block mb-2 font-semibold">{{ i18n.t().parametres.confirmerMdp }} *</label>
-                <p-password formControlName="confirmPassword" [toggleMask]="true" [feedback]="false" class="w-full" inputclass="w-full" autocomplete="new-password"></p-password>
-                @if (passwordForm.get('confirmPassword')?.hasError('passwordMismatch') && passwordForm.get('confirmPassword')?.touched) {
+                <label class="block mb-2 font-semibold"
+                  >{{ i18n.t().parametres.confirmerMdp }} *</label
+                >
+                <p-password
+                  formControlName="confirmPassword"
+                  [toggleMask]="true"
+                  [feedback]="false"
+                  class="w-full"
+                  inputclass="w-full"
+                  autocomplete="new-password"
+                ></p-password>
+                @if (
+                  passwordForm.get('confirmPassword')?.hasError('passwordMismatch') &&
+                  passwordForm.get('confirmPassword')?.touched
+                ) {
                   <small class="p-error">{{ i18n.t().auth.passwordMismatch }}</small>
                 }
               </div>
             </div>
           </div>
           <div class="flex justify-content-end mt-4">
-            <p-button [label]="i18n.t().parametres.modifierMdp" icon="pi pi-check" type="submit" [loading]="loading()"></p-button>
+            <p-button
+              [label]="i18n.t().parametres.modifierMdp"
+              icon="pi pi-check"
+              type="submit"
+              [loading]="loading()"
+            ></p-button>
           </div>
         </form>
       </p-card>
     }
-
   </div>
 </div>

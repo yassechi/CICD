@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 import { Contrat, ContratService, StatutContrat } from '../../../../core/services/contrat.service';
 import { MessageService } from '../../../../core/services/message.service';
 import { AuthService } from '../../../../core/services/auth.service';
@@ -31,11 +38,20 @@ export class ContratsUtilisateurComponent {
   private readonly contratsErrorShown = signal(false);
   private readonly contratsEffect = effect((onCleanup) => {
     const userId = this.currentUserId();
-    if (!userId) { this.userContrats.set([]); this.loading.set(false); this.contratsErrorShown.set(false); return; }
+    if (!userId) {
+      this.userContrats.set([]);
+      this.loading.set(false);
+      this.contratsErrorShown.set(false);
+      return;
+    }
 
     this.loading.set(true);
     const sub = this.contratService.getList({ userId }).subscribe({
-      next: (data) => { this.userContrats.set(data ?? []); this.loading.set(false); this.contratsErrorShown.set(false); },
+      next: (data) => {
+        this.userContrats.set(data ?? []);
+        this.loading.set(false);
+        this.contratsErrorShown.set(false);
+      },
       error: () => {
         this.loading.set(false);
         if (!this.contratsErrorShown()) {
@@ -47,9 +63,17 @@ export class ContratsUtilisateurComponent {
     onCleanup(() => sub.unsubscribe());
   });
 
-  getStatutLabel(statut: StatutContrat): string { return this.contratService.getStatutLabel(statut); }
+  getStatutLabel(statut: StatutContrat): string {
+    return this.contratService.getStatutLabel(statut);
+  }
   getStatutSeverity(statut: StatutContrat): 'success' | 'secondary' | 'info' | 'warn' | 'danger' {
-    return statut === StatutContrat.EnCours ? 'success' : statut === StatutContrat.Termine ? 'secondary' : statut === StatutContrat.Resilie ? 'danger' : 'secondary';
+    return statut === StatutContrat.EnCours
+      ? 'success'
+      : statut === StatutContrat.Termine
+        ? 'secondary'
+        : statut === StatutContrat.Resilie
+          ? 'danger'
+          : 'secondary';
   }
   formatDate(date: string): string {
     const locale = this.i18n.lang() === 'nl' ? 'nl-BE' : 'fr-BE';

@@ -31,12 +31,22 @@
           <ng-template pTemplate="body" let-demande>
             <tr class="clickable-row" (click)="onView(demande)">
               <td>{{ demande.id }}</td>
-              <td>{{ (demande.veloMarque + ' ' + demande.veloModele).trim() || ('#' + demande.idVelo) }}</td>
+              <td>
+                {{ (demande.veloMarque + ' ' + demande.veloModele).trim() || '#' + demande.idVelo }}
+              </td>
               <td>
                 <div class="status-with-indicator">
-                  <p-tag [value]="getStatusLabel(demande.status)" [severity]="getStatusSeverity(demande.status)" [ngClass]="getStatusClass(demande.status)"></p-tag>
+                  <p-tag
+                    [value]="getStatusLabel(demande.status)"
+                    [severity]="getStatusSeverity(demande.status)"
+                    [ngClass]="getStatusClass(demande.status)"
+                  ></p-tag>
                   @if (hasUnreadMessages(demande)) {
-                    <span class="unread-indicator" [pTooltip]="i18n.t().demandes.nouveauMessage" tooltipPosition="top"></span>
+                    <span
+                      class="unread-indicator"
+                      [pTooltip]="i18n.t().demandes.nouveauMessage"
+                      tooltipPosition="top"
+                    ></span>
                   }
                 </div>
               </td>
@@ -56,4 +66,3 @@
     </div>
   </div>
 </div>
-

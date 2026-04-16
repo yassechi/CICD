@@ -40,5 +40,3 @@ export class MessageService {
     this.showMessage('warn', detail, summary);
   }
 }
-
-

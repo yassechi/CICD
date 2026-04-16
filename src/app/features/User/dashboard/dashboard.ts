@@ -19,7 +19,12 @@ export class TableauDeBordUtilisateurComponent {
   demandesEnCours = signal(0);
   contratsActifs = signal(0);
 
-  private readonly demandesStats = signal({ enCours: 0, attente: 0, attenteCompagnie: 0, valide: 0 });
+  private readonly demandesStats = signal({
+    enCours: 0,
+    attente: 0,
+    attenteCompagnie: 0,
+    valide: 0,
+  });
   private readonly contratsStats = signal({ enCours: 0, termine: 0 });
 
   readonly demandesChartData = computed(() => {
@@ -32,11 +37,13 @@ export class TableauDeBordUtilisateurComponent {
         t.demandeStatus.attenteCompagnie,
         t.demandeStatus.valide,
       ],
-      datasets: [{
-        data: [stats.enCours, stats.attente, stats.attenteCompagnie, stats.valide],
-        backgroundColor: ['#0F766E', '#F59E0B', '#F97316', '#84CC16'],
-        hoverBackgroundColor: ['#0B5D56', '#D97706', '#EA580C', '#65A30D'],
-      }],
+      datasets: [
+        {
+          data: [stats.enCours, stats.attente, stats.attenteCompagnie, stats.valide],
+          backgroundColor: ['#0F766E', '#F59E0B', '#F97316', '#84CC16'],
+          hoverBackgroundColor: ['#0B5D56', '#D97706', '#EA580C', '#65A30D'],
+        },
+      ],
     };
   });
 
@@ -45,11 +52,13 @@ export class TableauDeBordUtilisateurComponent {
     const stats = this.contratsStats();
     return {
       labels: [t.contratStatus.enCours, t.contratStatus.termine],
-      datasets: [{
-        data: [stats.enCours, stats.termine],
-        backgroundColor: ['#0F766E', '#94A3B8'],
-        hoverBackgroundColor: ['#0B5D56', '#64748B'],
-      }],
+      datasets: [
+        {
+          data: [stats.enCours, stats.termine],
+          backgroundColor: ['#0F766E', '#94A3B8'],
+          hoverBackgroundColor: ['#0B5D56', '#64748B'],
+        },
+      ],
     };
   });
 
@@ -62,13 +71,21 @@ export class TableauDeBordUtilisateurComponent {
     plugins: {
       legend: {
         position: 'bottom',
-        labels: { usePointStyle: true, boxWidth: 10, boxHeight: 10, padding: 16, color: '#334155', font: { family: 'Manrope', size: 12, weight: '600' } },
+        labels: {
+          usePointStyle: true,
+          boxWidth: 10,
+          boxHeight: 10,
+          padding: 16,
+          color: '#334155',
+          font: { family: 'Manrope', size: 12, weight: '600' },
+        },
       },
       tooltip: {
         backgroundColor: 'rgba(15, 23, 42, 0.92)',
         titleFont: { family: 'Space Grotesk', size: 13, weight: '700' },
         bodyFont: { family: 'Manrope', size: 12, weight: '600' },
-        padding: 12, cornerRadius: 12,
+        padding: 12,
+        cornerRadius: 12,
       },
     },
   };

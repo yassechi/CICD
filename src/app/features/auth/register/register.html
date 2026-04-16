@@ -25,8 +25,12 @@
           <input pInputText type="email" formControlName="email" class="w-full" />
           @if (form.get('email')?.invalid && form.get('email')?.touched) {
             <small class="field-error">
-              @if (form.get('email')?.errors?.['required']) { <span>{{ i18n.t().auth.emailRequired }}</span> }
-              @if (form.get('email')?.errors?.['email'])    { <span>{{ i18n.t().auth.emailInvalid }}</span> }
+              @if (form.get('email')?.errors?.['required']) {
+                <span>{{ i18n.t().auth.emailRequired }}</span>
+              }
+              @if (form.get('email')?.errors?.['email']) {
+                <span>{{ i18n.t().auth.emailInvalid }}</span>
+              }
             </small>
           }
         </div>
@@ -75,32 +79,61 @@
 
         <div class="register-field">
           <label>{{ i18n.t().auth.password }} *</label>
-          <p-password formControlName="password" [toggleMask]="true" [feedback]="false" class="w-full" inputclass="w-full"></p-password>
+          <p-password
+            formControlName="password"
+            [toggleMask]="true"
+            [feedback]="false"
+            class="w-full"
+            inputclass="w-full"
+          ></p-password>
           @if (form.get('password')?.invalid && form.get('password')?.touched) {
             <small class="field-error">
-              @if (form.get('password')?.errors?.['required'])  { <span>{{ i18n.t().auth.passwordRequired }}</span> }
-              @if (form.get('password')?.errors?.['minlength']) { <span>{{ i18n.t().auth.passwordMin }}</span> }
+              @if (form.get('password')?.errors?.['required']) {
+                <span>{{ i18n.t().auth.passwordRequired }}</span>
+              }
+              @if (form.get('password')?.errors?.['minlength']) {
+                <span>{{ i18n.t().auth.passwordMin }}</span>
+              }
             </small>
           }
         </div>
 
         <div class="register-field">
           <label>{{ i18n.t().auth.confirmPassword }} *</label>
-          <p-password formControlName="confirmPassword" [toggleMask]="true" [feedback]="false" class="w-full" inputclass="w-full"></p-password>
+          <p-password
+            formControlName="confirmPassword"
+            [toggleMask]="true"
+            [feedback]="false"
+            class="w-full"
+            inputclass="w-full"
+          ></p-password>
           @if (form.get('confirmPassword')?.invalid && form.get('confirmPassword')?.touched) {
             <small class="field-error">
-              @if (form.get('confirmPassword')?.errors?.['required'])         { <span>{{ i18n.t().auth.confirmRequired }}</span> }
-              @if (form.get('confirmPassword')?.errors?.['passwordMismatch']) { <span>{{ i18n.t().auth.passwordMismatch }}</span> }
+              @if (form.get('confirmPassword')?.errors?.['required']) {
+                <span>{{ i18n.t().auth.confirmRequired }}</span>
+              }
+              @if (form.get('confirmPassword')?.errors?.['passwordMismatch']) {
+                <span>{{ i18n.t().auth.passwordMismatch }}</span>
+              }
             </small>
           }
         </div>
       </div>
 
       <div class="register-actions">
-        <p-button [label]="i18n.t().auth.login"          type="button" class="p-button-outlined" (onClick)="goToLogin()"></p-button>
-        <p-button [label]="i18n.t().auth.registerAction" type="submit" [loading]="loading()" [disabled]="form.invalid || loading()"></p-button>
+        <p-button
+          [label]="i18n.t().auth.login"
+          type="button"
+          class="p-button-outlined"
+          (onClick)="goToLogin()"
+        ></p-button>
+        <p-button
+          [label]="i18n.t().auth.registerAction"
+          type="submit"
+          [loading]="loading()"
+          [disabled]="form.invalid || loading()"
+        ></p-button>
       </div>
     </form>
   </div>
-
 </div>

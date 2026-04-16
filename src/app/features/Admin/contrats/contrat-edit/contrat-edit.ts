@@ -33,7 +33,8 @@ import { forkJoin } from 'rxjs';
     InputText,
     Select,
     DatePicker,
-    InputNumber],
+    InputNumber,
+  ],
   templateUrl: './contrat-edit.html',
   styleUrls: ['./contrat-edit.scss'],
 })
@@ -155,10 +156,10 @@ export class ContratEditComponent {
     this.loading = true;
     this.contratService.getEditData(id).subscribe({
       next: (data) => {
-        this.users = (data.users ?? []);
+        this.users = data.users ?? [];
         this.beneficiaires = this.users;
         this.responsablesRh = this.users;
-        this.velos = (data.velos ?? []);
+        this.velos = data.velos ?? [];
         if (data.contrat) {
           this.contratForm.patchValue({
             ...data.contrat,
@@ -195,5 +196,4 @@ export class ContratEditComponent {
       },
     });
   }
-
 }

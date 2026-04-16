@@ -47,4 +47,3 @@ export class AmortissementService {
 }
 
 // New line ...
-

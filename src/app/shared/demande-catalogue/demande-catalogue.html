@@ -1,11 +1,17 @@
-
 <div class="user-demande-form-page page-shell">
   <div class="page-header">
     <div>
-      <h1 class="page-title">{{ isEdit ? i18n.t().demandes.editTitle : i18n.t().demandes.create }}</h1>
+      <h1 class="page-title">
+        {{ isEdit ? i18n.t().demandes.editTitle : i18n.t().demandes.create }}
+      </h1>
       <p class="page-subtitle">{{ i18n.t().demandes.manageSubtitle }}</p>
     </div>
-    <p-button [label]="i18n.t().common.retour" icon="pi pi-arrow-left" class="p-button-text" (click)="goBack()"></p-button>
+    <p-button
+      [label]="i18n.t().common.retour"
+      icon="pi pi-arrow-left"
+      class="p-button-text"
+      (click)="goBack()"
+    ></p-button>
   </div>
 
   <p-card>
@@ -16,44 +22,83 @@
             <label class="block mb-2 font-semibold">{{ i18n.t().demandes.searchBike }}</label>
             <span class="p-input-icon-left w-full">
               <i class="pi pi-search"></i>
-              <input pInputText type="text" class="w-full" [placeholder]="i18n.t().demandes.searchPlaceholder"
-                [(ngModel)]="searchTerm" [ngModelOptions]="{ standalone: true }" (ngModelChange)="onFilterChange()" />
+              <input
+                pInputText
+                type="text"
+                class="w-full"
+                [placeholder]="i18n.t().demandes.searchPlaceholder"
+                [(ngModel)]="searchTerm"
+                [ngModelOptions]="{ standalone: true }"
+                (ngModelChange)="onFilterChange()"
+              />
             </span>
           </div>
         </div>
         <div class="col-12 md:col-4">
           <div class="field mb-4">
             <label class="block mb-2 font-semibold">{{ i18n.t().demandes.brand }}</label>
-            <p-select [options]="brandOptions" [(ngModel)]="selectedBrandId" [ngModelOptions]="{ standalone: true }"
-              [placeholder]="i18n.t().common.tous" optionLabel="label" optionValue="value" class="w-full" [showClear]="true" (ngModelChange)="onFilterChange()"></p-select>
+            <p-select
+              [options]="brandOptions"
+              [(ngModel)]="selectedBrandId"
+              [ngModelOptions]="{ standalone: true }"
+              [placeholder]="i18n.t().common.tous"
+              optionLabel="label"
+              optionValue="value"
+              class="w-full"
+              [showClear]="true"
+              (ngModelChange)="onFilterChange()"
+            ></p-select>
           </div>
         </div>
         <div class="col-12 md:col-4">
           <div class="field mb-4">
             <label class="block mb-2 font-semibold">{{ i18n.t().demandes.type }}</label>
-            <p-select [options]="typeOptions" [(ngModel)]="selectedType" [ngModelOptions]="{ standalone: true }"
-              [placeholder]="i18n.t().common.tous" optionLabel="label" optionValue="value" class="w-full" [showClear]="true" (ngModelChange)="onFilterChange()"></p-select>
+            <p-select
+              [options]="typeOptions"
+              [(ngModel)]="selectedType"
+              [ngModelOptions]="{ standalone: true }"
+              [placeholder]="i18n.t().common.tous"
+              optionLabel="label"
+              optionValue="value"
+              class="w-full"
+              [showClear]="true"
+              (ngModelChange)="onFilterChange()"
+            ></p-select>
           </div>
         </div>
         <div class="col-12 md:col-2">
           <div class="field mb-4">
             <label class="block mb-2 font-semibold">{{ i18n.t().demandes.priceMin }}</label>
-            <p-inputnumber [(ngModel)]="minPrice" [ngModelOptions]="{ standalone: true }" mode="decimal"
-              [minFractionDigits]="0" class="w-full" [style]="{ width: '100%' }" (ngModelChange)="onFilterChange()"></p-inputnumber>
+            <p-inputnumber
+              [(ngModel)]="minPrice"
+              [ngModelOptions]="{ standalone: true }"
+              mode="decimal"
+              [minFractionDigits]="0"
+              class="w-full"
+              [style]="{ width: '100%' }"
+              (ngModelChange)="onFilterChange()"
+            ></p-inputnumber>
           </div>
         </div>
         <div class="col-12 md:col-2">
           <div class="field mb-4">
             <label class="block mb-2 font-semibold">{{ i18n.t().demandes.priceMax }}</label>
-            <p-inputnumber [(ngModel)]="maxPrice" [ngModelOptions]="{ standalone: true }" mode="decimal"
-              [minFractionDigits]="0" class="w-full" [style]="{ width: '100%' }" (ngModelChange)="onFilterChange()"></p-inputnumber>
+            <p-inputnumber
+              [(ngModel)]="maxPrice"
+              [ngModelOptions]="{ standalone: true }"
+              mode="decimal"
+              [minFractionDigits]="0"
+              class="w-full"
+              [style]="{ width: '100%' }"
+              (ngModelChange)="onFilterChange()"
+            ></p-inputnumber>
           </div>
         </div>
 
         <div class="col-12">
           @if (loadingVelos()) {
             <div class="text-center py-5">
-              <i class="pi pi-spin pi-spinner" style="font-size: 2.5rem; color: #1e3a8a;"></i>
+              <i class="pi pi-spin pi-spinner" style="font-size: 2.5rem; color: #1e3a8a"></i>
               <p class="mt-3 text-600">{{ i18n.t().demandes.loadingBikes }}</p>
             </div>
           } @else {
@@ -83,9 +128,14 @@
                     <span>{{ formatCurrency(velo.acf?.prix_par_mois) }}</span>
                   </div>
                   <p-button
-                    [label]="velo.id === selectedVeloId ? i18n.t().demandes.selected : i18n.t().demandes.choose"
+                    [label]="
+                      velo.id === selectedVeloId
+                        ? i18n.t().demandes.selected
+                        : i18n.t().demandes.choose
+                    "
                     [severity]="velo.id === selectedVeloId ? 'success' : 'secondary'"
-                    (onClick)="selectVelo(velo)" size="small"
+                    (onClick)="selectVelo(velo)"
+                    size="small"
                   ></p-button>
                 </div>
               } @empty {
@@ -101,16 +151,36 @@
         @if (!loadingVelos() && filteredVelos.length > pageSize) {
           <div class="col-12">
             <div class="pagination">
-              <button type="button" class="page-btn" (click)="prevPage()" [disabled]="currentPage === 1">{{ i18n.t().common.precedent }}</button>
-              <div class="page-info">{{ i18n.t().common.page }} {{ currentPage }} / {{ totalPages }}</div>
-              <button type="button" class="page-btn" (click)="nextPage()" [disabled]="currentPage === totalPages">{{ i18n.t().common.suivant }}</button>
+              <button
+                type="button"
+                class="page-btn"
+                (click)="prevPage()"
+                [disabled]="currentPage === 1"
+              >
+                {{ i18n.t().common.precedent }}
+              </button>
+              <div class="page-info">
+                {{ i18n.t().common.page }} {{ currentPage }} / {{ totalPages }}
+              </div>
+              <button
+                type="button"
+                class="page-btn"
+                (click)="nextPage()"
+                [disabled]="currentPage === totalPages"
+              >
+                {{ i18n.t().common.suivant }}
+              </button>
             </div>
           </div>
         }
       </div>
 
       <div class="flex justify-content-end gap-2 mt-4">
-        <p-button [label]="i18n.t().common.annuler" (onClick)="goBack()" class="p-button-text"></p-button>
+        <p-button
+          [label]="i18n.t().common.annuler"
+          (onClick)="goBack()"
+          class="p-button-text"
+        ></p-button>
         <p-button
           [label]="isEdit ? i18n.t().common.sauvegarder : i18n.t().common.creer"
           icon="pi pi-check"

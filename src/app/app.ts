@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [RouterOutlet, ToastModule],
   templateUrl: './app.html',
-  styleUrls: ['./app.scss']
+  styleUrls: ['./app.scss'],
 })
 export class AppComponent {
   title = 'MojoVelo';

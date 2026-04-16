@@ -39,7 +39,8 @@ import { TagModule } from 'primeng/tag';
     TooltipModule,
     RouterLink,
     RouterLinkActive,
-    RouterOutlet],
+    RouterOutlet,
+  ],
   providers: [ConfirmationService],
   templateUrl: './contrat-detail.html',
   styleUrls: ['./contrat-detail.scss'],
@@ -95,7 +96,8 @@ export class ContratDetailComponent implements OnInit, OnDestroy {
       { route: 'detail', label: t.contrats.tabDetail, icon: 'pi pi-id-card' },
       { route: 'documents', label: t.contrats.tabDocuments, icon: 'pi pi-file-pdf' },
       { route: 'entretien', label: t.contrats.tabEntretien, icon: 'pi pi-wrench' },
-      { route: 'amortissement', label: t.contrats.tabAmortissement, icon: 'pi pi-chart-line' }];
+      { route: 'amortissement', label: t.contrats.tabAmortissement, icon: 'pi pi-chart-line' },
+    ];
 
     if (this.role() === 1) return tabs;
     if (this.role() === 2) {

@@ -14,7 +14,14 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ButtonModule, InputTextModule, PasswordModule, SelectModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ButtonModule,
+    InputTextModule,
+    PasswordModule,
+    SelectModule,
+  ],
   templateUrl: './register.html',
   styleUrls: ['./register.scss'],
 })
@@ -30,22 +37,29 @@ export class RegisterComponent {
   private readonly messageService = inject(MessageService);
   readonly i18n = inject(I18nService);
 
-  form = this.fb.group({
-    userName: ['', Validators.required],
-    firstName: ['', Validators.required],
-    lastName: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
-    phoneNumber: ['', Validators.required],
-    password: ['', [Validators.required, Validators.minLength(8)]],
-    confirmPassword: ['', Validators.required],
-    organisationId: [null as number | null, Validators.required],
-  }, { validators: this.passwordMatchValidator });
+  form = this.fb.group(
+    {
+      userName: ['', Validators.required],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      phoneNumber: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      confirmPassword: ['', Validators.required],
+      organisationId: [null as number | null, Validators.required],
+    },
+    { validators: this.passwordMatchValidator },
+  );
 
   constructor() {
     this.loadingOrganisations.set(true);
     this.organisationService.getAll().subscribe({
       next: (data) => {
-        this.organisations.set((data ?? []).slice().sort((a: Organisation, b: Organisation) => a.name.localeCompare(b.name)));
+        this.organisations.set(
+          (data ?? [])
+            .slice()
+            .sort((a: Organisation, b: Organisation) => a.name.localeCompare(b.name)),
+        );
         this.loadingOrganisations.set(false);
       },
       error: () => {
@@ -56,34 +70,41 @@ export class RegisterComponent {
   }
 
   onSubmit(): void {
-    if (this.form.invalid) { this.form.markAllAsTouched(); return; }
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
     this.loading.set(true);
     const v = this.form.getRawValue();
-    this.userService.create({
-      userName: String(v.userName ?? '').trim(),
-      firstName: String(v.firstName ?? '').trim(),
-      lastName: String(v.lastName ?? '').trim(),
-      email: String(v.email ?? '').trim(),
-      phoneNumber: String(v.phoneNumber ?? '').trim(),
-      password: v.password,
-      confirmPassword: v.confirmPassword,
-      role: UserRole.User,
-      isActif: true,
-      organisationId: Number(v.organisationId),
-    }).subscribe({
-      next: () => {
-        this.loading.set(false);
-        this.messageService.showSuccess(this.i18n.get('auth.registerSuccess'));
-        this.router.navigate(['/login']);
-      },
-      error: (err) => {
-        this.loading.set(false);
-        this.messageService.showError(err?.error?.message || this.i18n.get('auth.registerError'));
-      },
-    });
+    this.userService
+      .create({
+        userName: String(v.userName ?? '').trim(),
+        firstName: String(v.firstName ?? '').trim(),
+        lastName: String(v.lastName ?? '').trim(),
+        email: String(v.email ?? '').trim(),
+        phoneNumber: String(v.phoneNumber ?? '').trim(),
+        password: v.password,
+        confirmPassword: v.confirmPassword,
+        role: UserRole.User,
+        isActif: true,
+        organisationId: Number(v.organisationId),
+      })
+      .subscribe({
+        next: () => {
+          this.loading.set(false);
+          this.messageService.showSuccess(this.i18n.get('auth.registerSuccess'));
+          this.router.navigate(['/login']);
+        },
+        error: (err) => {
+          this.loading.set(false);
+          this.messageService.showError(err?.error?.message || this.i18n.get('auth.registerError'));
+        },
+      });
   }
 
-  goToLogin(): void { this.router.navigate(['/login']); }
+  goToLogin(): void {
+    this.router.navigate(['/login']);
+  }
 
   private passwordMatchValidator(form: FormGroup) {
     const pwd = form.get('password');

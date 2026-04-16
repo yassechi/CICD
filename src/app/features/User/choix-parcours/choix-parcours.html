@@ -27,7 +27,10 @@
         </div>
         <h3>{{ i18n.t().parcours.optionGuideTitle }}</h3>
         <p>{{ i18n.t().parcours.optionGuideDesc }}</p>
-        <p-button [label]="i18n.t().parcours.optionGuideCta" (click)="goToQuestionnaire()"></p-button>
+        <p-button
+          [label]="i18n.t().parcours.optionGuideCta"
+          (click)="goToQuestionnaire()"
+        ></p-button>
       </div>
 
       <div class="parcours-option">
@@ -36,10 +39,12 @@
         </div>
         <h3>{{ i18n.t().parcours.optionCatalogTitle }}</h3>
         <p>{{ i18n.t().parcours.optionCatalogDesc }}</p>
-        <p-button [label]="i18n.t().parcours.optionCatalogCta" class="p-button-outlined" (click)="goToCatalogue()"></p-button>
+        <p-button
+          [label]="i18n.t().parcours.optionCatalogCta"
+          class="p-button-outlined"
+          (click)="goToCatalogue()"
+        ></p-button>
       </div>
     </div>
   </div>
-
- 
 </div>

@@ -4,7 +4,7 @@ import { FR } from '../i18n/fr';
 import { NL } from '../i18n/nl';
 
 export type Lang = 'fr' | 'nl';
-type ContratsTranslations = typeof FR['contrats'] & Record<string, string>;
+type ContratsTranslations = (typeof FR)['contrats'] & Record<string, string>;
 export type Translations = Omit<typeof FR, 'contrats'> & { contrats: ContratsTranslations };
 
 @Injectable({ providedIn: 'root' })
@@ -13,9 +13,7 @@ export class I18nService {
 
   readonly lang = signal<Lang>(this.loadLang());
   readonly t = computed<Translations>(() => {
-    return this.lang() === 'nl'
-      ? (this.mergeTranslations(FR, NL) as Translations)
-      : FR;
+    return this.lang() === 'nl' ? (this.mergeTranslations(FR, NL) as Translations) : FR;
   });
 
   toggle(): void {

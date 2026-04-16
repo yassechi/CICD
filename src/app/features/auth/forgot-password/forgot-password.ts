@@ -12,9 +12,16 @@ import { CardModule } from 'primeng/card';
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, CardModule, InputTextModule, ButtonModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule,
+    CardModule,
+    InputTextModule,
+    ButtonModule,
+  ],
   templateUrl: './forgot-password.html',
-  styleUrls: ['./forgot-password.scss']
+  styleUrls: ['./forgot-password.scss'],
 })
 export class ForgotPasswordComponent {
   private fb = inject(FormBuilder);
@@ -27,20 +34,28 @@ export class ForgotPasswordComponent {
   emailSent = signal(false);
 
   onSubmit(): void {
-    if (this.forgotForm.invalid) { this.forgotForm.markAllAsTouched(); return; }
+    if (this.forgotForm.invalid) {
+      this.forgotForm.markAllAsTouched();
+      return;
+    }
     this.loading.set(true);
     this.authService.forgotPassword(this.forgotForm.value).subscribe({
       next: () => {
         this.loading.set(false);
         this.emailSent.set(true);
-        this.messageService.showSuccess(this.i18n.get('auth.emailSentInfo'), this.i18n.get('auth.emailSentTitle'));
+        this.messageService.showSuccess(
+          this.i18n.get('auth.emailSentInfo'),
+          this.i18n.get('auth.emailSentTitle'),
+        );
       },
       error: () => {
         this.loading.set(false);
         this.messageService.showError(this.i18n.get('auth.forgotError'));
-      }
+      },
     });
   }
 
-  get email() { return this.forgotForm.get('email'); }
+  get email() {
+    return this.forgotForm.get('email');
+  }
 }

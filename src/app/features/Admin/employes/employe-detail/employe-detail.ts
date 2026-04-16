@@ -16,7 +16,16 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-employe-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, CardModule, ButtonModule, ConfirmDialogModule, TagModule, DialogModule, PasswordModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    CardModule,
+    ButtonModule,
+    ConfirmDialogModule,
+    TagModule,
+    DialogModule,
+    PasswordModule,
+  ],
   providers: [ConfirmationService],
   templateUrl: './employe-detail.html',
   styleUrls: ['./employe-detail.scss'],
@@ -40,16 +49,30 @@ export class EmployeDetailComponent {
 
   constructor() {
     const id = this.route.snapshot.paramMap.get('id');
-    if (!id) { this.goBack(); return; }
+    if (!id) {
+      this.goBack();
+      return;
+    }
     this.userId.set(id);
     this.userService.getOne(id).subscribe({
       next: (data) => this.user.set(data),
-      error: () => { this.messageService.showError(this.i18n.get('employes.loadOneError')); this.goBack(); },
+      error: () => {
+        this.messageService.showError(this.i18n.get('employes.loadOneError'));
+        this.goBack();
+      },
     });
   }
 
-  goBack(): void { this.router.navigate([this.router.url.startsWith('/manager/') ? '/manager/employes' : '/admin/employes']); }
-  goEdit(): void { this.router.navigate([`${this.router.url.startsWith('/manager/') ? '/manager/employes' : '/admin/employes'}/${this.userId()}/edit`]); }
+  goBack(): void {
+    this.router.navigate([
+      this.router.url.startsWith('/manager/') ? '/manager/employes' : '/admin/employes',
+    ]);
+  }
+  goEdit(): void {
+    this.router.navigate([
+      `${this.router.url.startsWith('/manager/') ? '/manager/employes' : '/admin/employes'}/${this.userId()}/edit`,
+    ]);
+  }
   onDelete(): void {
     const id = this.userId();
     if (!id) return;
@@ -63,16 +86,17 @@ export class EmployeDetailComponent {
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: this.i18n.get('common.oui'),
       rejectLabel: this.i18n.get('common.non'),
-      accept: () => this.userService.delete(id).subscribe({
-        next: () => {
-          this.messageService.showSuccess(
-            this.i18n.get('employes.deleteSuccess'),
-            this.i18n.get('common.succes'),
-          );
-          this.goBack();
-        },
-        error: () => this.messageService.showError(this.i18n.get('employes.deleteError')),
-      }),
+      accept: () =>
+        this.userService.delete(id).subscribe({
+          next: () => {
+            this.messageService.showSuccess(
+              this.i18n.get('employes.deleteSuccess'),
+              this.i18n.get('common.succes'),
+            );
+            this.goBack();
+          },
+          error: () => this.messageService.showError(this.i18n.get('employes.deleteError')),
+        }),
     });
   }
 
@@ -106,37 +130,39 @@ export class EmployeDetailComponent {
       return;
     }
     this.reactivateSubmitting = true;
-    this.userService.update({
-      id,
-      userName: u.userName,
-      firstName: u.firstName,
-      lastName: u.lastName,
-      email: u.email,
-      phoneNumber: u.phoneNumber,
-      role: u.role,
-      tailleCm: u.tailleCm ?? 177,
-      organisationId,
-      isActif: true,
-      password: this.reactivatePassword.trim(),
-      confirmPassword: this.reactivateConfirm.trim(),
-    }).subscribe({
-      next: () => {
-        this.messageService.showSuccess(
-          this.i18n.get('employes.reactivateSuccess'),
-          this.i18n.get('common.succes'),
-        );
-        this.user.set({ ...u, isActif: true });
-        this.reactivateDialogOpen = false;
-        this.reactivateSubmitting = false;
-      },
-      error: (error) => {
-        this.reactivateSubmitting = false;
-        this.messageService.showError(
-          this.getApiErrorMessage(error, this.i18n.get('employes.reactivateError')),
-          this.i18n.get('common.erreur'),
-        );
-      },
-    });
+    this.userService
+      .update({
+        id,
+        userName: u.userName,
+        firstName: u.firstName,
+        lastName: u.lastName,
+        email: u.email,
+        phoneNumber: u.phoneNumber,
+        role: u.role,
+        tailleCm: u.tailleCm ?? 177,
+        organisationId,
+        isActif: true,
+        password: this.reactivatePassword.trim(),
+        confirmPassword: this.reactivateConfirm.trim(),
+      })
+      .subscribe({
+        next: () => {
+          this.messageService.showSuccess(
+            this.i18n.get('employes.reactivateSuccess'),
+            this.i18n.get('common.succes'),
+          );
+          this.user.set({ ...u, isActif: true });
+          this.reactivateDialogOpen = false;
+          this.reactivateSubmitting = false;
+        },
+        error: (error) => {
+          this.reactivateSubmitting = false;
+          this.messageService.showError(
+            this.getApiErrorMessage(error, this.i18n.get('employes.reactivateError')),
+            this.i18n.get('common.erreur'),
+          );
+        },
+      });
   }
 
   getRoleLabel(role: UserRole): string {
@@ -149,11 +175,21 @@ export class EmployeDetailComponent {
           : this.i18n.t().common.inconnu;
   }
   getRoleSeverity(role: UserRole): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
-    return role === UserRole.Admin ? 'danger' : role === UserRole.Manager ? 'warn' : role === UserRole.User ? 'info' : 'secondary';
+    return role === UserRole.Admin
+      ? 'danger'
+      : role === UserRole.Manager
+        ? 'warn'
+        : role === UserRole.User
+          ? 'info'
+          : 'secondary';
   }
   getOrganisationName(user: User): string {
     const org = user.organisationId;
-    return org && typeof org === 'object' ? org.name || this.i18n.t().common.inconnu : typeof org === 'number' ? String(org) : this.i18n.t().common.inconnu;
+    return org && typeof org === 'object'
+      ? org.name || this.i18n.t().common.inconnu
+      : typeof org === 'number'
+        ? String(org)
+        : this.i18n.t().common.inconnu;
   }
 
   isActive(user: User | null | undefined): boolean {

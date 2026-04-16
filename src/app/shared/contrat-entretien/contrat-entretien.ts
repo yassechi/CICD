@@ -19,7 +19,17 @@ import { map } from 'rxjs';
 @Component({
   selector: 'app-contrat-entretien',
   standalone: true,
-  imports: [CommonModule, FormsModule, CardModule, ButtonModule, TableModule, InputTextModule, TooltipModule, DatePicker, InputNumber],
+  imports: [
+    CommonModule,
+    FormsModule,
+    CardModule,
+    ButtonModule,
+    TableModule,
+    InputTextModule,
+    TooltipModule,
+    DatePicker,
+    InputNumber,
+  ],
   templateUrl: './contrat-entretien.html',
   styleUrls: ['./contrat-entretien.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,17 +41,27 @@ export class ContratEntretienComponent {
   private readonly messageService = inject(MessageService);
   readonly i18n = inject(I18nService);
 
-  readonly contratId = toSignal((this.route.parent ?? this.route).paramMap.pipe(map((p) => Number(p.get('id')) || null)), { initialValue: null });
+  readonly contratId = toSignal(
+    (this.route.parent ?? this.route).paramMap.pipe(map((p) => Number(p.get('id')) || null)),
+    { initialValue: null },
+  );
   readonly veloId = signal<number | null>(null);
   readonly interventions = signal<Intervention[]>([]);
   private readonly reloadInterventions = signal(0);
 
   private readonly loadContratEffect = effect((onCleanup) => {
     const id = this.contratId();
-    if (!id) { this.veloId.set(null); this.interventions.set([]); return; }
+    if (!id) {
+      this.veloId.set(null);
+      this.interventions.set([]);
+      return;
+    }
     const sub = this.contratService.getDetail(id).subscribe({
       next: (contrat) => this.veloId.set(contrat.veloId ?? null),
-      error: () => { this.veloId.set(null); this.interventions.set([]); },
+      error: () => {
+        this.veloId.set(null);
+        this.interventions.set([]);
+      },
     });
     onCleanup(() => sub.unsubscribe());
   });
@@ -49,10 +69,16 @@ export class ContratEntretienComponent {
   private readonly loadInterventionsEffect = effect((onCleanup) => {
     const veloId = this.veloId();
     this.reloadInterventions();
-    if (!veloId) { this.interventions.set([]); return; }
+    if (!veloId) {
+      this.interventions.set([]);
+      return;
+    }
     const sub = this.interventionService.getByVelo(veloId).subscribe({
       next: (data) => this.interventions.set(data ?? []),
-      error: (error) => { if (!this.isUnauthorized(error)) this.messageService.showError(this.i18n.get('contrats.loadInterventionsError')); },
+      error: (error) => {
+        if (!this.isUnauthorized(error))
+          this.messageService.showError(this.i18n.get('contrats.loadInterventionsError'));
+      },
     });
     onCleanup(() => sub.unsubscribe());
   });
@@ -68,7 +94,13 @@ export class ContratEntretienComponent {
     this.interventionFormMode = 'create';
     this.editingIntervention = true;
     this.interventionDate = new Date();
-    this.currentIntervention = { typeIntervention: '', description: '', cout: 0, veloId, isActif: true };
+    this.currentIntervention = {
+      typeIntervention: '',
+      description: '',
+      cout: 0,
+      veloId,
+      isActif: true,
+    };
   }
 
   onEditIntervention(intervention: Intervention): void {
@@ -86,7 +118,12 @@ export class ContratEntretienComponent {
 
   onSaveIntervention(): void {
     const veloId = this.veloId();
-    if (!veloId || !this.interventionDate || !this.currentIntervention.typeIntervention || !this.currentIntervention.description) {
+    if (
+      !veloId ||
+      !this.interventionDate ||
+      !this.currentIntervention.typeIntervention ||
+      !this.currentIntervention.description
+    ) {
       this.messageService.showWarn(this.i18n.get('contrats.fillRequired'));
       return;
     }
@@ -101,7 +138,10 @@ export class ContratEntretienComponent {
       isActif: true,
     };
 
-    (this.interventionFormMode === 'create' ? this.interventionService.create(intervention) : this.interventionService.update(intervention)).subscribe({
+    (this.interventionFormMode === 'create'
+      ? this.interventionService.create(intervention)
+      : this.interventionService.update(intervention)
+    ).subscribe({
       next: () => {
         this.messageService.showSuccess(
           this.interventionFormMode === 'create'
@@ -116,7 +156,14 @@ export class ContratEntretienComponent {
   }
 
   onDeleteIntervention(intervention: Intervention): void {
-    if (!confirm(this.i18n.format('contrats.deleteInterventionConfirm', { type: intervention.typeIntervention }))) return;
+    if (
+      !confirm(
+        this.i18n.format('contrats.deleteInterventionConfirm', {
+          type: intervention.typeIntervention,
+        }),
+      )
+    )
+      return;
     this.interventionService.delete(intervention.id).subscribe({
       next: () => {
         this.messageService.showSuccess(this.i18n.get('contrats.interventionDeleted'));

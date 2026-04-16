@@ -53,7 +53,8 @@ export const NL = {
     forgotIntro: 'Voer uw e-mailadres in en wij sturen een link om uw wachtwoord te resetten.',
     sendLink: 'Link versturen',
     emailSentTitle: 'E-mail verzonden!',
-    emailSentInfo: 'Als er een account bestaat met dit e-mailadres, ontvangt u binnenkort een resetlink.',
+    emailSentInfo:
+      'Als er een account bestaat met dit e-mailadres, ontvangt u binnenkort een resetlink.',
     emailSentHint: 'Controleer uw inbox en spam.',
     rememberPassword: 'Weet u uw wachtwoord nog?',
     resetTitle: 'Reset uw wachtwoord',
@@ -69,7 +70,8 @@ export const NL = {
     registerError: 'Kan account niet aanmaken',
     loadOrganisationsError: 'Kan organisaties niet laden',
     accountCreatedButLoginFailed: 'Account aangemaakt, maar inloggen mislukt',
-    accountCreatedButActivationFailed: 'Account aangemaakt, maar activeren mislukt. Neem contact op met een beheerder.',
+    accountCreatedButActivationFailed:
+      'Account aangemaakt, maar activeren mislukt. Neem contact op met een beheerder.',
     accountCreatedAndLogged: 'Account aangemaakt en ingelogd',
   },
   dashboard: {
@@ -659,7 +661,8 @@ export const NL = {
     heroAction: 'Vraag een offerte',
     heroDetecting: 'Bedrijf detecteren...',
     supportSubject: 'Aanvraag om mijn bedrijf toe te voegen',
-    supportBody: 'Hallo,\\n\\nMijn bedrijf staat niet in de lijst. Kunt u het toevoegen?\\n\\nBedankt.',
+    supportBody:
+      'Hallo,\\n\\nMijn bedrijf staat niet in de lijst. Kunt u het toevoegen?\\n\\nBedankt.',
     loadError: 'Kan bedrijf niet detecteren',
     confirmationTitle: 'Uw aanvraag is verzonden!',
     confirmationSubtitle: 'Bedankt, uw fietsleasingaanvraag is doorgestuurd.',

@@ -1,5 +1,4 @@
 <div class="contrats-container page-shell">
-
   <div class="page-header">
     <div>
       <h1 class="page-title">{{ i18n.t().contrats.title }}</h1>
@@ -22,12 +21,18 @@
         >
           <ng-template pTemplate="header">
             <tr>
-              <th pSortableColumn="ref">{{ i18n.t().contrats.reference }} <p-sortIcon field="ref"></p-sortIcon></th>
+              <th pSortableColumn="ref">
+                {{ i18n.t().contrats.reference }} <p-sortIcon field="ref"></p-sortIcon>
+              </th>
               <th>{{ i18n.t().contrats.beneficiaire }}</th>
               <th>{{ i18n.t().contrats.responsableRh }}</th>
               <th>{{ i18n.t().demandes.velo }}</th>
-              <th pSortableColumn="dateDebut">{{ i18n.t().contrats.dateDebut }} <p-sortIcon field="dateDebut"></p-sortIcon></th>
-              <th pSortableColumn="dateFin">{{ i18n.t().contrats.dateFin }} <p-sortIcon field="dateFin"></p-sortIcon></th>
+              <th pSortableColumn="dateDebut">
+                {{ i18n.t().contrats.dateDebut }} <p-sortIcon field="dateDebut"></p-sortIcon>
+              </th>
+              <th pSortableColumn="dateFin">
+                {{ i18n.t().contrats.dateFin }} <p-sortIcon field="dateFin"></p-sortIcon>
+              </th>
               <th>{{ i18n.t().contrats.duree }}</th>
               <th>{{ i18n.t().contrats.loyer }}</th>
               <th>{{ i18n.t().contrats.statut }}</th>
@@ -45,7 +50,10 @@
               <td>{{ contrat.duree }}</td>
               <td>{{ formatCurrency(contrat.loyerMensuelHT) }}</td>
               <td>
-                <p-tag [value]="getStatutLabel(contrat.statutContrat)" [severity]="getStatutSeverity(contrat.statutContrat)"></p-tag>
+                <p-tag
+                  [value]="getStatutLabel(contrat.statutContrat)"
+                  [severity]="getStatutSeverity(contrat.statutContrat)"
+                ></p-tag>
               </td>
             </tr>
           </ng-template>
@@ -63,4 +71,3 @@
     </div>
   </div>
 </div>
-

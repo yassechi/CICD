@@ -1,9 +1,17 @@
 ﻿<div class="contrat-edit-container page-shell">
   <div class="page-header">
     <div class="flex align-items-center gap-3">
-      <p-button icon="pi pi-arrow-left" [text]="true" [rounded]="true" (onClick)="goBack()" [pTooltip]="i18n.t().common.retour"></p-button>
+      <p-button
+        icon="pi pi-arrow-left"
+        [text]="true"
+        [rounded]="true"
+        (onClick)="goBack()"
+        [pTooltip]="i18n.t().common.retour"
+      ></p-button>
       <div>
-        <h1 class="page-title">{{ isEdit ? i18n.t().contrats.editTitle : i18n.t().contrats.create }}</h1>
+        <h1 class="page-title">
+          {{ isEdit ? i18n.t().contrats.editTitle : i18n.t().contrats.create }}
+        </h1>
         <p class="page-subtitle">
           {{ isEdit ? i18n.t().contrats.editSubtitle : i18n.t().contrats.createSubtitle }}
         </p>
@@ -15,7 +23,6 @@
     <p-card>
       <form [formGroup]="contratForm" (ngSubmit)="onSubmit()">
         <div class="grid">
-
           <div class="col-12 md:col-6">
             <label class="block text-600 mb-2">{{ i18n.t().contrats.reference }} *</label>
             <input type="text" pInputText formControlName="ref" class="w-full" />
@@ -23,55 +30,124 @@
 
           <div class="col-12 md:col-6">
             <label class="block text-600 mb-2">{{ i18n.t().contrats.veloLabel }} *</label>
-            <p-select formControlName="veloId" [options]="velos" optionLabel="marque" optionValue="id" [placeholder]="i18n.t().contrats.selectVeloPlaceholder" class="w-full" [style]="{ 'width': '100%' }">
-              <ng-template let-velo pTemplate="item">{{ velo.marque }} {{ velo.modele }} ({{ velo.numeroSerie }})</ng-template>
+            <p-select
+              formControlName="veloId"
+              [options]="velos"
+              optionLabel="marque"
+              optionValue="id"
+              [placeholder]="i18n.t().contrats.selectVeloPlaceholder"
+              class="w-full"
+              [style]="{ width: '100%' }"
+            >
+              <ng-template let-velo pTemplate="item"
+                >{{ velo.marque }} {{ velo.modele }} ({{ velo.numeroSerie }})</ng-template
+              >
             </p-select>
           </div>
 
           <div class="col-12 md:col-6">
             <label class="block text-600 mb-2">{{ i18n.t().contrats.beneficiaire }} *</label>
-            <p-select formControlName="beneficiaireId" [options]="beneficiaires" optionLabel="firstName" optionValue="id" [placeholder]="i18n.t().contrats.selectBeneficiairePlaceholder" class="w-full" [style]="{ 'width': '100%' }">
-              <ng-template let-user pTemplate="item">{{ user.firstName }} {{ user.lastName }}</ng-template>
+            <p-select
+              formControlName="beneficiaireId"
+              [options]="beneficiaires"
+              optionLabel="firstName"
+              optionValue="id"
+              [placeholder]="i18n.t().contrats.selectBeneficiairePlaceholder"
+              class="w-full"
+              [style]="{ width: '100%' }"
+            >
+              <ng-template let-user pTemplate="item"
+                >{{ user.firstName }} {{ user.lastName }}</ng-template
+              >
             </p-select>
           </div>
 
           <div class="col-12 md:col-6">
             <label class="block text-600 mb-2">{{ i18n.t().contrats.responsableRh }} *</label>
-            <p-select formControlName="userRhId" [options]="responsablesRh" optionLabel="firstName" optionValue="id" [placeholder]="i18n.t().contrats.selectRhPlaceholder" class="w-full" [style]="{ 'width': '100%' }">
-              <ng-template let-user pTemplate="item">{{ user.firstName }} {{ user.lastName }}</ng-template>
+            <p-select
+              formControlName="userRhId"
+              [options]="responsablesRh"
+              optionLabel="firstName"
+              optionValue="id"
+              [placeholder]="i18n.t().contrats.selectRhPlaceholder"
+              class="w-full"
+              [style]="{ width: '100%' }"
+            >
+              <ng-template let-user pTemplate="item"
+                >{{ user.firstName }} {{ user.lastName }}</ng-template
+              >
             </p-select>
           </div>
 
           <div class="col-12 md:col-6">
             <label class="block text-600 mb-2">{{ i18n.t().contrats.dateDebut }} *</label>
-            <p-datepicker formControlName="dateDebut" dateFormat="dd/mm/yy" [showIcon]="true" class="w-full" [style]="{ 'width': '100%' }"></p-datepicker>
+            <p-datepicker
+              formControlName="dateDebut"
+              dateFormat="dd/mm/yy"
+              [showIcon]="true"
+              class="w-full"
+              [style]="{ width: '100%' }"
+            ></p-datepicker>
           </div>
 
           <div class="col-12 md:col-6">
             <label class="block text-600 mb-2">{{ i18n.t().contrats.dateFin }} *</label>
-            <p-datepicker formControlName="dateFin" dateFormat="dd/mm/yy" [showIcon]="true" class="w-full" [style]="{ 'width': '100%' }"></p-datepicker>
+            <p-datepicker
+              formControlName="dateFin"
+              dateFormat="dd/mm/yy"
+              [showIcon]="true"
+              class="w-full"
+              [style]="{ width: '100%' }"
+            ></p-datepicker>
           </div>
 
           <div class="col-12 md:col-6">
             <label class="block text-600 mb-2">{{ i18n.t().contrats.duree }} *</label>
-            <p-inputnumber formControlName="duree" class="w-full" [style]="{ 'width': '100%' }"></p-inputnumber>
+            <p-inputnumber
+              formControlName="duree"
+              class="w-full"
+              [style]="{ width: '100%' }"
+            ></p-inputnumber>
           </div>
 
           <div class="col-12 md:col-6">
             <label class="block text-600 mb-2">{{ i18n.t().contrats.loyerMensuel }} (€) *</label>
-            <p-inputnumber formControlName="loyerMensuelHT" mode="decimal" [minFractionDigits]="2" class="w-full" [style]="{ 'width': '100%' }"></p-inputnumber>
+            <p-inputnumber
+              formControlName="loyerMensuelHT"
+              mode="decimal"
+              [minFractionDigits]="2"
+              class="w-full"
+              [style]="{ width: '100%' }"
+            ></p-inputnumber>
           </div>
 
           <div class="col-12 md:col-6">
             <label class="block text-600 mb-2">{{ i18n.t().contrats.statut }} *</label>
-            <p-select formControlName="statutContrat" [options]="statutOptions()" optionLabel="label" optionValue="value" [placeholder]="i18n.t().contrats.selectStatutPlaceholder" class="w-full" [style]="{ 'width': '100%' }"></p-select>
+            <p-select
+              formControlName="statutContrat"
+              [options]="statutOptions()"
+              optionLabel="label"
+              optionValue="value"
+              [placeholder]="i18n.t().contrats.selectStatutPlaceholder"
+              class="w-full"
+              [style]="{ width: '100%' }"
+            ></p-select>
           </div>
-
         </div>
 
         <div class="flex gap-2 justify-content-end mt-4">
-          <p-button [label]="i18n.t().common.annuler" severity="secondary" (onClick)="goBack()" type="button"></p-button>
-          <p-button [label]="i18n.t().common.enregistrer" icon="pi pi-check" type="submit" [disabled]="contratForm.invalid"></p-button>
+          <p-button
+            [label]="i18n.t().common.annuler"
+            severity="secondary"
+            (onClick)="goBack()"
+            type="button"
+          ></p-button>
+          <p-button
+            [label]="i18n.t().common.enregistrer"
+            icon="pi pi-check"
+            type="submit"
+            [disabled]="contratForm.invalid"
+          ></p-button>
         </div>
       </form>
     </p-card>

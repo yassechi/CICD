@@ -1,7 +1,7 @@
 export enum UserRole {
   Admin = 1,
   Manager = 2,
-  User = 3
+  User = 3,
 }
 
 export interface OrganisationRef {

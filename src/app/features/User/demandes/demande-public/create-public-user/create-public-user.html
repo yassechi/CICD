@@ -26,7 +26,13 @@
 
         <div class="register-field">
           <label>{{ i18n.t().auth.email }} *</label>
-          <input pInputText type="email" formControlName="email" class="w-full" autocomplete="off" />
+          <input
+            pInputText
+            type="email"
+            formControlName="email"
+            class="w-full"
+            autocomplete="off"
+          />
           @if (form.get('email')?.invalid && form.get('email')?.touched) {
             <small class="field-error">
               @if (form.get('email')?.errors?.['required']) {
@@ -143,6 +149,4 @@
       </div>
     </form>
   </div>
-
- 
 </div>

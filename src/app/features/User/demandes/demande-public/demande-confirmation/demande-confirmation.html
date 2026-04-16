@@ -24,8 +24,15 @@
     </p-card>
 
     <div class="confirmation-actions">
-      <p-button [label]="i18n.t().publicDemande.confirmationDemandesCta" class="p-button-outlined" (onClick)="goToDemandes()"></p-button>
-      <p-button [label]="i18n.t().publicDemande.confirmationCatalogueCta" (onClick)="goToCatalogue()"></p-button>
+      <p-button
+        [label]="i18n.t().publicDemande.confirmationDemandesCta"
+        class="p-button-outlined"
+        (onClick)="goToDemandes()"
+      ></p-button>
+      <p-button
+        [label]="i18n.t().publicDemande.confirmationCatalogueCta"
+        (onClick)="goToCatalogue()"
+      ></p-button>
     </div>
   </div>
 </div>

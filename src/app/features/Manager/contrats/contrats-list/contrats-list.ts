@@ -29,35 +29,66 @@ export class ManagerContratsComponent {
   private readonly orgId: number | null = (() => {
     const user = this.authService.getCurrentUser();
     if (!user?.organisationId) return null;
-    return typeof user.organisationId === 'object' ? (user.organisationId as any).id : user.organisationId;
+    return typeof user.organisationId === 'object'
+      ? (user.organisationId as any).id
+      : user.organisationId;
   })();
 
   constructor() {
-    if (!this.orgId) { this.contrats.set([]); return; }
+    if (!this.orgId) {
+      this.contrats.set([]);
+      return;
+    }
     this.loading.set(true);
     this.contratService.getList({ organisationId: this.orgId }).subscribe({
-      next: (data) => { this.contrats.set(data ?? []); this.loading.set(false); },
-      error: () => { this.messageService.showError(this.i18n.get('contrats.loadError')); this.loading.set(false); },
+      next: (data) => {
+        this.contrats.set(data ?? []);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.messageService.showError(this.i18n.get('contrats.loadError'));
+        this.loading.set(false);
+      },
     });
   }
 
   onViewDetail(contrat: Contrat): void {
-    if (!contrat.id) { this.messageService.showError(this.i18n.get('contrats.invalid')); return; }
+    if (!contrat.id) {
+      this.messageService.showError(this.i18n.get('contrats.invalid'));
+      return;
+    }
     this.router.navigate(['/manager/contrats', contrat.id]);
   }
 
   load(): void {
-    if (!this.orgId) { this.contrats.set([]); return; }
+    if (!this.orgId) {
+      this.contrats.set([]);
+      return;
+    }
     this.loading.set(true);
     this.contratService.getList({ organisationId: this.orgId }).subscribe({
-      next: (data) => { this.contrats.set(data ?? []); this.loading.set(false); },
-      error: () => { this.messageService.showError(this.i18n.get('contrats.loadError')); this.loading.set(false); },
+      next: (data) => {
+        this.contrats.set(data ?? []);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.messageService.showError(this.i18n.get('contrats.loadError'));
+        this.loading.set(false);
+      },
     });
   }
 
-  getStatutLabel(s: StatutContrat): string { return this.contratService.getStatutLabel(s); }
+  getStatutLabel(s: StatutContrat): string {
+    return this.contratService.getStatutLabel(s);
+  }
   getStatutSeverity(s: StatutContrat): 'success' | 'secondary' | 'info' | 'warn' | 'danger' {
-    return s === StatutContrat.EnCours ? 'success' : s === StatutContrat.Termine ? 'secondary' : s === StatutContrat.Resilie ? 'danger' : 'secondary';
+    return s === StatutContrat.EnCours
+      ? 'success'
+      : s === StatutContrat.Termine
+        ? 'secondary'
+        : s === StatutContrat.Resilie
+          ? 'danger'
+          : 'secondary';
   }
   formatDate(date: string): string {
     const locale = this.i18n.lang() === 'nl' ? 'nl-BE' : 'fr-BE';

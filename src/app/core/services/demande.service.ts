@@ -100,7 +100,7 @@ export interface DemandeListParams {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DemandeService {
   private apiUrl = `${environment.urls.coreApi}/Demande`;
@@ -118,7 +118,9 @@ export class DemandeService {
 
   getList(params?: DemandeListParams): Observable<AdminDemandeListItem[]> {
     const suffix = this.buildQueryParams(params);
-    return this.http.get<AdminDemandeListItem[]>(`${this.apiUrl}/list${suffix ? `?${suffix}` : ''}`);
+    return this.http.get<AdminDemandeListItem[]>(
+      `${this.apiUrl}/list${suffix ? `?${suffix}` : ''}`,
+    );
   }
 
   create(demande: Demande): Observable<any> {
@@ -127,7 +129,10 @@ export class DemandeService {
 
   createWithVelo(payload: CreateDemandeWithVeloPayload): Observable<CreateDemandeWithVeloResponse> {
     const { velo, ...rest } = payload;
-    return this.http.post<CreateDemandeWithVeloResponse>(`${this.apiUrl}/create-with-bike`, { ...rest, bike: velo });
+    return this.http.post<CreateDemandeWithVeloResponse>(`${this.apiUrl}/create-with-bike`, {
+      ...rest,
+      bike: velo,
+    });
   }
 
   update(demande: Demande): Observable<any> {
@@ -180,9 +185,7 @@ export class DemandeService {
     }
   }
 
-  getStatusSeverity(
-    status: DemandeStatus,
-  ): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
+  getStatusSeverity(status: DemandeStatus): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
     switch (status) {
       case DemandeStatus.Encours:
         return 'success';

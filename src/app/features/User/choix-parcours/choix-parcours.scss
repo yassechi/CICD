@@ -83,7 +83,9 @@
   gap: 0.75rem;
   background: #ffffff;
   box-shadow: 0 10px 20px rgba(15, 23, 42, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .parcours-option:hover {
@@ -150,11 +152,7 @@
 
 :host ::ng-deep .p-button {
   border-radius: 10px !important;
-  background: linear-gradient(
-    135deg,
-    var(--mojo-button-start),
-    var(--mojo-button-end)
-  ) !important;
+  background: linear-gradient(135deg, var(--mojo-button-start), var(--mojo-button-end)) !important;
   border: none !important;
   font-weight: 600;
   box-shadow: none !important;

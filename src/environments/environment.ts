@@ -6,7 +6,6 @@
 //   },
 // };
 
-
 export const environment = {
   urls: {
     coreBase: 'https://localhost:7000',
@@ -16,7 +15,6 @@ export const environment = {
   },
 };
 
-
 // export const environment = {
 //   urls: {
 //     coreBase: 'http://135.125.200.236:5000',
@@ -24,7 +22,6 @@ export const environment = {
 //     cmsApi: 'https://mojovelo.be/wp-json/wp/v2',
 //   },
 // };
-
 
 // export const environment = {
 //   urls: {

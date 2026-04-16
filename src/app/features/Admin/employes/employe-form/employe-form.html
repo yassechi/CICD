@@ -1,16 +1,22 @@
 <div class="employe-form-page page-shell">
   <div class="page-header">
     <div>
-      <h1 class="page-title">{{ isEdit ? i18n.t().employes.formTitleEdit : i18n.t().employes.formTitleCreate }}</h1>
+      <h1 class="page-title">
+        {{ isEdit ? i18n.t().employes.formTitleEdit : i18n.t().employes.formTitleCreate }}
+      </h1>
       <p class="page-subtitle">{{ i18n.t().employes.formSubtitle }}</p>
     </div>
-    <p-button [label]="i18n.t().common.retour" icon="pi pi-arrow-left" class="p-button-text" (click)="goBack()"></p-button>
+    <p-button
+      [label]="i18n.t().common.retour"
+      icon="pi pi-arrow-left"
+      class="p-button-text"
+      (click)="goBack()"
+    ></p-button>
   </div>
 
   <p-card>
     <form [formGroup]="form">
       <div class="grid">
-
         <div class="col-12 md:col-6">
           <div class="field mb-4">
             <label class="block mb-2 font-semibold">{{ i18n.t().employes.username }} *</label>
@@ -48,12 +54,25 @@
 
         <div class="col-12 md:col-6">
           <div class="field mb-4">
-            <label class="block mb-2 font-semibold">{{ i18n.t().employes.passwordLabel }} {{ isEdit ? i18n.t().employes.passwordOptional : '*' }}</label>
-            <p-password formControlName="password" [toggleMask]="true" [feedback]="false" class="w-full" inputclass="w-full"></p-password>
+            <label class="block mb-2 font-semibold"
+              >{{ i18n.t().employes.passwordLabel }}
+              {{ isEdit ? i18n.t().employes.passwordOptional : '*' }}</label
+            >
+            <p-password
+              formControlName="password"
+              [toggleMask]="true"
+              [feedback]="false"
+              class="w-full"
+              inputclass="w-full"
+            ></p-password>
             @if (form.get('password')?.invalid && form.get('password')?.touched) {
               <small class="text-red-500 block mt-1">
-                @if (form.get('password')?.errors?.['required'])  { <span>{{ i18n.t().employes.passwordRequired }}</span> }
-                @if (form.get('password')?.errors?.['minlength']) { <span>{{ i18n.t().employes.passwordMin }}</span> }
+                @if (form.get('password')?.errors?.['required']) {
+                  <span>{{ i18n.t().employes.passwordRequired }}</span>
+                }
+                @if (form.get('password')?.errors?.['minlength']) {
+                  <span>{{ i18n.t().employes.passwordMin }}</span>
+                }
               </small>
             }
           </div>
@@ -61,12 +80,25 @@
 
         <div class="col-12 md:col-6">
           <div class="field mb-4">
-            <label class="block mb-2 font-semibold">{{ i18n.t().employes.confirmPasswordLabel }} {{ isEdit ? i18n.t().employes.passwordOptional : '*' }}</label>
-            <p-password formControlName="confirmPassword" [toggleMask]="true" [feedback]="false" class="w-full" inputclass="w-full"></p-password>
+            <label class="block mb-2 font-semibold"
+              >{{ i18n.t().employes.confirmPasswordLabel }}
+              {{ isEdit ? i18n.t().employes.passwordOptional : '*' }}</label
+            >
+            <p-password
+              formControlName="confirmPassword"
+              [toggleMask]="true"
+              [feedback]="false"
+              class="w-full"
+              inputclass="w-full"
+            ></p-password>
             @if (form.get('confirmPassword')?.invalid && form.get('confirmPassword')?.touched) {
               <small class="text-red-500 block mt-1">
-                @if (form.get('confirmPassword')?.errors?.['required'])        { <span>{{ i18n.t().employes.confirmRequired }}</span> }
-                @if (form.get('confirmPassword')?.errors?.['passwordMismatch']) { <span>{{ i18n.t().employes.passwordMismatch }}</span> }
+                @if (form.get('confirmPassword')?.errors?.['required']) {
+                  <span>{{ i18n.t().employes.confirmRequired }}</span>
+                }
+                @if (form.get('confirmPassword')?.errors?.['passwordMismatch']) {
+                  <span>{{ i18n.t().employes.passwordMismatch }}</span>
+                }
               </small>
             }
           </div>
@@ -75,14 +107,29 @@
         <div class="col-12 md:col-6">
           <div class="field mb-4">
             <label class="block mb-2 font-semibold">{{ i18n.t().employes.role }} *</label>
-            <p-select formControlName="role" [options]="roleOptions()" optionLabel="label" optionValue="value" class="w-full"></p-select>
+            <p-select
+              formControlName="role"
+              [options]="roleOptions()"
+              optionLabel="label"
+              optionValue="value"
+              class="w-full"
+            ></p-select>
           </div>
         </div>
 
         <div class="col-12 md:col-6">
           <div class="field mb-4">
-            <label class="block mb-2 font-semibold">{{ i18n.t().employes.organisationLabel }} *</label>
-            <p-select formControlName="organisationId" [options]="organisations()" optionLabel="name" optionValue="id" class="w-full" [placeholder]="i18n.t().employes.organisationPlaceholder"></p-select>
+            <label class="block mb-2 font-semibold"
+              >{{ i18n.t().employes.organisationLabel }} *</label
+            >
+            <p-select
+              formControlName="organisationId"
+              [options]="organisations()"
+              optionLabel="name"
+              optionValue="id"
+              class="w-full"
+              [placeholder]="i18n.t().employes.organisationPlaceholder"
+            ></p-select>
           </div>
         </div>
 
@@ -94,12 +141,20 @@
             </div>
           </div>
         </div>
-
       </div>
 
       <div class="flex justify-content-end gap-2 mt-4">
-        <p-button [label]="i18n.t().common.annuler" (onClick)="goBack()" class="p-button-text"></p-button>
-        <p-button [label]="isEdit ? i18n.t().common.sauvegarder : i18n.t().common.creer" icon="pi pi-check" (onClick)="onSubmit()" [loading]="loading()"></p-button>
+        <p-button
+          [label]="i18n.t().common.annuler"
+          (onClick)="goBack()"
+          class="p-button-text"
+        ></p-button>
+        <p-button
+          [label]="isEdit ? i18n.t().common.sauvegarder : i18n.t().common.creer"
+          icon="pi pi-check"
+          (onClick)="onSubmit()"
+          [loading]="loading()"
+        ></p-button>
       </div>
     </form>
   </p-card>

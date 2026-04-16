@@ -73,16 +73,19 @@ export class AdminDemandesComponent {
     this.veloService.getTypes().subscribe((types) => this.rawTypes.set(types ?? []));
 
     this.load();
-    effect(() => {
-      this.i18n.lang();
-      const t = this.i18n.t();
-      this.typeOptions.set([
-        { label: t.common.tous, value: 'all' },
-        ...this.rawTypes().map((v) => ({ label: v, value: v })),
-      ]);
-      this.messageApiService.refreshSignal();
-      this.loadUnreadDiscussions();
-    }, { allowSignalWrites: true });
+    effect(
+      () => {
+        this.i18n.lang();
+        const t = this.i18n.t();
+        this.typeOptions.set([
+          { label: t.common.tous, value: 'all' },
+          ...this.rawTypes().map((v) => ({ label: v, value: v })),
+        ]);
+        this.messageApiService.refreshSignal();
+        this.loadUnreadDiscussions();
+      },
+      { allowSignalWrites: true },
+    );
   }
 
   load(): void {

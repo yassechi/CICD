@@ -52,10 +52,12 @@ export const FR = {
     loginSuccess: 'Connexion réussie',
     loginError: 'Email ou mot de passe incorrect',
     loginErrorTitle: 'Erreur de connexion',
-    forgotIntro: "Entrez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
+    forgotIntro:
+      'Entrez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe.',
     sendLink: 'Envoyer le lien',
     emailSentTitle: 'Email envoyé !',
-    emailSentInfo: "Si un compte existe avec cet email, vous recevrez un lien de réinitialisation dans quelques instants.",
+    emailSentInfo:
+      'Si un compte existe avec cet email, vous recevrez un lien de réinitialisation dans quelques instants.',
     emailSentHint: 'Vérifiez votre boîte de réception et vos spams.',
     rememberPassword: 'Vous vous souvenez de votre mot de passe ?',
     resetTitle: 'Réinitialisez votre mot de passe',
@@ -71,7 +73,8 @@ export const FR = {
     registerError: 'Impossible de créer le compte',
     loadOrganisationsError: 'Impossible de charger les organisations',
     accountCreatedButLoginFailed: 'Compte créé, mais connexion impossible',
-    accountCreatedButActivationFailed: "Compte créé, mais activation impossible. Contactez un administrateur.",
+    accountCreatedButActivationFailed:
+      'Compte créé, mais activation impossible. Contactez un administrateur.',
     accountCreatedAndLogged: 'Compte créé et connecté',
   },
   // Dashboard
@@ -135,13 +138,13 @@ export const FR = {
     uploadedSummary: 'Uploadés : {files}',
     errorsPrefix: 'Erreurs: {errors}',
     uploadError: "Impossible d'uploader les documents.",
-    loadPdfListError: "Impossible de charger la liste des PDFs.",
+    loadPdfListError: 'Impossible de charger la liste des PDFs.',
     deleteFileConfirm: 'Êtes-vous sûr de vouloir supprimer "{file}" ?',
     deleteFileSuccess: 'Fichier supprimé.',
     deleteFileError: 'Impossible de supprimer le fichier.',
     aiError: "Impossible d'obtenir une réponse IA.",
     noAnswer: 'Je ne sais pas.',
-    chatError: "Une erreur est survenue. Merci de réessayer dans quelques instants.",
+    chatError: 'Une erreur est survenue. Merci de réessayer dans quelques instants.',
   },
   // Statuts demandes
   demandeStatus: {
@@ -364,7 +367,7 @@ export const FR = {
   employes: {
     title: 'Gestion des employés',
     subtitle: 'Liste et gestion des employés',
-    create: "Créer un employé",
+    create: 'Créer un employé',
     username: "Nom d'utilisateur",
     prenom: 'Prénom',
     nom: 'Nom',
@@ -409,7 +412,7 @@ export const FR = {
     updateSuccess: 'Employé modifié',
     updateError: "Impossible de modifier l'employé",
     reactivate: 'Réactiver',
-    reactivateConfirm: "Réactiver cet employé ?",
+    reactivateConfirm: 'Réactiver cet employé ?',
     reactivateSuccess: 'Employé réactivé',
     reactivateError: "Impossible de réactiver l'employé",
     reactivateTitle: "Réactiver l'employé",
@@ -480,7 +483,7 @@ export const FR = {
     reactivate: 'Réactiver',
     reactivateConfirm: 'Réactiver cette compagnie ?',
     reactivateSuccess: 'Compagnie réactivée',
-    reactivateError: "Impossible de réactiver la compagnie",
+    reactivateError: 'Impossible de réactiver la compagnie',
   },
   // Commun
   common: {
@@ -551,12 +554,12 @@ export const FR = {
   // Questionnaire
   questionnaire: {
     title: 'Questionnaire guide vélo',
-    subtitleWithName: 'Bonjour {firstName} {lastName}, répondez à ces questions pour lancer l\'IA.',
-    subtitle: 'Répondez à ces questions pour lancer l\'IA.',
+    subtitleWithName: "Bonjour {firstName} {lastName}, répondez à ces questions pour lancer l'IA.",
+    subtitle: "Répondez à ces questions pour lancer l'IA.",
     progress: 'Progression',
     notesLabel: 'Précisions (optionnel)',
-    notesPlaceholder: 'Ex: usage mixte, besoin d\'un porte-bagages, préférence marque...',
-    askAi: 'Demander à l\'IA',
+    notesPlaceholder: "Ex: usage mixte, besoin d'un porte-bagages, préférence marque...",
+    askAi: "Demander à l'IA",
     reset: 'Réinitialiser',
     back: 'Retour',
     loading: 'IA en cours de réponse...',
@@ -673,7 +676,8 @@ export const FR = {
     heroAction: 'Demander une offre',
     heroDetecting: 'Détection de la compagnie...',
     supportSubject: 'Demande ajout de ma société',
-    supportBody: "Bonjour,\\n\\nMa société n'apparaît pas dans la liste. Pouvez-vous l'ajouter ?\\n\\nMerci.",
+    supportBody:
+      "Bonjour,\\n\\nMa société n'apparaît pas dans la liste. Pouvez-vous l'ajouter ?\\n\\nMerci.",
     loadError: 'Impossible de détecter la compagnie',
     confirmationTitle: 'Votre demande a été envoyée !',
     confirmationSubtitle: 'Merci, votre demande de leasing vélo a bien été transmise.',

@@ -29,12 +29,20 @@ export class DemandeConfirmationComponent {
     this.demandeId = demande ? Number(demande) : null;
   }
 
-  goToDemandes(): void { this.router.navigate(['/user/demandes']); }
-  goToCatalogue(): void { this.router.navigate(['/catalogue-velos']); }
+  goToDemandes(): void {
+    this.router.navigate(['/user/demandes']);
+  }
+  goToCatalogue(): void {
+    this.router.navigate(['/catalogue-velos']);
+  }
 
   formatCurrency(amount?: number | null): string {
     if (amount == null || Number.isNaN(amount)) return '-';
     const locale = this.i18n.lang() === 'nl' ? 'nl-BE' : 'fr-BE';
-    return new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(amount);
+    return new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency: 'EUR',
+      maximumFractionDigits: 0,
+    }).format(amount);
   }
 }

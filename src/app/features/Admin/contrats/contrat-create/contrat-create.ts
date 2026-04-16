@@ -33,7 +33,8 @@ import { Router } from '@angular/router';
     InputText,
     Select,
     DatePicker,
-    InputNumber],
+    InputNumber,
+  ],
   templateUrl: './contrat-create.html',
   styleUrls: ['./contrat-create.scss'],
 })
@@ -152,5 +153,4 @@ export class ContratCreateComponent {
       },
     });
   }
-
 }

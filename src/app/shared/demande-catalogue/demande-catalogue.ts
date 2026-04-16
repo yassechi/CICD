@@ -1,4 +1,9 @@
-import { CreateDemandeWithVeloPayload, Demande, DemandeService, DemandeStatus } from '../../core/services/demande.service';
+import {
+  CreateDemandeWithVeloPayload,
+  Demande,
+  DemandeService,
+  DemandeStatus,
+} from '../../core/services/demande.service';
 import { VeloBrand, VeloCatalogService, VeloItem } from '../../core/services/velo-catalog.service';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from '../../core/services/message.service';
@@ -18,7 +23,16 @@ import { finalize } from 'rxjs';
 @Component({
   selector: 'app-demande-catalogue',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, CardModule, ButtonModule, InputTextModule, SelectModule, InputNumber],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    CardModule,
+    ButtonModule,
+    InputTextModule,
+    SelectModule,
+    InputNumber,
+  ],
   templateUrl: './demande-catalogue.html',
   styleUrls: ['./demande-catalogue.scss'],
 })
@@ -63,7 +77,11 @@ export class DemandeCatalogueComponent {
       this.demandeId = Number(id);
       this.loading.set(true);
       this.demandeService.getOne(this.demandeId).subscribe({
-        next: (d) => { this.demande = d; this.form.patchValue({ idVelo: d.idVelo }); this.loading.set(false); },
+        next: (d) => {
+          this.demande = d;
+          this.form.patchValue({ idVelo: d.idVelo });
+          this.loading.set(false);
+        },
         error: () => {
           this.loading.set(false);
           this.messageService.showError(this.i18n.get('demandes.loadDemandeError'));
@@ -74,7 +92,9 @@ export class DemandeCatalogueComponent {
 
     this.loadingVelos.set(true);
     this.veloCatalogService.getBrands().subscribe({
-      next: (brands) => { this.brandMap = new Map(brands.map((b) => [b.id, b])); },
+      next: (brands) => {
+        this.brandMap = new Map(brands.map((b) => [b.id, b]));
+      },
       error: () => {},
     });
     this.veloCatalogService.getVelos().subscribe({
@@ -91,8 +111,12 @@ export class DemandeCatalogueComponent {
     });
   }
 
-  get selectedVeloId(): number | null { return this.form.get('idVelo')?.value ?? null; }
-  get selectedVelo(): VeloItem | undefined { return this.velos().find((b) => b.id === this.selectedVeloId); }
+  get selectedVeloId(): number | null {
+    return this.form.get('idVelo')?.value ?? null;
+  }
+  get selectedVelo(): VeloItem | undefined {
+    return this.velos().find((b) => b.id === this.selectedVeloId);
+  }
 
   get filteredVelos(): VeloItem[] {
     const term = this.searchTerm.trim().toLowerCase();
@@ -105,44 +129,76 @@ export class DemandeCatalogueComponent {
       const type = b.acf?.type?.toLowerCase() ?? '';
       const brand = this.getBrandName(b.velos_brand?.[0]).toLowerCase();
       const price = b.acf?.prix ?? null;
-      return (!term || title.includes(term) || type.includes(term) || brand.includes(term))
-        && (!brandId || b.velos_brand?.includes(brandId))
-        && (!typeF || type.includes(typeF))
-        && (min === null || (price !== null && price >= min))
-        && (max === null || (price !== null && price <= max));
+      return (
+        (!term || title.includes(term) || type.includes(term) || brand.includes(term)) &&
+        (!brandId || b.velos_brand?.includes(brandId)) &&
+        (!typeF || type.includes(typeF)) &&
+        (min === null || (price !== null && price >= min)) &&
+        (max === null || (price !== null && price <= max))
+      );
     });
   }
 
-  get totalPages(): number { return Math.max(1, Math.ceil(this.filteredVelos.length / this.pageSize)); }
+  get totalPages(): number {
+    return Math.max(1, Math.ceil(this.filteredVelos.length / this.pageSize));
+  }
   get pagedVelos(): VeloItem[] {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.filteredVelos.slice(start, start + this.pageSize);
   }
 
   get brandOptions(): Array<{ label: string; value: number }> {
-    return Array.from(this.brandMap.values()).sort((a, b) => a.name.localeCompare(b.name)).map((b) => ({ label: b.name, value: b.id }));
+    return Array.from(this.brandMap.values())
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map((b) => ({ label: b.name, value: b.id }));
   }
   get typeOptions(): Array<{ label: string; value: string }> {
-    const types = Array.from(new Set(this.velos().map((b) => b.acf?.type).filter((v): v is string => !!v)));
+    const types = Array.from(
+      new Set(
+        this.velos()
+          .map((b) => b.acf?.type)
+          .filter((v): v is string => !!v),
+      ),
+    );
     return types.sort().map((t) => ({ label: t, value: t }));
   }
 
   selectVelo(velo: VeloItem): void {
     if (this.selectedVeloId === velo.id) return;
     this.form.patchValue({ idVelo: velo.id });
-    this.messageService.showInfo(velo.title?.rendered ?? '', this.i18n.get('demandes.bikeSelected'));
+    this.messageService.showInfo(
+      velo.title?.rendered ?? '',
+      this.i18n.get('demandes.bikeSelected'),
+    );
   }
 
-  onFilterChange(): void { this.currentPage = 1; }
-  goToPage(p: number): void { if (p >= 1 && p <= this.totalPages) this.currentPage = p; }
-  nextPage(): void { this.goToPage(this.currentPage + 1); }
-  prevPage(): void { this.goToPage(this.currentPage - 1); }
+  onFilterChange(): void {
+    this.currentPage = 1;
+  }
+  goToPage(p: number): void {
+    if (p >= 1 && p <= this.totalPages) this.currentPage = p;
+  }
+  nextPage(): void {
+    this.goToPage(this.currentPage + 1);
+  }
+  prevPage(): void {
+    this.goToPage(this.currentPage - 1);
+  }
 
   onSubmit(): void {
-    if (this.form.invalid) { this.form.markAllAsTouched(); return; }
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
     const user: User | null = this.authService.getCurrentUser();
-    if (!user?.id) { this.messageService.showError(this.i18n.get('demandes.userNotAuth')); return; }
-    if (!this.selectedVelo) { this.messageService.showError(this.i18n.get('demandes.selectBike')); return; }
+    if (!user?.id) {
+      this.messageService.showError(this.i18n.get('demandes.userNotAuth'));
+      return;
+    }
+    if (!this.selectedVelo) {
+      this.messageService.showError(this.i18n.get('demandes.selectBike'));
+      return;
+    }
 
     this.loading.set(true);
     const v = this.form.getRawValue();
@@ -182,13 +238,19 @@ export class DemandeCatalogueComponent {
       },
     };
 
-    this.demandeService.createWithVelo(payload).pipe(finalize(() => this.loading.set(false))).subscribe({
-      next: () => {
-        this.messageService.showSuccess(this.i18n.get('demandes.demandeCreated'));
-        this.goToUserDemandes(user);
-      },
-      error: (err) => this.messageService.showError(err?.error?.message || this.i18n.get('demandes.createError')),
-    });
+    this.demandeService
+      .createWithVelo(payload)
+      .pipe(finalize(() => this.loading.set(false)))
+      .subscribe({
+        next: () => {
+          this.messageService.showSuccess(this.i18n.get('demandes.demandeCreated'));
+          this.goToUserDemandes(user);
+        },
+        error: (err) =>
+          this.messageService.showError(
+            err?.error?.message || this.i18n.get('demandes.createError'),
+          ),
+      });
   }
 
   goBack(): void {
@@ -203,13 +265,22 @@ export class DemandeCatalogueComponent {
     const fallback = this.i18n.get('demandes.brandUnknown');
     return brandId ? (this.brandMap.get(brandId)?.name ?? fallback) : fallback;
   }
-  getVeloImage(velo: VeloItem): string | null { return velo._embedded?.['wp:featuredmedia']?.[0]?.source_url ?? null; }
-  formatCurrency(amount?: number): string { return amount == null ? '-' : new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(amount); }
+  getVeloImage(velo: VeloItem): string | null {
+    return velo._embedded?.['wp:featuredmedia']?.[0]?.source_url ?? null;
+  }
+  formatCurrency(amount?: number): string {
+    return amount == null
+      ? '-'
+      : new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(amount);
+  }
 
   private trySelectPreselectedVelo(): void {
     if (!this.preselectedVeloId || !this.velos().length) return;
     const velo = this.velos().find((b) => b.id === this.preselectedVeloId);
-    if (velo) { this.form.patchValue({ idVelo: velo.id }); this.preselectedVeloId = null; }
+    if (velo) {
+      this.form.patchValue({ idVelo: velo.id });
+      this.preselectedVeloId = null;
+    }
   }
 
   private goToUserDemandes(user: User): void {

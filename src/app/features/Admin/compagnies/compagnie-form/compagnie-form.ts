@@ -24,7 +24,8 @@ import { CardModule } from 'primeng/card';
     InputTextModule,
     CheckboxModule,
     FileUploadModule,
-    SelectModule],
+    SelectModule,
+  ],
   templateUrl: './compagnie-form.html',
   styleUrls: ['./compagnie-form.scss'],
 })
@@ -45,7 +46,8 @@ export class CompagnieFormComponent {
     contactEmail: ['', [Validators.required, Validators.email]],
     emailAutorise: [
       '',
-      [Validators.required, Validators.pattern(/^@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
+      [Validators.required, Validators.pattern(/^@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)],
+    ],
     idContact: ['', Validators.required],
     isActif: [true],
   });
@@ -154,7 +156,9 @@ export class CompagnieFormComponent {
 
   private finishSave(isEdit: boolean): void {
     this.messageService.showSuccess(
-      isEdit ? this.i18n.get('compagnies.updateSuccess') : this.i18n.get('compagnies.createSuccess'),
+      isEdit
+        ? this.i18n.get('compagnies.updateSuccess')
+        : this.i18n.get('compagnies.createSuccess'),
       this.i18n.get('common.succes'),
     );
     this.loading.set(false);

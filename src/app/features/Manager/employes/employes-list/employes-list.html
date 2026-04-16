@@ -22,9 +22,15 @@
         >
           <ng-template pTemplate="header">
             <tr>
-              <th pSortableColumn="userName">{{ i18n.t().employes.username }} <p-sortIcon field="userName"></p-sortIcon></th>
-              <th pSortableColumn="firstName">{{ i18n.t().employes.prenom }} <p-sortIcon field="firstName"></p-sortIcon></th>
-              <th pSortableColumn="lastName">{{ i18n.t().employes.nom }} <p-sortIcon field="lastName"></p-sortIcon></th>
+              <th pSortableColumn="userName">
+                {{ i18n.t().employes.username }} <p-sortIcon field="userName"></p-sortIcon>
+              </th>
+              <th pSortableColumn="firstName">
+                {{ i18n.t().employes.prenom }} <p-sortIcon field="firstName"></p-sortIcon>
+              </th>
+              <th pSortableColumn="lastName">
+                {{ i18n.t().employes.nom }} <p-sortIcon field="lastName"></p-sortIcon>
+              </th>
               <th>{{ i18n.t().employes.email }}</th>
               <th>{{ i18n.t().employes.telephone }}</th>
               <th>{{ i18n.t().employes.role }}</th>
@@ -41,11 +47,17 @@
               <td>{{ user.email }}</td>
               <td>{{ user.phoneNumber }}</td>
               <td>
-                <p-tag [value]="getRoleLabel(user.role)" [severity]="getRoleSeverity(user.role)"></p-tag>
+                <p-tag
+                  [value]="getRoleLabel(user.role)"
+                  [severity]="getRoleSeverity(user.role)"
+                ></p-tag>
               </td>
               <td>{{ getOrganisationName(user) }}</td>
               <td>
-                <p-tag [value]="user.isActif ? i18n.t().common.actif : i18n.t().common.inactif" [severity]="user.isActif ? 'success' : 'danger'"></p-tag>
+                <p-tag
+                  [value]="user.isActif ? i18n.t().common.actif : i18n.t().common.inactif"
+                  [severity]="user.isActif ? 'success' : 'danger'"
+                ></p-tag>
               </td>
             </tr>
           </ng-template>

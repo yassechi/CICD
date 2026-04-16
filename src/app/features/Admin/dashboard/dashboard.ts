@@ -112,7 +112,7 @@ export class AdminDashboardComponent {
       const refuse = demandes.filter((d) => d.status === DemandeStatus.Refuse).length;
       const t = this.i18n.t();
 
-      // Remplir le chart 
+      // Remplir le chart
       this.demandeStatusChartData.set({
         labels: [
           t.demandeStatus.encours,
@@ -165,8 +165,7 @@ export class AdminDashboardComponent {
     const rejected: string[] = [];
 
     files.forEach((file) => {
-      const isPdf =
-        file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+      const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
       if (!isPdf) {
         rejected.push(`${file.name} (${this.i18n.t().ai.fileNotPdfSuffix})`);
         return;
@@ -179,7 +178,9 @@ export class AdminDashboardComponent {
     });
 
     if (rejected.length) {
-      this.messageService.showWarn(this.i18n.format('ai.fileIgnored', { names: rejected.join(' | ') }));
+      this.messageService.showWarn(
+        this.i18n.format('ai.fileIgnored', { names: rejected.join(' | ') }),
+      );
     }
     this.selectedAiFiles.set(validFiles);
   }
@@ -215,11 +216,17 @@ export class AdminDashboardComponent {
           const uploaded = response?.uploades ?? [];
           const errors = response?.erreurs ?? [];
           if (uploaded.length) {
-            this.messageService.showSuccess(this.i18n.format('ai.uploadedCount', { count: uploaded.length }));
-            this.lastUploadSummary.set(this.i18n.format('ai.uploadedSummary', { files: uploaded.join(', ') }));
+            this.messageService.showSuccess(
+              this.i18n.format('ai.uploadedCount', { count: uploaded.length }),
+            );
+            this.lastUploadSummary.set(
+              this.i18n.format('ai.uploadedSummary', { files: uploaded.join(', ') }),
+            );
           }
           if (errors.length) {
-            this.messageService.showWarn(this.i18n.format('ai.errorsPrefix', { errors: errors.join(' | ') }));
+            this.messageService.showWarn(
+              this.i18n.format('ai.errorsPrefix', { errors: errors.join(' | ') }),
+            );
           }
         }
         this.selectedAiFiles.set([]);
@@ -264,8 +271,7 @@ export class AdminDashboardComponent {
     const rejected: string[] = [];
 
     files.forEach((file) => {
-      const isPdf =
-        file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+      const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
       if (!isPdf) {
         rejected.push(`${file.name} (${this.i18n.t().ai.fileNotPdfSuffix})`);
         return;
@@ -278,7 +284,9 @@ export class AdminDashboardComponent {
     });
 
     if (rejected.length) {
-      this.messageService.showWarn(this.i18n.format('ai.fileIgnored', { names: rejected.join(' | ') }));
+      this.messageService.showWarn(
+        this.i18n.format('ai.fileIgnored', { names: rejected.join(' | ') }),
+      );
     }
     this.selectedClientAiFiles.set(validFiles);
   }
@@ -314,11 +322,17 @@ export class AdminDashboardComponent {
           const uploaded = response?.uploades ?? [];
           const errors = response?.erreurs ?? [];
           if (uploaded.length) {
-            this.messageService.showSuccess(this.i18n.format('ai.uploadedCount', { count: uploaded.length }));
-            this.lastClientUploadSummary.set(this.i18n.format('ai.uploadedSummary', { files: uploaded.join(', ') }));
+            this.messageService.showSuccess(
+              this.i18n.format('ai.uploadedCount', { count: uploaded.length }),
+            );
+            this.lastClientUploadSummary.set(
+              this.i18n.format('ai.uploadedSummary', { files: uploaded.join(', ') }),
+            );
           }
           if (errors.length) {
-            this.messageService.showWarn(this.i18n.format('ai.errorsPrefix', { errors: errors.join(' | ') }));
+            this.messageService.showWarn(
+              this.i18n.format('ai.errorsPrefix', { errors: errors.join(' | ') }),
+            );
           }
         }
         this.selectedClientAiFiles.set([]);
@@ -404,7 +418,6 @@ export class AdminDashboardComponent {
     }
   }
 
-
   deleteUploadedAiFile(file: AiPdfInfo): void {
     this.confirmationService.confirm({
       message: this.i18n.format('ai.deleteFileConfirm', { file: file.fileName }),
@@ -416,7 +429,9 @@ export class AdminDashboardComponent {
         this.uploadedListLoading.set(true);
         this.aiService.deleteAdminFile(file.fileName).subscribe({
           next: (response) => {
-            this.messageService.showSuccess(response?.message ?? this.i18n.get('ai.deleteFileSuccess'));
+            this.messageService.showSuccess(
+              response?.message ?? this.i18n.get('ai.deleteFileSuccess'),
+            );
             this.loadUploadedAiFiles();
           },
           error: () => {
@@ -439,7 +454,9 @@ export class AdminDashboardComponent {
         this.uploadedClientListLoading.set(true);
         this.aiService.deleteClientFile(file.fileName).subscribe({
           next: (response) => {
-            this.messageService.showSuccess(response?.message ?? this.i18n.get('ai.deleteFileSuccess'));
+            this.messageService.showSuccess(
+              response?.message ?? this.i18n.get('ai.deleteFileSuccess'),
+            );
             this.loadUploadedClientAiFiles();
           },
           error: () => {
@@ -465,10 +482,7 @@ export class AdminDashboardComponent {
         this.appendAiMessage('assistant', text);
       },
       error: () => {
-        this.appendAiMessage(
-          'assistant',
-          this.i18n.get('ai.chatError'),
-        );
+        this.appendAiMessage('assistant', this.i18n.get('ai.chatError'));
         this.messageService.showError(this.i18n.get('ai.aiError'));
         this.askLoading.set(false);
       },
@@ -506,4 +520,3 @@ export class AdminDashboardComponent {
     return date.toLocaleDateString(locale, { day: '2-digit', month: '2-digit', year: 'numeric' });
   }
 }
-

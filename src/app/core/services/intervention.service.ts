@@ -14,7 +14,7 @@ export interface Intervention {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class InterventionService {
   private apiUrl = `${environment.urls.coreApi}/Intervention`;

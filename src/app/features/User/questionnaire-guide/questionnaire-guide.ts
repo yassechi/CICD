@@ -71,7 +71,9 @@ export class QuestionnaireGuideComponent {
     this.firstName = this.params['firstName'] || '';
     this.lastName = this.params['lastName'] || '';
     this.organisationName = this.params['organisationName'] || '';
-    this.organisationId = this.params['organisationId'] ? Number(this.params['organisationId']) : null;
+    this.organisationId = this.params['organisationId']
+      ? Number(this.params['organisationId'])
+      : null;
     if (this.organisationId) {
       this.organisationService.getActiveLogo(this.organisationId).subscribe({
         next: (logo) => {

@@ -54,9 +54,8 @@ export class NavbarComponent {
 
   private goToSettings(): void {
     const role = this.currentUser()?.role;
-    const path = role === 1 ? '/admin/parametres'
-      : role === 2 ? '/manager/parametres'
-      : '/user/parametres';
+    const path =
+      role === 1 ? '/admin/parametres' : role === 2 ? '/manager/parametres' : '/user/parametres';
     this.menu?.hide();
     this.router.navigateByUrl(path);
   }
@@ -66,5 +65,7 @@ export class NavbarComponent {
     this.authService.logout();
   }
 
-  onToggleSidebar(): void { this.toggleSidebar.emit(); }
+  onToggleSidebar(): void {
+    this.toggleSidebar.emit();
+  }
 }
