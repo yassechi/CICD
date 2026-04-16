@@ -27,23 +27,36 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # 🔧 FORMAT
       - name: Format code (Prettier)
         run: |
           echo "🔧 Running Prettier..."
-          npx prettier --write "src/**/*.{ts,html,scss,json}" --log-level debug
+          npx prettier --write "src/**/*.{ts,html,scss,json}"
 
+      # 🔍 LINT
       - name: Lint fix (ESLint)
         run: |
           echo "🔍 Running ESLint..."
-          npx eslint . --ext .ts,.html --fix --debug
+          npx eslint . --ext .ts,.html --fix
 
+      # 👀 VOIR LES MODIFS
+      - name: Show changes
+        run: |
+          echo "📂 Modified files:"
+          git diff --name-only
+
+      # 📤 COMMIT SI NECESSAIRE
       - name: Commit changes if needed
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add .
-          git diff --cached --quiet || git commit -m "chore: auto format & lint"
-          git push
 
-#
-#
+          git add .
+
+          if git diff --cached --quiet; then
+            echo "✅ No changes to commit"
+          else
+            echo "🚀 Committing changes..."
+            git commit -m "chore: auto format & lint"
+            git push
+          fi
