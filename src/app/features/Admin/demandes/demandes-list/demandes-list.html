@@ -87,19 +87,20 @@
                 <div class="text-600 text-sm">{{ demande.veloMarque || i18n.t().demandes.brandUnknown }}</div>
               </td>
               <td>{{ demande.veloType || demande.organisationName || '-' }}</td>
-              <td>{{ demande.veloPrixAchat == null ? '-' : (demande.veloPrixAchat | currency:'EUR') }}</td>
+              <td>{{ demande.veloPrixAchat === null || demande.veloPrixAchat === undefined ? '-' : (demande.veloPrixAchat | currency:'EUR') }}</td>
               <td>
                 <div class="status-with-indicator">
                   <p-tag
                     [value]="getStatusLabel(demande.status)"
                     [severity]="getStatusSeverity(demande.status)" [ngClass]="getStatusClass(demande.status)"
                   ></p-tag>
-                  <span
-                    *ngIf="hasUnreadMessages(demande)"
-                    class="unread-indicator"
-                    [pTooltip]="i18n.t().demandes.nouveauMessage"
-                    tooltipPosition="top"
-                  ></span>
+                  @if (hasUnreadMessages(demande)) {
+                    <span
+                      class="unread-indicator"
+                      [pTooltip]="i18n.t().demandes.nouveauMessage"
+                      tooltipPosition="top"
+                    ></span>
+                  }
                 </div>
               </td>
             </tr>
