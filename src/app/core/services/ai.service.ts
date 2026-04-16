@@ -3,9 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-export interface AiAskResponse {
-  response: string;
-}
+export interface AiAskResponse{response: string;}
 
 export interface AiUploadSingleResponse {
   message: string;
