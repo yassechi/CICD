@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 
 export interface AiAskResponse
 
+
+
 {
   response: string;
 }
