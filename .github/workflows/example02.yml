@@ -24,3 +24,6 @@ jobs:
 
       - name: Run ESLint
         run: npx eslint . --ext .ts,.html
+
+      - name: Run Format code
+        run: npm run format
