@@ -1,6 +1,6 @@
 import { Organisation, OrganisationService } from '../../../../core/services/organisation.service';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { User, UserRole, UserService } from '../../../../core/services/user.service';
+import { UserRole, UserService } from '../../../../core/services/user.service';
 import { MessageService } from '../../../../core/services/message.service';
 import { I18nService } from '../../../../core/services/I18n.service';
 import { Component, computed, inject, signal } from '@angular/core';
@@ -152,7 +152,8 @@ export class EmployeFormDialogComponent {
       confirm?.setErrors({ ...(confirm.errors ?? {}), passwordMismatch: true });
       return { passwordMismatch: true };
     }
-    const { passwordMismatch, ...rest } = confirm?.errors ?? {};
+    const rest = { ...(confirm?.errors ?? {}) };
+    delete rest['passwordMismatch'];
     confirm?.setErrors(Object.keys(rest).length ? rest : null);
     return null;
   }

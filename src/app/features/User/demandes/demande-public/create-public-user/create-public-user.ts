@@ -137,7 +137,8 @@ export class CreateLamdaUserComponent {
     if (!password || !confirmPassword) return null;
     if (!passwordValue && !confirmValue) {
       if (confirmPassword.errors?.['passwordMismatch']) {
-        const { passwordMismatch, ...rest } = confirmPassword.errors;
+        const rest = { ...confirmPassword.errors };
+        delete rest['passwordMismatch'];
         confirmPassword.setErrors(Object.keys(rest).length ? rest : null);
       }
       return null;
@@ -147,7 +148,8 @@ export class CreateLamdaUserComponent {
       return { passwordMismatch: true };
     }
     if (confirmPassword.errors?.['passwordMismatch']) {
-      const { passwordMismatch, ...rest } = confirmPassword.errors;
+      const rest = { ...confirmPassword.errors };
+      delete rest['passwordMismatch'];
       confirmPassword.setErrors(Object.keys(rest).length ? rest : null);
     }
     return null;

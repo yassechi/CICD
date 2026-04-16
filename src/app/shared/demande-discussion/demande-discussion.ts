@@ -2,7 +2,6 @@ import { Component, ElementRef, Input, OnInit, ViewChild, inject } from '@angula
 import { DemandeMessage, DemandeService } from '../../core/services/demande.service';
 import { MessageApiService } from '../../core/services/message-api.service';
 import { I18nService } from '../../core/services/I18n.service';
-import { filter, interval, switchMap } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
 import { TextareaModule } from 'primeng/textarea';
 import { CommonModule } from '@angular/common';

@@ -26,7 +26,6 @@ import { ConfirmationService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
-import { User } from '../../core/models/user.model';
 
 @Component({
   selector: 'app-contrat-detail',
@@ -65,7 +64,7 @@ export class ContratDetailComponent implements OnInit, OnDestroy {
   tabs: Array<{ route: string; label: string; icon: string }> = [];
 
   ngOnInit(): void {
-    this.role.set(this.AuthService.getCurrentUser()?.role!);
+    this.role.set(this.AuthService.getCurrentUser()?.role ?? null);
 
     this.tabs = this.buildTabs();
     this.sub.add(

@@ -1,16 +1,26 @@
-name: example 02
+name: ESLint CI
 
 on:
+  pull_request:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
-  xxx:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
-      - name: yyy
-        run: echo example 2
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-#
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npx eslint . --ext .ts,.html

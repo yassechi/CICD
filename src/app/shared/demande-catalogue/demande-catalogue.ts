@@ -192,7 +192,11 @@ export class DemandeCatalogueComponent {
   }
 
   goBack(): void {
-    this.authService.isAuthenticated() ? this.router.navigate(['/user/demandes']) : this.router.navigate(['/catalogue-velos']);
+    if (this.authService.isAuthenticated()) {
+      this.router.navigate(['/user/demandes']);
+      return;
+    }
+    this.router.navigate(['/catalogue-velos']);
   }
 
   getBrandName(brandId?: number): string {

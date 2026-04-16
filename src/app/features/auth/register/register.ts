@@ -91,7 +91,8 @@ export class RegisterComponent {
     if (!pwd || !confirm) return null;
     if (!pwd.value && !confirm.value) {
       if (confirm.errors?.['passwordMismatch']) {
-        const { passwordMismatch, ...rest } = confirm.errors;
+        const rest = { ...confirm.errors };
+        delete rest['passwordMismatch'];
         confirm.setErrors(Object.keys(rest).length ? rest : null);
       }
       return null;
@@ -101,7 +102,8 @@ export class RegisterComponent {
       return { passwordMismatch: true };
     }
     if (confirm.errors?.['passwordMismatch']) {
-      const { passwordMismatch, ...rest } = confirm.errors;
+      const rest = { ...confirm.errors };
+      delete rest['passwordMismatch'];
       confirm.setErrors(Object.keys(rest).length ? rest : null);
     }
     return null;
