@@ -1,6 +1,11 @@
 {
   "root": true,
-  "ignorePatterns": ["dist"],
+  "ignorePatterns": [
+    "dist",
+    "node_modules",
+    "android",
+    "ios"
+  ],
   "overrides": [
     {
       "files": ["*.ts"],
@@ -13,6 +18,17 @@
       ],
       "rules": {
         "@typescript-eslint/no-explicit-any": "off"
+      }
+    },
+    {
+      "files": ["*.html"],
+      "parser": "@angular-eslint/template-parser",
+      "plugins": ["@angular-eslint/template"],
+      "extends": [
+        "plugin:@angular-eslint/template/recommended"
+      ],
+      "rules": {
+        "eqeqeq": "off"
       }
     }
   ]
