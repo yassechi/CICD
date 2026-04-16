@@ -28,10 +28,14 @@ jobs:
         run: npm ci
 
       - name: Format code (Prettier)
-        run: npx prettier --write "src/**/*.{ts,html,scss,json}" --log-level debug
+        run: |
+          echo "🔧 Running Prettier..."
+          npx prettier --write "src/**/*.{ts,html,scss,json}" --log-level debug
 
       - name: Lint fix (ESLint)
-        run: npx eslint . --ext .ts,.html --fix --debug
+        run: |
+          echo "🔍 Running ESLint..."
+          npx eslint . --ext .ts,.html --fix --debug
 
       - name: Commit changes if needed
         run: |
